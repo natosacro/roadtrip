@@ -676,14 +676,17 @@ svg.zoomed .m-minor { opacity: 1; }
   background-image: radial-gradient(ellipse at 30% 20%, rgba(255,255,255,.35), transparent 60%), linear-gradient(180deg, transparent 70%, rgba(90,46,20,.08));
 }
 .g-nome { font-family: var(--f-titolo); font-style: italic; font-weight: 700; font-size: 1.5rem; line-height: 1; color: #C9562A; text-shadow: 1px 1px 0 #5A2E14; transform: rotate(-4deg); }
+.g-mid { display: flex; align-items: center; justify-content: center; gap: 8px; }
+.g-wr { width: 30px; height: 30px; flex-shrink: 0; fill: #5A2E14; }
 .garage h1 {
-  font-family: var(--f-cartello); font-weight: 800; font-size: 2.2rem; line-height: 1; letter-spacing: .18em; text-transform: uppercase;
+  font-family: var(--f-cartello); font-weight: 800; font-size: 1.75rem; line-height: 1; letter-spacing: .12em; text-transform: uppercase; text-align: center;
   color: #5A2E14; text-shadow: 2px 2px 0 #E9B43A;
 }
 .g-righe { display: grid; gap: 3px; width: 100%; margin: 4px 0 2px; }
 .g-righe i { display: block; height: 4px; border-radius: 2px; }
 .g-righe i:nth-child(1) { background: #E8762B; } .g-righe i:nth-child(2) { background: #E9B43A; } .g-righe i:nth-child(3) { background: #8A4A22; }
-.g-sub { font-family: var(--f-cartello); font-weight: 800; font-size: .66rem; letter-spacing: .16em; text-transform: uppercase; color: #5A2E14; }
+.g-sub { font-family: var(--f-cartello); font-weight: 800; font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; color: #5A2E14; text-align: center; }
+.g-since { margin-top: 4px; font-family: var(--f-titolo); font-style: italic; font-weight: 700; font-size: .8rem; color: #F3E6C8; background: #C9562A; border-radius: 999px; padding: 1px 12px; }
 .hazard { height: 12px; border-radius: 3px; margin-top: -4px; background: repeating-linear-gradient(-45deg, var(--giallo) 0 11px, var(--nero) 11px 22px); box-shadow: 0 2px 0 rgba(0,0,0,.3); }
 .drawer {
   position: relative; border-radius: 8px; padding: 16px 14px 18px; display: grid; gap: 10px; border: 2px solid #6E757D;
@@ -1441,7 +1444,7 @@ function viewHome() {
   var km = String(TRIP.km).padStart(5, "0").split("");
   var lead = true, digits = km.map(function (c) { if (c !== "0") lead = false; return '<span class="' + (lead ? "z" : "") + '">' + c + '</span>'; }).join("");
   return '<section class="hero"><div class="shooting"></div>' +
-      '<a class="gear" href="#impostazioni" aria-label="Nota\'s Garage, impostazioni"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 0 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></a>' +
+      '<a class="gear" href="#impostazioni" aria-label="Nota\'s Auto Repair, impostazioni"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 0 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></a>' +
       '<div class="hero-inner">' +
       '<h1>Road trip d\'Avvento</h1><p class="date">8–13 dicembre 2026</p>' +
       '<a class="countdown" id="countdown"' + (tl ? ' href="#leg-' + tl + '"' : '') + '>' + cd + '</a></div>' +
@@ -2128,9 +2131,10 @@ function viewImpostazioni() {
     '<div class="officina">' +
       '<header class="garage"><span class="rivet rv-tl"></span><span class="rivet rv-tr"></span><span class="rivet rv-bl"></span><span class="rivet rv-br"></span>' +
         '<span class="g-nome">Nota\'s</span>' +
-        '<h1>Garage</h1>' +
+        '<div class="g-mid"><svg class="g-wr" viewBox="0 0 48 48" aria-hidden="true"><g transform="rotate(45 24 24)"><path d="M21 6a7 7 0 0 0 0 13v19a3 3 0 0 0 6 0V19a7 7 0 0 0 0-13v6h-6z"/></g><g transform="rotate(-45 24 24)"><path d="M21 6a7 7 0 0 0 0 13v19a3 3 0 0 0 6 0V19a7 7 0 0 0 0-13v6h-6z"/></g></svg><h1>Auto Repair</h1><svg class="g-wr" viewBox="0 0 48 48" aria-hidden="true"><g transform="rotate(45 24 24)"><path d="M21 6a7 7 0 0 0 0 13v19a3 3 0 0 0 6 0V19a7 7 0 0 0 0-13v6h-6z"/></g><g transform="rotate(-45 24 24)"><path d="M21 6a7 7 0 0 0 0 13v19a3 3 0 0 0 6 0V19a7 7 0 0 0 0-13v6h-6z"/></g></svg></div>' +
         '<span class="g-righe" aria-hidden="true"><i></i><i></i><i></i></span>' +
-        '<span class="g-sub">Auto repair · Tune-ups · Since 1979</span></header>' +
+        '<span class="g-sub">Mechanic on duty · Engine · Brakes · Tune-ups</span>' +
+        '<span class="g-since">Since 1979</span></header>' +
       '<div class="hazard" aria-hidden="true"></div>' +
       drawer("TEMA", "#1B1B1B", seg("theme", [["auto", "Auto"], ["light", "Giorno"], ["dark", "Notte"]])) +
       drawer("DISTANZE", "#B3261E", seg("units", [["km", "km"], ["mi", "miglia"], ["both", "entrambe"]])) +
