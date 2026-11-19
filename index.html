@@ -2129,6 +2129,68 @@ function render() {
 }
 window.addEventListener("hashchange", render);
 render();
+
+/* ---------- Swipe tra i tab (come in Agrolandia) ----------
+   Scorrendo a sinistra o a destra la pagina segue il dito; lasciando, scivola fuori e il tab vicino entra
+   dal lato opposto. Non vale sulla barra in basso, sulla mappa, sulle casette dei mercatini e sui campi. */
+(function () {
+  var ORDINE = ["home", "mappa", "leg", "strade", "rubrica", "guida", "radio"];
+  var TAB_DI = { strada: "strade", cantone: "strade", impostazioni: "home" };
+  function tabCorrente() {
+    var h = (location.hash || "#home").slice(1) || "home", t = h.split("-")[0];
+    t = TAB_DI[t] || t;
+    return ORDINE.indexOf(t) === -1 ? "home" : t;
+  }
+  var main = document.getElementById("app");
+  var x0 = null, y0 = 0, t0 = 0, dx = 0, dir = null;
+  function muovi(x, op, ms) {
+    main.style.transition = ms ? "transform " + ms + "ms cubic-bezier(.2,.7,.2,1), opacity " + ms + "ms ease" : "none";
+    main.style.transform = x ? "translateX(" + x + "px)" : "";
+    main.style.opacity = op === 1 ? "" : op;
+  }
+  document.addEventListener("touchstart", function (e) {
+    if (e.touches.length !== 1 || e.target.closest(".tabbar, input, select, textarea, button.num-in, #map, .carousel, .seg")) { x0 = null; return; }
+    x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; t0 = Date.now(); dx = 0; dir = null;
+  }, { passive: true });
+  document.addEventListener("touchmove", function (e) {
+    if (x0 === null) return;
+    dx = e.touches[0].clientX - x0;
+    var dy = e.touches[0].clientY - y0;
+    if (!dir && (Math.abs(dx) > 10 || Math.abs(dy) > 10)) dir = Math.abs(dx) > Math.abs(dy) * 1.2 ? "h" : "v";
+    if (dir !== "h") return;
+    e.preventDefault();
+    var i = ORDINE.indexOf(tabCorrente()), bordo = (i === 0 && dx > 0) || (i === ORDINE.length - 1 && dx < 0);
+    // la pagina si sposta poco (al massimo 70 px) e sbiadisce: niente spazio vuoto di lato
+    var d = Math.max(-70, Math.min(70, dx * (bordo ? 0.12 : 0.3)));
+    muovi(d, bordo ? 1 : 1 - Math.min(0.5, Math.abs(dx) / innerWidth * 0.8), 0);
+  }, { passive: false });
+  document.addEventListener("touchend", function () {
+    if (x0 === null) return;
+    x0 = null;
+    if (dir !== "h") return;
+    var W = innerWidth, i = ORDINE.indexOf(tabCorrente()), j = i + (dx < 0 ? 1 : -1);
+    var veloce = Math.abs(dx) / Math.max(1, Date.now() - t0) > 0.45 && Math.abs(dx) > 40;
+    if (j < 0 || j >= ORDINE.length || !(Math.abs(dx) > W * 0.25 || veloce)) { muovi(0, 1, 200); return; }
+    var verso = dx < 0 ? -1 : 1;
+    muovi(verso * 70, 0, 120);
+    setTimeout(function () {
+      window.addEventListener("hashchange", function entra() {
+        window.removeEventListener("hashchange", entra);
+        muovi(-verso * 50, 0, 0);
+        void main.offsetWidth;
+        muovi(0, 1, 200);
+      });
+      location.hash = ORDINE[j];
+    }, 120);
+  }, { passive: true });
+  document.addEventListener("touchcancel", function () { if (x0 !== null) { x0 = null; muovi(0, 1, 200); } }, { passive: true });
+  // anche toccando la barra dei tab il cambio è morbido
+  document.querySelectorAll(".tabbar a").forEach(function (a) {
+    a.addEventListener("click", function () {
+      if (main.animate) main.animate([{ opacity: 0, transform: "translateY(8px)" }, { opacity: 1, transform: "none" }], { duration: 200, easing: "ease-out" });
+    });
+  });
+})();
 loadTcs();
 
 if ("serviceWorker" in navigator && location.protocol === "https:") {
