@@ -1,0 +1,33 @@
+# Road trip d'Avvento: ogni 2 giorni legge il prezzo medio svizzero della benzina sul sito del TCS
+# e aggiorna benzina.json, che l'app usa per il budget.
+name: Prezzo benzina TCS
+
+on:
+  schedule:
+    - cron: "23 5 */2 * *"   # ogni 2 giorni alle 05:23 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  benzina:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Leggi il prezzo dal TCS
+        run: python3 strumenti/benzina_tcs.py
+
+      - name: Salva se è cambiato
+        run: |
+          git config user.name "roadtrip-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add benzina.json
+          if git diff --cached --quiet; then
+            echo "Prezzo invariato."
+          else
+            git commit -m "Prezzo benzina TCS del $(date -u +%Y-%m-%d)"
+            git push
+          fi

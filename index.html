@@ -1,0 +1,2140 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Road trip d'Avvento</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="theme-color" content="#0F6B4C">
+<meta name="description" content="Il nostro road trip d'Avvento, 8–13 dicembre 2026: mappa, leg, mercatini e rubrica.">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icona-192.png">
+<link rel="apple-touch-icon" href="icona-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bitter:wght@600;700&family=Courier+Prime:wght@400;700&family=Overpass:wght@600;700;800&family=Patrick+Hand&family=Source+Sans+3:wght@400;600;700&display=swap">
+<style>
+/* Layout: app a colonna singola, cartelli autostradali verdi come titoli, barra a 5 tab fissa in basso. */
+:root {
+  --carta: #EFE4D2;        /* fondo, come le slide */
+  --carta-2: #E4D6BF;      /* superfici incassate */
+  --card: #FFFCF6;         /* card */
+  --bordo: #B29C82;        /* filetti */
+  --testo: #2B2019;
+  --testo-2: #6B5A4C;
+  --verde: #0F6B4C;        /* cartello autostradale */
+  --su-verde: #FFFFFF;
+  --rosso: #B5432F;        /* pillole orario, tracciato */
+  --oro: #E2A93B;          /* numeri delle leg */
+  --marrone: #3A2A20;      /* card scure */
+  --su-marrone: #F4E9D8;
+  --etichetta: #E9B24A;    /* etichette su marrone */
+  --blu: #1F4E8C;          /* riquadri info */
+  --turistico: #6A4126;    /* cartelli marroni */
+  --treno: #2456A4;
+  --bus: #7B4E9A;
+  --mappa: #F7EFE1;
+  --mappa-ink: #2B2019;
+  --strada: #2F2A27;
+  --nav: #FFFCF6;
+  /* oggetti illustrati: stessi colori in entrambi i temi */
+  --legno: #7E5234;
+  --legno-2: #6E4629;
+  --tetto: #4E3222;
+  --neve: #FFFFFF;
+  --carta-scontrino: #FFFDF7;
+  --ink-scontrino: #2B2019;
+  --nb-copertina: #7A2B2B;
+  --nb-carta: #FBF6EA;
+  --nb-riga: #BCD0E4;
+  --nb-margine: #E3A49B;
+  --nb-ink: #2747A0;
+  --neon: #1E8C86;
+  --cielo-1: #17152B;
+  --cielo-2: #3A2140;
+  --cielo-3: #8C4A48;
+  --monti-1: #3B2A36;
+  --monti-2: #241B24;
+
+  --f-cartello: "Overpass", "Highway Gothic", "Arial Narrow", Arial, sans-serif;
+  --f-titolo: "Bitter", "Rockwell", Georgia, serif;
+  --f-testo: "Source Sans 3", "Segoe UI", Roboto, Arial, sans-serif;
+  --f-mano: "Patrick Hand", "Comic Sans MS", "Bradley Hand", cursive;
+  --f-cassa: "Courier Prime", "Courier New", monospace;
+  --gutter-l: max(16px, env(safe-area-inset-left, 0px));
+  --gutter-r: max(16px, env(safe-area-inset-right, 0px));
+  --nav-h: 64px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --carta: #1C1A2A; --carta-2: #262337; --card: #2A2740; --bordo: #4C4566;
+    --testo: #F1E6D8; --testo-2: #B9AFC4; --verde: #127552; --rosso: #C2523C;
+    --marrone: #120F1C; --blu: #24569A; --turistico: #6E4429;
+    --mappa: #24213A; --mappa-ink: #F1E6D8; --nav: #221F33;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --carta: #1C1A2A; --carta-2: #262337; --card: #2A2740; --bordo: #4C4566;
+  --testo: #F1E6D8; --testo-2: #B9AFC4; --verde: #127552; --rosso: #C2523C;
+  --marrone: #120F1C; --blu: #24569A; --turistico: #6E4429;
+  --mappa: #24213A; --mappa-ink: #F1E6D8; --nav: #221F33;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--carta); color: var(--testo);
+  font-family: var(--f-testo); font-size: 1rem; line-height: 1.45;
+  padding-left: var(--gutter-l); padding-right: var(--gutter-r);
+  padding-block: env(safe-area-inset-top, 0px) calc(var(--nav-h) + 28px + env(safe-area-inset-bottom, 0px));
+  -webkit-tap-highlight-color: transparent;
+}
+body::before {
+  content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px);
+  z-index: 10; background: var(--carta);
+}
+main { max-width: 40rem; margin-inline: auto; display: grid; gap: 18px; }
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--oro); outline-offset: 2px; }
+h1, h2, h3 { margin: 0; text-wrap: balance; }
+p { margin: 0; }
+
+/* ---------- Cartello autostradale ---------- */
+.sign {
+  position: relative; margin-top: 16px; background: var(--verde); color: var(--su-verde);
+  border-radius: 12px; padding: 11px 16px 10px;
+  box-shadow: inset 0 0 0 3px var(--verde), inset 0 0 0 5.5px var(--su-verde), 0 1px 0 rgba(0,0,0,.08);
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+.sign h1 { font-family: var(--f-cartello); font-weight: 700; font-size: 1.3rem; line-height: 1.15; min-width: 0; }
+.sign-tab {
+  position: absolute; left: 16px; bottom: calc(100% - 6px); padding: 6px 16px 9px;
+  background: var(--verde); border-radius: 9px 9px 0 0;
+  box-shadow: inset 0 0 0 3px var(--verde), inset 0 0 0 5.5px var(--su-verde);
+  font-family: var(--f-cartello); font-weight: 700; font-size: .7rem; letter-spacing: .14em; text-transform: uppercase;
+}
+.sign-tab::after {
+  content: ""; position: absolute; left: 5.5px; right: 5.5px; bottom: -6px; height: 12px; background: var(--verde);
+}
+.shields { display: flex; gap: 4px; flex-shrink: 0; }
+.shields svg { width: 26px; height: 29px; display: block; }
+.diamond {
+  width: 32px; height: 32px; flex-shrink: 0; display: grid; place-items: center;
+  background: #F08A24; border: 2px solid #2B2019; transform: rotate(45deg); border-radius: 4px; margin-right: 6px;
+}
+.diamond span { transform: rotate(-45deg); color: #2B2019; font: 800 .45rem/1.05 var(--f-cartello); text-align: center; text-transform: uppercase; }
+
+.back {
+  display: inline-flex; align-items: center; gap: 6px; text-decoration: none;
+  font-family: var(--f-cartello); font-weight: 700; font-size: .78rem; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--testo-2); padding: 14px 0 0;
+}
+.lead { color: var(--testo-2); font-size: .98rem; }
+.label {
+  font-family: var(--f-cartello); font-weight: 700; font-size: .68rem; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--rosso);
+}
+
+/* ---------- Hero notturno (tab mappa) ---------- */
+.hero {
+  margin-left: calc(-1 * var(--gutter-l)); margin-right: calc(-1 * var(--gutter-r));
+  position: relative; overflow: hidden; color: #F3E9D6;
+  background:
+    radial-gradient(1px 1px at 12% 22%, #fff 99%, transparent) ,
+    radial-gradient(1px 1px at 28% 12%, #fff 99%, transparent),
+    radial-gradient(1.5px 1.5px at 47% 30%, #fff 99%, transparent),
+    radial-gradient(1px 1px at 63% 9%, #fff 99%, transparent),
+    radial-gradient(1px 1px at 78% 26%, #fff 99%, transparent),
+    radial-gradient(1.5px 1.5px at 90% 14%, #fff 99%, transparent),
+    radial-gradient(1px 1px at 36% 40%, #fff 99%, transparent),
+    radial-gradient(1px 1px at 70% 42%, #fff 99%, transparent),
+    linear-gradient(180deg, var(--cielo-1) 0%, var(--cielo-2) 58%, var(--cielo-3) 100%);
+}
+.hero-inner {
+  max-width: 40rem; margin-inline: auto; position: relative; z-index: 1;
+  padding: 26px var(--gutter-r) 74px var(--gutter-l); display: grid; gap: 4px;
+}
+.hero h1 { font-family: var(--f-titolo); font-weight: 700; font-size: clamp(1.9rem, 8vw, 2.6rem); line-height: 1.05; }
+.hero .date { font-family: var(--f-testo); font-weight: 700; color: var(--oro); font-size: 1.05rem; }
+.countdown {
+  justify-self: start; text-decoration: none; color: inherit; margin-top: 10px; display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.22); border-radius: 999px;
+  padding: 5px 12px; font-family: var(--f-cartello); font-weight: 700; font-size: .78rem; letter-spacing: .06em;
+}
+.countdown b { color: var(--oro); font-size: .95rem; font-variant-numeric: tabular-nums; }
+.hero svg.monti { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: 78px; display: block; }
+.shooting { position: absolute; top: 22px; right: 12%; width: 90px; height: 2px; transform: rotate(18deg);
+  background: linear-gradient(90deg, transparent, #fff); opacity: .8; border-radius: 2px; }
+@media (prefers-reduced-motion: no-preference) {
+  .shooting { animation: shoot 6s ease-in-out infinite; }
+  @keyframes shoot { 0%, 70% { opacity: 0; transform: translate(-40px,-12px) rotate(18deg); } 80% { opacity: .9; } 100% { opacity: 0; transform: translate(30px, 10px) rotate(18deg); } }
+}
+
+/* ---------- Mappa ---------- */
+.mapbox {
+  position: relative; border: 2px solid var(--marrone); border-radius: 12px; overflow: hidden;
+  background: var(--mappa); aspect-ratio: 520 / 452; max-height: 72vh;
+  margin-left: calc(10px - var(--gutter-l)); margin-right: calc(10px - var(--gutter-r));
+}
+.mapbox svg { width: 100%; height: 100%; display: block; touch-action: pan-x pan-y; cursor: grab; user-select: none; -webkit-user-select: none; }
+.mapbox svg.dragging { cursor: grabbing; }
+.map-2dita {
+  position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; opacity: 0; transition: opacity .25s;
+  background: rgba(20,16,12,.45); color: #fff; font-family: var(--f-cartello); font-weight: 700; font-size: 1rem; text-align: center; padding: 20px;
+}
+.map-2dita.show { opacity: 1; }
+.map-ctrl { position: absolute; right: 8px; top: 8px; display: grid; gap: 6px; }
+.map-ctrl button {
+  width: 38px; height: 38px; border-radius: 10px; border: 1.5px solid var(--marrone);
+  background: var(--card); color: var(--testo); font-size: 1.2rem; line-height: 1; cursor: pointer;
+  display: grid; place-items: center;
+}
+.map-hint { font-size: .84rem; color: var(--testo-2); margin-top: -8px; text-align: center; }
+.m-paper { fill: var(--mappa); }
+.m-frame { fill: none; stroke: var(--bordo); stroke-width: 1.2; stroke-dasharray: 2 4; }
+.m-hit { fill: none; stroke: transparent; stroke-width: 24; stroke-linecap: round; stroke-linejoin: round; }
+.m-case { fill: none; stroke: var(--mappa); stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; }
+.m-route { fill: none; stroke: var(--rosso); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; transition: stroke-width .15s; }
+.m-route.treno { stroke: var(--treno); }
+.m-route.bus { stroke: var(--bus); }
+.m-route.ring { stroke-dasharray: 4 4; stroke-width: 2.5; }
+.leg-g { cursor: pointer; }
+.leg-g:hover .m-route, .leg-g.on .m-route { stroke-width: 6.5; }
+.m-dot { fill: var(--mappa); stroke: var(--mappa-ink); stroke-width: 2.4; }
+.m-dot.small { stroke-width: 1.6; }
+.m-label {
+  font-family: var(--f-cartello); font-weight: 800; font-size: 18px; fill: var(--mappa-ink);
+  paint-order: stroke; stroke: var(--mappa); stroke-width: 4px; stroke-linejoin: round; pointer-events: none;
+}
+.m-minor {
+  font-family: var(--f-cartello); font-weight: 700; font-size: 11px; fill: var(--testo-2);
+  paint-order: stroke; stroke: var(--mappa); stroke-width: 3px; stroke-linejoin: round;
+  opacity: 0; transition: opacity .25s; pointer-events: none;
+}
+svg.zoomed .m-minor { opacity: 1; }
+.m-badge circle { fill: var(--oro); stroke: var(--marrone); stroke-width: 2; }
+.m-badge text { font-family: var(--f-titolo); font-weight: 700; font-size: 16px; fill: #2B2019; text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+.m-bio { fill: #7FA65A; fill-opacity: .25; stroke: #5E8A3E; stroke-dasharray: 3 3; stroke-width: 1; }
+.m-note { font-family: var(--f-testo); font-style: italic; font-size: 9px; fill: #4F7A35; pointer-events: none; }
+.m-faint { fill: var(--testo-2); font-family: var(--f-cartello); font-weight: 700; font-size: 9px; }
+.m-scale { stroke: var(--mappa-ink); stroke-width: 3; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 8px; text-decoration: none;
+  background: var(--card); border: 1.5px solid var(--bordo); border-radius: 999px; padding: 5px 12px 5px 5px;
+  font-family: var(--f-cartello); font-weight: 700; font-size: .8rem;
+}
+.num {
+  width: 28px; height: 28px; border-radius: 50%; display: inline-grid; place-items: center; flex-shrink: 0;
+  background: var(--oro); border: 2px solid #3A2A20; color: #2B2019;
+  font-family: var(--f-titolo); font-weight: 700; font-size: .92rem; line-height: 1;
+}
+.num.big { width: 42px; height: 42px; font-size: 1.3rem; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: .85rem; color: var(--testo-2); }
+.legend span { display: inline-flex; align-items: center; gap: 8px; }
+.legend i { width: 26px; height: 4px; border-radius: 2px; background: var(--rosso); display: inline-block; }
+.legend i.t { background: var(--treno); } .legend i.b { background: var(--bus); }
+
+.odo {
+  background: var(--marrone); color: var(--su-marrone); border-radius: 12px; padding: 14px 16px;
+  display: grid; gap: 8px;
+}
+.odo .label { color: var(--etichetta); }
+.odo-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.digits { display: flex; gap: 3px; }
+.digits span {
+  width: 30px; height: 40px; display: grid; place-items: center; border-radius: 4px;
+  background: #FFFDF7; color: #2B2019; font-family: var(--f-cassa); font-weight: 700; font-size: 1.45rem;
+  box-shadow: inset 0 -8px 10px -8px rgba(0,0,0,.35);
+}
+.digits span.z { background: #3A2E26; color: #7E6A58; }
+.odo-row .u { font-family: var(--f-cartello); font-weight: 800; font-size: 1.1rem; line-height: 1.1; }
+.odo-row .u small { display: block; font-weight: 600; font-size: .78rem; opacity: .8; }
+.stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.stat {
+  background: var(--card); border: 1.5px solid var(--bordo); border-radius: 12px; padding: 10px 12px; display: grid; gap: 2px; min-width: 0;
+}
+.stat strong { font-family: var(--f-cartello); font-weight: 800; font-size: 1.05rem; font-variant-numeric: tabular-nums; }
+.stat span { font-size: .8rem; color: var(--testo-2); }
+.trivia { font-size: .86rem; color: var(--testo-2); }
+.trivia b { color: var(--rosso); font-family: var(--f-cartello); letter-spacing: .1em; font-size: .72rem; margin-right: 6px; }
+
+/* ---------- Elenco leg ---------- */
+.leglist { display: grid; gap: 10px; }
+.legcard {
+  display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; text-decoration: none;
+  background: var(--card); border: 1.5px solid var(--bordo); border-radius: 12px; padding: 12px 12px 12px 10px;
+}
+.legcard:active { transform: scale(.99); }
+.legcard .when { font-family: var(--f-cartello); font-weight: 800; font-size: .78rem; letter-spacing: .08em; color: var(--rosso); }
+.legcard .route { font-weight: 700; font-size: 1.02rem; line-height: 1.25; }
+.legcard .meta { font-size: .84rem; color: var(--testo-2); }
+.legcard .body { min-width: 0; display: grid; gap: 2px; }
+.chev { color: var(--testo-2); font-size: 1.3rem; }
+.today { background: var(--verde); color: #fff; border-radius: 999px; padding: 1px 8px; font-size: .65rem; letter-spacing: .1em; margin-left: 6px; vertical-align: 1px; }
+
+/* ---------- Dettaglio leg ---------- */
+.road { padding-top: 6px; }
+.road-inner { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; position: relative; }
+.road-inner::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 44px; border-radius: 22px;
+  background:
+    linear-gradient(var(--strada), var(--strada)) padding-box;
+  box-shadow: inset 0 4px 0 -1px var(--strada), inset 0 6px 0 -1px #E8E1D6, inset 0 -6px 0 -1px #E8E1D6, inset 0 -4px 0 -1px var(--strada);
+}
+.road-inner::after {
+  content: ""; position: absolute; left: 14px; right: 14px; top: 21px; height: 2.5px;
+  background: repeating-linear-gradient(90deg, var(--oro) 0 14px, transparent 14px 24px);
+}
+.stop { position: relative; z-index: 1; display: grid; justify-items: center; gap: 8px; text-align: center; }
+.stop i { width: 26px; height: 26px; margin-top: 9px; border-radius: 50%; background: #fff; border: 5px solid var(--rosso); display: block; }
+.stop span { font-family: var(--f-cartello); font-weight: 700; font-size: .78rem; line-height: 1.15; padding-inline: 4px; }
+
+.facts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.fact { border-radius: 10px; padding: 9px 12px; background: var(--marrone); color: var(--su-marrone); display: grid; gap: 1px; min-width: 0; }
+.fact.g { background: var(--verde); color: #fff; }
+.fact.wide { grid-column: 1 / -1; }
+.fact small { font-family: var(--f-cartello); font-weight: 700; font-size: .64rem; letter-spacing: .14em; text-transform: uppercase; color: var(--etichetta); }
+.fact.g small { color: #CFE8DC; }
+.fact b { font-weight: 700; font-size: .98rem; }
+.fact b em { font-style: normal; font-weight: 400; opacity: .85; }
+
+.timeline { display: grid; gap: 8px; }
+.tl {
+  display: grid; grid-template-columns: 96px 1fr; gap: 10px; align-items: start;
+  background: var(--card); border: 1.5px solid var(--bordo); border-radius: 10px; padding: 10px 12px 10px 8px;
+}
+.pill {
+  background: var(--rosso); color: #fff; border-radius: 999px; padding: 4px 6px; text-align: center;
+  font-family: var(--f-cartello); font-weight: 700; font-size: .6rem; letter-spacing: .06em; text-transform: uppercase; line-height: 1.3;
+  margin-top: 1px;
+}
+.tl .t { display: grid; gap: 3px; min-width: 0; }
+.tl.nopill { grid-template-columns: 1fr; padding-left: 12px; }
+.tl .t b { font-weight: 700; font-size: 1rem; }
+.tl .t span { color: var(--testo-2); font-size: .9rem; }
+.go {
+  justify-self: start; margin-top: 4px; display: inline-flex; align-items: center; gap: 6px; text-decoration: none;
+  font-family: var(--f-cartello); font-weight: 700; font-size: .72rem; letter-spacing: .06em; text-transform: uppercase;
+  color: #fff; background: var(--blu); border-radius: 999px; padding: 4px 11px 3px;
+}
+.go.pin { background: transparent; color: var(--blu); border: 1.5px solid currentColor; }
+:root[data-theme="dark"] .go.pin { color: #9DBCF0; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .go.pin { color: #9DBCF0; } }
+
+.panel { border-radius: 14px; padding: 14px 16px; display: grid; gap: 10px; }
+.panel.blu { background: var(--blu); color: #fff; box-shadow: inset 0 0 0 3px var(--blu), inset 0 0 0 5px #fff; padding: 16px 18px; }
+.panel.blu h3 { font-family: var(--f-cartello); font-weight: 800; letter-spacing: .1em; text-transform: uppercase; font-size: .95rem; }
+.panel.blu ol { margin: 0; padding-left: 1.3em; display: grid; gap: 6px; }
+.panel.blu ol li::marker { color: var(--oro); font-weight: 700; }
+.panel.blu p { font-size: .88rem; font-style: italic; opacity: .9; }
+
+.linkcard {
+  display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; text-decoration: none;
+  background: var(--card); border: 1.5px solid var(--bordo); border-radius: 12px; padding: 10px 12px;
+}
+.linkcard b { display: block; }
+.linkcard span { font-size: .86rem; color: var(--testo-2); }
+.poi {
+  width: 44px; height: 44px; border-radius: 8px; background: var(--turistico); display: grid; place-items: center; flex-shrink: 0;
+  box-shadow: inset 0 0 0 2px var(--turistico), inset 0 0 0 3.5px #fff;
+}
+.poi svg { width: 26px; height: 26px; stroke: #fff; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+.museo { background: var(--card); border: 1.5px solid var(--bordo); border-radius: 12px; overflow: hidden; }
+.museo header { background: #3F6F73; color: #fff; padding: 10px 14px; display: grid; gap: 2px; }
+.museo header small { font-family: var(--f-cartello); font-weight: 700; font-size: .66rem; letter-spacing: .14em; color: #F3C66A; }
+.museo header b { font-family: var(--f-cartello); font-weight: 800; letter-spacing: .2em; font-size: 1.2rem; }
+.museo header i { font-size: .86rem; opacity: .9; }
+.museo dl { margin: 0; padding: 10px 14px 12px; display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; font-size: .9rem; }
+.museo dt { font-family: var(--f-cartello); font-weight: 700; font-size: .66rem; letter-spacing: .12em; color: var(--rosso); padding-top: 3px; }
+.museo dd { margin: 0; }
+.museo .go { margin: 0 14px 14px; }
+
+.motel {
+  --m-notte: #1B1626; --m-rosso: #D33A2C; --m-crema: #F6E7BE; --m-giallo: #F5C33B; --m-neon: #FF5A7A; --m-bulb: #FFE9A8;
+  position: relative; display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: center; overflow: hidden;
+  background: radial-gradient(ellipse at 30% 0%, #3A2D4D, var(--m-notte) 70%); border-radius: 14px; padding: 18px 14px 16px;
+}
+.motel-v {
+  display: grid; gap: 2px; padding: 10px 8px; border-radius: 10px; background: #2A1E1E;
+  box-shadow: inset 0 0 0 3px var(--m-rosso), 0 0 14px rgba(211,58,44,.45);
+}
+.motel-v span {
+  font-family: var(--f-titolo); font-weight: 700; font-size: 1.35rem; line-height: 1.05; text-align: center; color: #FFE3E8;
+  text-shadow: 0 0 4px var(--m-neon), 0 0 10px var(--m-neon), 0 0 20px var(--m-neon);
+}
+.motel-s {
+  position: relative; padding: 7px; border-radius: 12px 12px 12px 4px; background-color: var(--m-rosso);
+  background-image: radial-gradient(circle, var(--m-bulb) 2.2px, rgba(255,233,168,.35) 3.2px, transparent 4px);
+  background-size: 13px 13px; background-position: 1px 1px;
+  box-shadow: 0 0 16px rgba(255,200,90,.35);
+}
+.motel-board { background: var(--m-crema); color: #6E1A12; border-radius: 8px; padding: 10px 12px 12px; display: grid; gap: 6px; }
+.motel-board b { font-family: var(--f-titolo); font-style: italic; font-size: 1.25rem; line-height: 1.1; }
+.motel-board ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 1px; font-family: var(--f-cartello); font-weight: 800; font-size: .74rem; letter-spacing: .1em; color: #2B2019; }
+.motel-board li::before { content: "★ "; color: var(--m-rosso); }
+.vacancy {
+  justify-self: start; margin-top: 4px; background: #1E1A1A; border-radius: 6px; padding: 3px 10px;
+  font-family: var(--f-cartello); font-weight: 800; letter-spacing: .14em; font-size: .74rem; color: #FFD9DE;
+  text-shadow: 0 0 4px var(--m-neon), 0 0 9px var(--m-neon);
+}
+.vacancy s { text-decoration: none; opacity: .35; text-shadow: none; color: #9A8E90; }
+@media (prefers-reduced-motion: no-preference) {
+  .motel-v span { animation: neon 3s infinite; }
+  .motel-v span:nth-child(4) { animation: neon-flicker 1.9s infinite; }
+  .vacancy s { animation: no-flicker 2.3s infinite; }
+  @keyframes neon { 0%, 100% { opacity: 1; } 50% { opacity: .9; } }
+  @keyframes neon-flicker { 0%, 60%, 66%, 72%, 100% { opacity: 1; } 63%, 69% { opacity: .2; } }
+  @keyframes no-flicker {
+    0%, 18%, 100% { opacity: .3; text-shadow: none; color: #9A8E90; }
+    20%, 24%, 30%, 52% { opacity: 1; color: #FFD9DE; text-shadow: 0 0 4px var(--m-neon), 0 0 9px var(--m-neon); }
+    22%, 27%, 55% { opacity: .3; text-shadow: none; color: #9A8E90; }
+  }
+}
+
+.pager { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.pager a {
+  text-decoration: none; background: var(--card); border: 1.5px solid var(--bordo); border-radius: 12px; padding: 10px 12px;
+  display: grid; gap: 2px; font-size: .85rem; color: var(--testo-2); min-width: 0;
+}
+.pager a b { color: var(--testo); font-size: .95rem; }
+.pager a.next { text-align: right; grid-column: 2; }
+
+/* ---------- Guida ---------- */
+.tiles { display: grid; gap: 10px; }
+
+/* Mercatini: casette swipeabili */
+.towns { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
+.towns button {
+  border: 1.5px solid var(--bordo); background: var(--card); border-radius: 999px; padding: 5px 14px; cursor: pointer;
+  font-family: var(--f-cartello); font-weight: 700; font-size: .8rem;
+}
+.towns button[aria-selected="true"] { background: var(--verde); border-color: var(--verde); color: #fff; }
+.carousel {
+  display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 14px;
+  margin-left: calc(-1 * var(--gutter-l)); margin-right: calc(-1 * var(--gutter-r));
+  padding: 26px var(--gutter-r) 6px var(--gutter-l); scroll-padding-inline: var(--gutter-l) var(--gutter-r);
+  scrollbar-width: none; overscroll-behavior-x: contain;
+}
+.carousel::-webkit-scrollbar { display: none; }
+.casa { flex: 0 0 100%; scroll-snap-align: center; scroll-snap-stop: always; display: grid; position: relative; }
+.casa-roof { position: relative; height: 64px; }
+.casa-roof::before {
+  content: ""; position: absolute; inset: 0; background: var(--tetto);
+  clip-path: polygon(50% 0, 100% 78%, 100% 100%, 0 100%, 0 78%);
+}
+.casa-roof::after {
+  content: ""; position: absolute; inset: 0; background: var(--neve);
+  clip-path: polygon(50% 0, 100% 78%, 100% 90%, 96% 84%, 92% 88%, 50% 12%, 8% 88%, 4% 84%, 0 90%, 0 78%);
+}
+.lights { display: flex; justify-content: space-around; padding: 0 10px; height: 12px; background: var(--legno-2); }
+.lights i { width: 7px; height: 10px; border-radius: 50% 50% 45% 45%; display: block; margin-top: 1px; }
+.casa-body {
+  background: repeating-linear-gradient(90deg, var(--legno) 0 26px, var(--legno-2) 26px 28px);
+  padding: 12px 12px 14px; display: grid; gap: 12px;
+}
+.casa-sign {
+  justify-self: center; display: inline-flex; align-items: center; gap: 8px; border-radius: 6px; padding: 6px 18px;
+  font-family: var(--f-titolo); font-weight: 700; font-size: 1.25rem; color: #fff; box-shadow: 0 0 0 3px #2B2019;
+}
+.casa-panel {
+  background: var(--card); border-radius: 8px; padding: 12px 14px; display: grid; gap: 10px;
+  outline: 1.5px dashed var(--rosso); outline-offset: -6px; align-content: start;
+}
+.casa-panel .when { font-style: italic; color: var(--rosso); font-size: .88rem; }
+.mkt { display: grid; gap: 2px; text-decoration: none; padding: 6px 8px; margin-inline: -8px; border-radius: 8px; }
+.mkt:active, .mkt:hover { background: var(--carta-2); }
+.mkt b { font-size: 1.02rem; display: flex; justify-content: space-between; gap: 8px; }
+.mkt b::after { content: ""; width: 9px; height: 9px; flex-shrink: 0; margin: 5px 3px 0 0; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); background: var(--rosso); box-shadow: inset 0 0 0 2.5px var(--rosso), inset 0 0 0 5px var(--card); }
+.mkt span { font-size: .88rem; color: var(--testo-2); }
+.counter { height: 16px; background: var(--tetto); border-radius: 0 0 4px 4px; display: flex; justify-content: space-around; align-items: end; padding: 0 12px; }
+.counter i { width: 9px; height: 10px; border-radius: 1px 1px 3px 3px; margin-bottom: 3px; display: block; }
+.snow { height: 12px; background: var(--neve); border-radius: 0 0 8px 8px; opacity: .9; }
+.dots { display: flex; gap: 8px; justify-content: center; }
+.dots i { width: 8px; height: 8px; border-radius: 50%; background: var(--bordo); display: block; transition: background .2s, transform .2s; }
+.dots i.on { background: var(--verde); transform: scale(1.3); }
+.swipe-hint { text-align: center; font-size: .82rem; color: var(--testo-2); }
+
+/* Mangiare vegano */
+.vegan { background: var(--blu); color: #fff; border-radius: 14px; padding: 16px 14px 14px; box-shadow: inset 0 0 0 3px var(--blu), inset 0 0 0 5px #fff; display: grid; gap: 14px; }
+.vegan h3 { font-family: var(--f-cartello); font-weight: 800; letter-spacing: .12em; font-size: 1rem; display: flex; gap: 10px; align-items: center; padding-inline: 4px; }
+.vegan h3 svg { width: 22px; height: 22px; stroke: #fff; fill: none; stroke-width: 2; stroke-linecap: round; }
+.vgroup { background: var(--card); color: var(--testo); border-radius: 10px; padding: 8px; display: grid; gap: 4px; }
+.vgroup .label { padding: 4px 6px 2px; }
+.vitem { display: grid; gap: 1px; text-decoration: none; padding: 7px 8px; border-radius: 8px; border: 1px solid var(--bordo); }
+.vitem:active, .vitem:hover { background: var(--carta-2); }
+.vitem b { display: flex; justify-content: space-between; gap: 8px; }
+.vitem b::after { content: ""; width: 9px; height: 9px; flex-shrink: 0; margin: 5px 3px 0 0; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); background: var(--rosso); box-shadow: inset 0 0 0 2.5px var(--rosso), inset 0 0 0 5px var(--card); }
+.vitem span { font-size: .86rem; color: var(--testo-2); }
+.tel { font-size: .86rem; color: var(--rosso); }
+.fonti { font-size: .78rem; opacity: .85; padding-inline: 4px; }
+.fonti a { color: inherit; }
+
+/* Racchette */
+.board {
+  background: repeating-linear-gradient(180deg, var(--legno-2) 0 34px, var(--tetto) 34px 36px);
+  border-radius: 6px; padding: 14px; color: #F7EBDD; display: grid; gap: 10px; position: relative; margin-top: 24px;
+}
+.board::before {
+  content: ""; position: absolute; left: -8px; right: -8px; top: -22px; height: 24px; background: #A79A8E;
+  clip-path: polygon(6% 100%, 50% 0, 94% 100%);
+}
+.board h3 { font-family: var(--f-cartello); font-weight: 800; font-size: 1rem; }
+.trail { display: grid; grid-template-columns: 24px 1fr; gap: 10px; text-decoration: none; padding: 6px; border-radius: 8px; }
+.trail:hover, .trail:active { background: rgba(255,255,255,.08); }
+.trail b { font-family: var(--f-cartello); font-weight: 700; font-size: .95rem; color: #fff; }
+.trail span { font-size: .84rem; opacity: .9; display: block; }
+.diff { width: 18px; height: 18px; margin-top: 2px; display: block; }
+.diff.facile { border-radius: 50%; background: #1C7A55; border: 2px solid #fff; }
+.diff.medio { background: #1F4E8C; border: 2px solid #fff; }
+.diff.nd { border-radius: 50%; border: 2px dashed #fff; }
+.board .fonti { color: #E9DCCB; }
+
+/* Scontrino */
+.receipt {
+  background: var(--carta-scontrino); color: var(--ink-scontrino); font-family: var(--f-cassa);
+  padding: 22px 18px; position: relative; display: grid; gap: 10px; margin-block: 8px;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,.18));
+}
+.receipt::before, .receipt::after {
+  content: ""; position: absolute; left: 0; right: 0; height: 8px;
+  background: linear-gradient(-45deg, var(--carta-scontrino) 5.6px, transparent 0), linear-gradient(45deg, var(--carta-scontrino) 5.6px, transparent 0);
+  background-size: 12px 12px;
+}
+.receipt::before { top: -8px; background-position: left bottom; }
+.receipt::after { bottom: -8px; transform: rotate(180deg); }
+.receipt h3 { text-align: center; font-family: var(--f-cassa); letter-spacing: .14em; font-size: 1.05rem; }
+.receipt .sub { text-align: center; font-size: .78rem; }
+.receipt hr { border: 0; border-top: 1.5px dashed var(--ink-scontrino); margin: 2px 0; width: 100%; }
+.receipt hr.d { border-top-style: double; border-top-width: 4px; }
+.r-row { display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; font-variant-numeric: tabular-nums; }
+.r-row b { font-size: 1rem; }
+.r-row small { grid-column: 1; font-size: .78rem; opacity: .8; }
+.r-row .v { grid-row: 1; grid-column: 2; font-weight: 700; }
+.r-tot { display: flex; justify-content: space-between; font-weight: 700; font-size: 1.3rem; }
+.r-tot .v { color: var(--rosso); }
+.r-small { display: flex; justify-content: space-between; font-size: .88rem; font-weight: 700; }
+.thanks { text-align: center; font-size: .8rem; }
+.r-row small { line-height: 1.9; }
+.num-in {
+  font: inherit; font-weight: 700; color: inherit; background: transparent; text-align: right;
+  border: 0; border-bottom: 1.5px dashed var(--rosso); border-radius: 0; padding: 0 1px; margin: 0;
+  width: calc(var(--w, 4) * 1ch + 4px); min-width: 2.5ch; font-variant-numeric: tabular-nums;
+}
+.num-in::placeholder { color: inherit; opacity: .35; }
+.num-in:focus { outline: none; background: rgba(226,169,59,.25); border-bottom-style: solid; }
+.r-row small .num-in { font-weight: 700; font-size: .9rem; }
+.r-row .v .num-in { font-size: 1rem; }
+.r-reset { justify-self: center; background: none; border: 0; cursor: pointer; font: 700 .78rem var(--f-cassa); color: var(--rosso); text-decoration: underline; padding: 4px; }
+
+/* ---------- Rubrica ---------- */
+.nb { background: var(--nb-copertina); border-radius: 14px; padding: 22px 38px 14px 12px; position: relative; box-shadow: 0 3px 0 rgba(0,0,0,.15); }
+.nb-rings {
+  position: absolute; left: 26px; right: 50px; top: 6px; height: 26px; z-index: 2; pointer-events: none;
+  background: radial-gradient(ellipse 4px 11px at 50% 50%, transparent 2.6px, #6E6E78 3px, #D3D3DA 4px, transparent 4.6px) 0 0 / 20px 26px repeat-x;
+}
+.nb-page {
+  background-color: var(--nb-carta);
+  background-image:
+    linear-gradient(90deg, transparent 38px, var(--nb-margine) 38px, var(--nb-margine) 39.5px, transparent 39.5px),
+    repeating-linear-gradient(180deg, transparent 0 27px, var(--nb-riga) 27px 28px);
+  background-position: 0 6px;
+  border-radius: 6px; padding: 34px 12px 28px 50px; color: var(--nb-ink);
+  font-family: var(--f-mano); font-size: 1.16rem; line-height: 28px; min-height: 60vh;
+}
+.nb-sec { position: relative; padding-top: 28px; scroll-margin-top: 16px; }
+.nb-sec:first-child { padding-top: 0; }
+.nb-sec h2 {
+  font-family: var(--f-mano); font-weight: 400; font-size: 1.45rem; line-height: 28px; display: inline-block;
+  border-bottom: 2px solid var(--nb-ink); padding-right: 10px; margin-bottom: 0; border-radius: 0 0 40% 0 / 0 0 4px 0;
+}
+.nb-sec h3 { font-family: var(--f-mano); font-weight: 400; font-size: 1.05rem; line-height: 28px; color: var(--rosso); letter-spacing: .06em; margin-top: 0; }
+.nb-e + h3 { margin-top: 28px; }
+.nb-e { display: grid; padding-right: 4px; }
+.nb-e .n { text-transform: uppercase; justify-self: start; padding-inline: 2px; background: linear-gradient(transparent 52%, rgba(242,194,48,.5) 52%, rgba(242,194,48,.5) 88%, transparent 88%); }
+.nb-e a { text-decoration: none; display: block; width: fit-content; max-width: 100%; border-bottom: 1.5px dashed var(--nb-ink); line-height: 26px; margin-bottom: 2px; }
+.nb-e a::after { content: " ↗"; font-size: .95rem; }
+.nb-e .i { color: #4A5E91; }
+.nb-tabs { position: absolute; right: 4px; top: 30px; display: grid; gap: 5px; z-index: 3; }
+.nb-tabs { justify-items: end; }
+.nb-tabs button {
+  width: 32px; padding: 9px 0; border: 0; border-radius: 0 7px 7px 0; text-align: center; cursor: pointer;
+  font-family: var(--f-cartello); font-weight: 800; font-size: .66rem; color: #2B2019; letter-spacing: .02em;
+  box-shadow: inset 2px 0 0 rgba(0,0,0,.12); transition: width .15s;
+}
+.nb-tabs button[data-rb=""] { font-size: .6rem; letter-spacing: 0; }
+.nb-tabs button[aria-pressed="true"] { width: 38px; margin-right: -6px; box-shadow: inset 2px 0 0 rgba(0,0,0,.12), 0 0 0 2px #2B2019; }
+.nb-pen { display: block; width: 150px; height: 26px; margin: 10px 0 0 auto; }
+.nb-note { font-size: .84rem; color: var(--testo-2); }
+
+/* ---------- Prossima tappa (home, solo nei giorni del viaggio) ---------- */
+.nextstop {
+  position: relative; margin-top: 30px; background: var(--verde); color: #fff; border-radius: 14px;
+  box-shadow: inset 0 0 0 3px var(--verde), inset 0 0 0 5.5px #fff; padding: 18px 18px 14px; display: grid; gap: 10px;
+}
+.nextstop h2 { font-family: var(--f-cartello); font-weight: 800; font-size: 1.55rem; line-height: 1.1; }
+.nextstop .where { font-size: .98rem; }
+.nextstop .note { font-size: .88rem; color: #CFE8DC; }
+.prog { display: flex; gap: 5px; }
+.prog i { flex: 1; height: 4px; border-radius: 2px; background: rgba(255,255,255,.28); display: block; }
+.prog i.done { background: var(--oro); }
+.prog i.cur { background: #fff; }
+.navgo {
+  display: flex; justify-content: center; align-items: center; gap: 8px; text-decoration: none; cursor: pointer;
+  background: #fff; color: #0F6B4C; border: 0; border-radius: 10px; padding: 13px 12px;
+  font-family: var(--f-cartello); font-weight: 800; font-size: 1.02rem; letter-spacing: .04em; text-transform: uppercase;
+}
+.nextstop .row { display: flex; justify-content: space-between; align-items: center; gap: 6px 12px; flex-wrap: wrap; }
+.linkbtn {
+  background: none; border: 0; padding: 4px 0; cursor: pointer; color: #fff; text-decoration: underline; text-underline-offset: 3px;
+  font-family: var(--f-cartello); font-weight: 700; font-size: .8rem;
+}
+.geo { font-size: .78rem; color: #CFE8DC; }
+.toast {
+  position: fixed; left: 50%; bottom: calc(var(--nav-h) + 22px + env(safe-area-inset-bottom, 0px)); z-index: 30;
+  transform: translate(-50%, 12px); opacity: 0; pointer-events: none; transition: opacity .3s, transform .3s;
+  background: var(--marrone); color: var(--su-marrone); border-radius: 10px; padding: 10px 16px; font-size: .9rem;
+  width: max-content; max-width: calc(100% - 32px); text-align: center;
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+/* ---------- Radio ---------- */
+.radio-wrap { margin-left: calc(6px - var(--gutter-l)); margin-right: calc(6px - var(--gutter-r)); }
+.radio { width: 100%; height: auto; display: block; filter: drop-shadow(0 6px 6px rgba(0,0,0,.25)); }
+.radio text { font-family: var(--f-cartello); }
+.radio .lcd-txt, .radio .lcd-glow, .radio .eq, .radio .led-on, .radio .p3-on { opacity: 0; transition: opacity .35s; }
+.radio.on .lcd-txt, .radio.on .lcd-glow, .radio.on .eq, .radio.on .led-on, .radio.on .p3-on { opacity: 1; }
+.radio .knob-rot { transition: transform .5s cubic-bezier(.3,1.4,.5,1); transform-box: view-box; transform-origin: 92px 112px; transform: rotate(-120deg); }
+.radio.on .knob-rot { transform: rotate(40deg); }
+.radio .pwr { cursor: pointer; }
+.radio .pwr:focus { outline: none; }
+.radio .pwr:focus-visible circle.ring { stroke: var(--oro); stroke-width: 3; }
+.radio .eq rect { transform-box: fill-box; transform-origin: 50% 100%; }
+@media (prefers-reduced-motion: no-preference) {
+  .radio.on .eq rect { animation: eq .7s ease-in-out infinite alternate; }
+  .radio.on .eq rect:nth-child(2n) { animation-duration: .55s; }
+  .radio.on .eq rect:nth-child(3n) { animation-duration: .9s; animation-delay: -.3s; }
+  .radio.on .eq rect:nth-child(5n) { animation-duration: .45s; animation-delay: -.2s; }
+}
+@keyframes eq { from { transform: scaleY(.25); } to { transform: scaleY(1); } }
+@media (prefers-reduced-motion: no-preference) {
+  .radio.tuning .lcd-txt { animation: tuning .9s steps(2, start) infinite; }
+  .radio.tuning .eq rect { animation-play-state: paused; }
+}
+@keyframes tuning { to { opacity: .25; } }
+.onair {
+  background: var(--marrone); color: var(--su-marrone); border-radius: 12px; padding: 12px; display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: center;
+}
+.onair-btn {
+  border: 0; cursor: pointer; border-radius: 8px; padding: 12px 12px; background: #5A2A22; color: #C9928A;
+  font-family: var(--f-cartello); font-weight: 800; letter-spacing: .14em; font-size: .9rem;
+  box-shadow: inset 0 0 0 3px #3A1A15, 0 0 0 3px #8A5A40; transition: background .25s, color .25s, box-shadow .25s;
+}
+.onair-btn[aria-pressed="true"] { background: #D23B2B; color: #fff; box-shadow: inset 0 0 0 3px #A52A1E, 0 0 0 3px #8A5A40, 0 0 18px rgba(255,80,60,.7); }
+.onair .t { display: grid; gap: 3px; min-width: 0; font-size: .86rem; }
+.onair .t b { font-family: var(--f-cartello); font-weight: 800; letter-spacing: .12em; color: var(--etichetta); font-size: .78rem; }
+.onair .t i { font-style: italic; }
+.onair .t a { color: inherit; font-weight: 700; }
+
+/* ---------- Home ---------- */
+.sign.has-tab { margin-top: 30px; }
+.gear { position: absolute; top: 12px; right: var(--gutter-r); z-index: 2; width: 40px; height: 40px; display: grid; place-items: center; border-radius: 50%; background: rgba(255,255,255,.12); color: #F3E9D6; }
+.gear svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.minilegs { display: grid; background: var(--card); border: 1.5px solid var(--bordo); border-radius: 12px; overflow: hidden; }
+.minilegs a { display: grid; grid-template-columns: auto auto 1fr; gap: 10px; align-items: center; padding: 9px 12px; text-decoration: none; }
+.minilegs a + a { border-top: 1px solid var(--bordo); }
+.minilegs .d { font-family: var(--f-cartello); font-weight: 800; font-size: .74rem; letter-spacing: .06em; color: var(--rosso); white-space: nowrap; }
+.minilegs .r { font-weight: 600; font-size: .9rem; min-width: 0; }
+
+/* ---------- Impostazioni · officina ---------- */
+.officina {
+  --acciaio-1: #DDE1E6; --acciaio-2: #9AA1A9; --ferro: #3A3F45; --giallo: #F2C230; --nero: #1B1B1B;
+  margin-left: calc(-1 * var(--gutter-l) + 6px); margin-right: calc(-1 * var(--gutter-r) + 6px);
+  border-radius: 12px; padding: 14px 12px 20px; display: grid; gap: 14px;
+  background-color: #8A6845;
+  background-image: radial-gradient(circle, #3B2817 1.7px, transparent 2.2px), linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.1));
+  background-size: 18px 18px, 100% 100%;
+  box-shadow: inset 0 0 0 2px #5C4329, inset 0 0 30px rgba(0,0,0,.25);
+}
+.rivet { position: absolute; width: 9px; height: 9px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #F4F6F8, #7E858D 70%); box-shadow: 0 1px 1px rgba(0,0,0,.5); }
+.rivet.tl { top: 7px; left: 7px; } .rivet.tr { top: 7px; right: 7px; } .rivet.bl { bottom: 7px; left: 7px; } .rivet.br { bottom: 7px; right: 7px; }
+.plate {
+  position: relative; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 16px 24px;
+  border-radius: 8px; border: 2px solid #5B6168;
+  background: repeating-linear-gradient(90deg, rgba(255,255,255,.12) 0 1px, transparent 1px 3px), linear-gradient(135deg, var(--acciaio-1), var(--acciaio-2) 55%, #C7CCD2);
+  box-shadow: 0 3px 0 rgba(0,0,0,.3);
+}
+.plate h1 { font-family: var(--f-cartello); font-weight: 800; font-size: 1.35rem; letter-spacing: .16em; text-transform: uppercase; color: var(--ferro); text-shadow: 0 1px 0 rgba(255,255,255,.7), 0 -1px 0 rgba(0,0,0,.25); }
+.plate svg { width: 26px; height: 26px; stroke: var(--ferro); fill: none; stroke-width: 2; stroke-linejoin: round; }
+.hazard { height: 12px; border-radius: 3px; margin-top: -4px; background: repeating-linear-gradient(-45deg, var(--giallo) 0 11px, var(--nero) 11px 22px); box-shadow: 0 2px 0 rgba(0,0,0,.3); }
+.drawer {
+  position: relative; border-radius: 8px; padding: 16px 14px 18px; display: grid; gap: 10px; border: 2px solid #6E757D;
+  background-color: #AEB4BB;
+  background-image:
+    linear-gradient(135deg, transparent 42%, rgba(255,255,255,.45) 42% 58%, transparent 58%),
+    linear-gradient(45deg, transparent 42%, rgba(0,0,0,.12) 42% 58%, transparent 58%);
+  background-size: 16px 16px, 16px 16px; background-position: 0 0, 8px 8px;
+  box-shadow: 0 3px 0 rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.5);
+}
+.dymo {
+  justify-self: start; color: #F4F4F4; border-radius: 3px; padding: 3px 12px 2px; transform: rotate(-1.2deg);
+  font-family: var(--f-cartello); font-weight: 800; font-size: .78rem; letter-spacing: .2em;
+  text-shadow: 0 1px 0 rgba(0,0,0,.6), 0 -1px 0 rgba(255,255,255,.25); box-shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+.drawer-in { display: grid; gap: 8px; background: rgba(255,255,255,.72); border-radius: 6px; padding: 10px; color: #23272C; font-size: .9rem; }
+.officina .seg { background: #2B2E33; border-radius: 8px; padding: 4px; gap: 4px; }
+.officina .seg button {
+  background: linear-gradient(#61666D, #3E4248); color: #D8DBDF; border-radius: 6px; padding: 9px 2px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.18), 0 1px 0 rgba(0,0,0,.5);
+}
+.officina .seg button[aria-pressed="true"] { background: linear-gradient(#F7D25A, #D99E15); color: #1B1B1B; box-shadow: inset 0 2px 4px rgba(0,0,0,.35); }
+.officina .btn { background: var(--nero); }
+.bolla {
+  position: relative; background: #FFFDF4; color: #2B2019; border-radius: 4px; padding: 26px 16px 14px; display: grid; gap: 8px;
+  font-family: var(--f-cassa); font-size: .86rem; box-shadow: 0 3px 6px rgba(0,0,0,.3); transform: rotate(.6deg); margin-top: 8px;
+  background-image: repeating-linear-gradient(180deg, transparent 0 21px, rgba(31,78,140,.12) 21px 22px);
+}
+.bolla .clip { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); width: 90px; height: 24px; border-radius: 5px;
+  background: linear-gradient(#E3E6EA, #8D949C); border: 1.5px solid #5B6168; }
+.bolla-h { font-weight: 700; letter-spacing: .12em; border-bottom: 1.5px dashed #2B2019; padding-bottom: 4px; }
+.bolla .firma { font-style: italic; opacity: .75; text-align: right; }
+.stopbtn { display: grid; justify-items: center; gap: 8px; margin-top: 4px; }
+.emergenza {
+  width: 78px; height: 78px; border-radius: 50%; cursor: pointer; border: 7px solid var(--giallo);
+  background: radial-gradient(circle at 38% 32%, #FF7A6B, #C42A1C 55%, #7D1610);
+  box-shadow: 0 0 0 3px var(--nero), 0 5px 0 #5A0F09, 0 8px 10px rgba(0,0,0,.4); transition: transform .08s, box-shadow .08s;
+}
+.emergenza:active { transform: translateY(4px); box-shadow: 0 0 0 3px var(--nero), 0 1px 0 #5A0F09, 0 3px 5px rgba(0,0,0,.4); }
+.stopbtn span { font-family: var(--f-cartello); font-weight: 800; letter-spacing: .2em; font-size: .78rem; color: #F4F4F4; background: var(--nero); padding: 3px 10px; border-radius: 3px; }
+
+/* ---------- Strade e cantoni ---------- */
+.roadgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(86px, 1fr)); gap: 10px; }
+.roadbtn {
+  display: grid; justify-items: center; align-content: start; gap: 6px; text-decoration: none; text-align: center;
+  background: var(--card); border: 1.5px solid var(--bordo); border-radius: 12px; padding: 12px 6px 10px; min-width: 0;
+}
+.roadbtn svg { width: 46px; height: 50px; display: block; }
+.roadbtn span { font-size: .74rem; color: var(--testo-2); line-height: 1.2; }
+.roadbtn:active, .roadrow a:active, .kt:active { transform: scale(.97); }
+.roadrow { display: flex; flex-wrap: wrap; gap: 8px; }
+.roadrow a {
+  display: inline-flex; align-items: center; gap: 8px; text-decoration: none; min-width: 0;
+  background: var(--card); border: 1.5px solid var(--bordo); border-radius: 10px; padding: 4px 10px 4px 5px; font-size: .84rem;
+}
+.roadrow svg { width: 26px; height: 29px; flex-shrink: 0; display: block; }
+.kts { display: flex; flex-wrap: wrap; gap: 6px; }
+.kt {
+  display: inline-flex; gap: 7px; align-items: center; text-decoration: none;
+  background: var(--card); border: 1.5px solid var(--bordo); border-radius: 8px; padding: 3px 10px 3px 3px; font-size: .84rem;
+}
+.kt b { background: var(--rosso); color: #fff; border-radius: 5px; padding: 2px 6px; font-family: var(--f-cartello); font-weight: 800; font-size: .72rem; letter-spacing: .06em; }
+.kt.big { padding: 6px 12px 6px 6px; font-size: .95rem; }
+.sign .shields a { display: block; }
+.kshield { flex-shrink: 0; }
+.kshield svg { width: 34px; height: 41px; display: block; filter: drop-shadow(0 1px 1px rgba(0,0,0,.25)); }
+.roadhead { display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: center; }
+.roadhead svg { width: 76px; height: 84px; display: block; }
+.roadhead .kind { font-family: var(--f-cartello); font-weight: 700; font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--rosso); }
+.roadhead h2 { font-family: var(--f-cartello); font-weight: 800; font-size: 1.35rem; line-height: 1.15; }
+.roadhead p { color: var(--testo-2); font-size: .95rem; margin-top: 4px; }
+.tratti { display: grid; gap: 10px; }
+.tratto { background: var(--card); border: 1.5px solid var(--bordo); border-radius: 12px; padding: 12px; display: grid; gap: 8px; }
+.tratto-top { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.tratto-top .when { font-family: var(--f-cartello); font-weight: 800; font-size: .78rem; letter-spacing: .08em; color: var(--rosso); }
+.tratto-top b { display: block; font-size: 1rem; }
+.tratto-top .chev { margin-left: auto; }
+.tratto .km { font-family: var(--f-cartello); font-weight: 800; font-size: .95rem; }
+.tratto p { color: var(--testo-2); font-size: .9rem; }
+.sumrow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.sumrow .stat strong { font-size: .98rem; }
+.cartelli { display: grid; gap: 8px; }
+.cartelli div { display: grid; grid-template-columns: 34px 1fr; gap: 12px; align-items: center; font-size: .9rem; color: var(--testo-2); }
+.cartelli svg { width: 30px; height: 33px; display: block; }
+.trivia a { color: inherit; font-weight: 700; text-decoration: none; border-bottom: 1.5px dotted var(--rosso); }
+.map-sel {
+  position: absolute; left: 8px; bottom: 8px; right: 54px; z-index: 2; text-decoration: none;
+  background: var(--card); border: 1.5px solid var(--marrone); border-radius: 10px; padding: 6px 10px 6px 6px;
+  display: flex; gap: 8px; align-items: center; font-size: .86rem; line-height: 1.2;
+}
+.map-sel b { display: block; }
+.map-sel .chev { margin-left: auto; }
+svg.focus .leg-g:not(.sel) { opacity: .25; }
+.leg-g.sel .m-route { stroke-width: 6.5; }
+.tolink { justify-self: start; }
+
+/* ---------- Impostazioni ---------- */
+.group { background: var(--card); border: 1.5px solid var(--bordo); border-radius: 12px; overflow: hidden; }
+.group > div { padding: 12px 14px; display: grid; gap: 8px; }
+.group > div + div { border-top: 1px solid var(--bordo); }
+.group h3 { font-size: .98rem; font-weight: 700; }
+.group p { color: var(--testo-2); font-size: .9rem; }
+.seg { display: flex; background: var(--carta-2); border-radius: 10px; padding: 3px; gap: 3px; }
+.seg button {
+  flex: 1; border: 0; background: transparent; border-radius: 8px; padding: 8px 4px; cursor: pointer;
+  font-family: var(--f-cartello); font-weight: 700; font-size: .8rem; color: var(--testo-2); min-width: 0;
+}
+.seg button[aria-pressed="true"] { background: var(--card); color: var(--testo); box-shadow: 0 1px 2px rgba(0,0,0,.18); }
+.btn {
+  border: 0; border-radius: 10px; padding: 10px 14px; cursor: pointer; background: var(--verde); color: #fff;
+  font-family: var(--f-cartello); font-weight: 700; font-size: .85rem; letter-spacing: .04em; justify-self: start;
+}
+.btn.ghost { background: transparent; color: var(--rosso); border: 1.5px solid var(--rosso); }
+.group ul { margin: 0; padding-left: 1.2em; display: grid; gap: 4px; color: var(--testo-2); font-size: .9rem; }
+.ver { text-align: center; font-size: .8rem; color: var(--testo-2); }
+
+/* ---------- Barra tab ---------- */
+nav.tabbar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; background: var(--nav);
+  border-top: 1.5px solid var(--bordo);
+  padding: 6px var(--gutter-r) calc(6px + env(safe-area-inset-bottom, 0px)) var(--gutter-l);
+}
+.tabbar-in { max-width: 40rem; margin-inline: auto; display: grid; grid-template-columns: repeat(7, 1fr); }
+.tabbar a {
+  text-decoration: none; display: grid; justify-items: center; gap: 2px; padding: 6px 0 4px; border-radius: 10px;
+  font-family: var(--f-cartello); font-weight: 700; font-size: .6rem; letter-spacing: 0; color: var(--testo-2);
+  position: relative; min-width: 0;
+}
+.tabbar svg { width: 23px; height: 23px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.tabbar a[aria-current="page"] { color: var(--verde); }
+.tabbar a[aria-current="page"]::before { content: ""; position: absolute; top: -7px; left: 30%; right: 30%; height: 3px; border-radius: 0 0 3px 3px; background: var(--verde); }
+:root[data-theme="dark"] .tabbar a[aria-current="page"] { color: #6FD3A6; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .tabbar a[aria-current="page"] { color: #6FD3A6; } }
+
+@media (max-width: 370px) {
+  .tl { grid-template-columns: 1fr; }
+  .pill { justify-self: start; padding-inline: 10px; }
+  .sign h1 { font-size: 1.25rem; }
+}
+</style>
+</head>
+<body>
+<main id="app" aria-live="polite"></main>
+
+<nav class="tabbar" aria-label="Sezioni">
+  <div class="tabbar-in">
+    <a href="#home" data-tab="home">
+      <svg viewBox="0 0 24 24"><path d="M3 11 12 4l9 7"/><path d="M5.5 9.5V20h13V9.5"/><path d="M10 20v-5h4v5"/></svg>Viaggio</a>
+    <a href="#mappa" data-tab="mappa">
+      <svg viewBox="0 0 24 24"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/><path d="M9 4v14M15 6v14"/></svg>Mappa</a>
+    <a href="#leg" data-tab="leg">
+      <svg viewBox="0 0 24 24"><path d="M6 21 10 3M18 21 14 3"/><path d="M12 6v2M12 11v2M12 16v2"/></svg>Leg</a>
+    <a href="#strade" data-tab="strade">
+      <svg viewBox="0 0 24 24"><path d="M4 5.5Q12 2 20 5.5Q21.5 15 12 22Q2.5 15 4 5.5Z"/><path d="M4.3 9.5h15.4"/></svg>Strade</a>
+    <a href="#rubrica" data-tab="rubrica">
+      <svg viewBox="0 0 24 24"><path d="M6 3h12a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H6z"/><path d="M6 3v18M3.5 7H8M3.5 12H8M3.5 17H8M10 8h6M10 11h4"/></svg>Rubrica</a>
+    <a href="#guida" data-tab="guida">
+      <svg viewBox="0 0 24 24"><path d="M12 2.5l1.2 2.3 2.5.3-1.8 1.7.5 2.5L12 8.1 9.6 9.3l.5-2.5-1.8-1.7 2.5-.3z"/><path d="M12 10 6 19h12z"/><path d="M12 19v2.5"/></svg>Guida</a>
+    <a href="#radio" data-tab="radio">
+      <svg viewBox="0 0 24 24"><rect x="2.5" y="8" width="19" height="12" rx="2"/><circle cx="8" cy="14" r="2.6"/><path d="M13.5 12h5M13.5 15h5M7 8l10-5"/></svg>Radio</a>
+  </div>
+</nav>
+
+<script>
+(function () {
+"use strict";
+
+/* =====================================================================
+   DATI DEL VIAGGIO (dalla presentazione e dal resoconto)
+   ===================================================================== */
+var TRIP = { start: "2026-12-08", end: "2026-12-13", km: 885, mi: 550 };
+
+var LEGS = [
+  { n: 1, day: "MAR", date: "8.12", iso: "2026-12-08",
+    title: "Locarno TI → Lucerna → Shoppyland → Berna", km: 265, mi: 165, drive: "≈ 4 h 25",
+    shields: ["A-13", "A-2", "CH-10", "A-6"], roads: "A-13 · A-2 · CH-10 · A-6",
+    stops: ["Locarno TI", "Lucerna", "Shoppyland", "Berna"],
+    pit: [["Lucerna", "Agrola"], ["Schönbühl BE", "Shoppyland"]], night: ["Berna", "Campus Muristalden"],
+    plan: [
+      ["Mattina", "Partenza da Locarno TI", "A-13 e A-2 per il Gottardo, fino a Lucerna"],
+      ["Mattina", "Agrola TopShop", "Bodenhof 5, Lucerna (Littau) · 6/7–21, aperto tutto l'anno · pieno e caffè", "Agrola TopShop, Bodenhof 5, 6014 Luzern"],
+      ["Mattina", "Strada principale 10", "Entlebuch, Biosfera UNESCO, fino a Worb BE (≈ 1 h 45)"],
+      ["Pranzo", "Pranzo sur le pouce", ""],
+      ["Pomeriggio", "Shoppyland", "Industriestrasse 10, Urtenen-Schönbühl BE · 9–20 · spesa alla Migros", "Shoppyland, Industriestrasse 10, 3322 Urtenen-Schönbühl"],
+      ["Sera", "Campus Muristalden · WG8", "Muristrasse 8, Berna · uscita 12 Bern-Ostring · 3 notti · CHF 0.–", "Muristrasse 8, 3006 Bern"]
+    ] },
+  { n: 2, day: "MER", date: "9.12", iso: "2026-12-09",
+    title: "Berna → Zurigo → Berna", km: 250, mi: 155, ar: true, drive: "≈ 2 h 50",
+    shields: ["A-6", "A-1", "A-1H"], roads: "A-6 · A-1 · A-1H",
+    stops: ["Berna", "Zurigo", "Berna"],
+    pit: [["Zurigo", "Vegiboss"]], pitLabel: "Consegna", night: ["Berna", "Campus Muristalden"],
+    plan: [
+      ["Mattina", "Partenza da Berna", "Congelatore spento 24 h prima, sdraiato nel bagagliaio"],
+      ["Mattina", "Consegna da Vegiboss AG", "Herdernstrasse 71, Zurigo · ≈ 1 h 25 · consegna del congelatore", "Vegiboss AG, Herdernstrasse 71, 8004 Zürich"],
+      ["Mattina", "Da Vegiboss, se ci lasciano", "Piano B: P+Rail Tiefenbrunnen, Bellerivestrasse 261 · CHF 15 al giorno · app SBB Mobile", "Bellerivestrasse 261, 8008 Zürich"],
+      ["Pomeriggio", "Giornata a Zurigo", "Proposta: il NONAM (vedi sotto)"],
+      ["Sera", "Rientro a Berna", "≈ 1 h 25 · uscita 12 Bern-Ostring · Muristrasse 8", "Muristrasse 8, 3006 Bern"]
+    ], extra: ["nonam", "vegan-zh"] },
+  { n: 3, day: "GIO", date: "10.12", iso: "2026-12-10",
+    title: "Berna · giornata libera", noCar: true, todo: true,
+    stops: ["Berna"],
+    facts: [["g", "Sauna", "Lorrainebad", "CHF 25 a testa, senza prenotazione"], ["", "Carico", "Muristalden", "valigie e scatoloni"]],
+    night: ["Berna", "Campus Muristalden"],
+    plan: [
+      ["", "Giornata libera", "A Berna, come vogliamo"],
+      ["", "Carico della macchina", "Valigie e scatoloni rimasti al Muristalden"],
+      ["", "Sauna al Lorrainebad, poi tuffo nell'Aare", "Uferweg 70, Berna · 10–21:30 · CHF 25 a testa · 2 asciugamani a testa", "Lorrainebad, Uferweg 70, 3013 Bern"],
+      ["", "Serata romantica a Berna", ""],
+      ["", "Campus Muristalden", "Muristrasse 8, Berna", "Muristrasse 8, 3006 Bern"]
+    ] },
+  { n: 4, day: "VEN", date: "11.12", iso: "2026-12-11",
+    title: "Berna → Saxon VS → Sion VS", km: 160, mi: 99, drive: "≈ 1 h 45",
+    shields: ["A-12", "A-9"], roads: "A-12 · A-9",
+    stops: ["Berna", "Saxon VS", "Sion VS"],
+    pit: [["Saxon VS", "Landi"]], night: ["Sion VS", "Le Merle Châtelain"],
+    plan: [
+      ["Mattina", "Partenza da Berna", "Verso Saxon VS, circa 1 h 30"],
+      ["Mattina", "Landi Saxon", "Route du Léman 12, Saxon VS · lun–ven 8:30–18:30", "LANDI, Route du Léman 12, 1907 Saxon"],
+      ["Pranzo", "Sion VS", "Mangiare vegano: vedi la lista qui sotto"],
+      ["Pomeriggio", "Città, castello, second-hand", "Valère mar–dom 11–17 · Tourbillon chiuso", "Château de Valère, Sion"],
+      ["Pomeriggio", "Check-in a Le Merle Châtelain", "Chemin de la Poudrière 20 B, Sion VS · 2 notti · CHF 180.–", "Chemin de la Poudrière 20B, 1950 Sion"]
+    ], extra: ["vegan-vs", "motel"] },
+  { n: 5, day: "SAB", date: "12.12", iso: "2026-12-12",
+    title: "Sion VS ↔ Evolène VS", byBus: true,
+    shields: ["VS-206"], roads: "VS-206 · AutoPostale 381",
+    stops: ["Sion VS", "Evolène VS"],
+    facts: [["g", "In bus", "AutoPostale 381", "ogni ora ai :45 · ≈ 40 min"], ["", "Biglietto", "CHF 16.–", "a/r a persona"]],
+    night: ["Sion VS", "Le Merle Châtelain"],
+    plan: [
+      ["Mattina", "Bus per Evolène VS", "AutoPostale 381, ogni ora ai :45, ≈ 40 min", "Sion, gare"],
+      ["Giorno", "Giornata in racchette", "Vedi le escursioni nella Guida"],
+      ["Pomeriggio", "Ritorno a Sion VS", "Bus CHF 16.– a/r a persona"],
+      ["Sera", "Serata a Sion VS", ""],
+      ["Notte", "Le Merle Châtelain", "Chemin de la Poudrière 20 B, Sion VS", "Chemin de la Poudrière 20B, 1950 Sion"]
+    ], extra: ["racchette"] },
+  { n: 6, day: "DOM", date: "13.12", iso: "2026-12-13",
+    title: "Sion VS → Furka Pass → Locarno TI", km: 210, mi: 130, drive: "≈ 3 h 40",
+    shields: ["A-9", "CH-19", "A-2"], roads: "A-9 · Furka Pass · Gottardo",
+    stops: ["Sion VS", "Furka Pass", "Locarno TI"],
+    pit: [["Oberwald VS → Realp UR", "≈ 15–20 min"]], pitLabel: "Treno-auto", night: ["Locarno TI", "a casa entro le 19"], nightLabel: "Rientro",
+    plan: [
+      ["9–12", "Chiesa", "Rue du Grand-Pont 8, Sion VS", "Rue du Grand-Pont 8, 1950 Sion"],
+      ["Pranzo", "Partenza", "Pranzo on the road"],
+      ["Pomeriggio", "Treno-auto Oberwald VS → Realp UR", "15–20 minuti in galleria · biglietto online, CHF 33.– · d'inverno il passo è chiuso", "Autoverlad Furka, Oberwald"],
+      ["Entro le 19", "Arrivo a Locarno TI", "A casa"]
+    ], extra: ["furka"] }
+];
+
+/* Strade: ogni tratto = [leg, da → a, km circa, cantoni, nota] */
+var ROADS = [
+  { code: "A-13", kind: "auto", name: "Autostrada A13",
+    desc: "Dal Rheintal al San Bernardino e giù fino a Bellinzona. Il ramo che usiamo collega Locarno all'autostrada del Gottardo.",
+    tratti: [[1, "Locarno TI → Bellinzona TI", 20, ["TI"], "Si parte presto, verso il Gottardo."],
+             [6, "Bellinzona TI → Locarno TI", 20, ["TI"], "Uscita 47 Locarno: a casa entro le 19."]] },
+  { code: "A-2", kind: "auto", name: "Autostrada A2 · Gottardo",
+    desc: "L'autostrada del Gottardo, da Basilea a Chiasso. Passa nella galleria stradale del San Gottardo, quasi 17 km sotto il passo.",
+    tratti: [[1, "Bellinzona TI → Gottardo → Altdorf UR → Stans NW → Lucerna", 140, ["TI", "UR", "NW", "LU"], "Il tratto più lungo dell'andata."],
+             [6, "Göschenen UR → Gottardo → Bellinzona TI", 80, ["UR", "TI"], "Si torna a sud sotto il Gottardo."]] },
+  { code: "CH-10", kind: "princ", name: "Strada principale 10",
+    desc: "La strada principale tra Lucerna e Berna attraverso l'Entlebuch, dentro la Biosfera UNESCO: niente autostrada, solo paesi e colline.",
+    tratti: [[1, "Lucerna (Littau) → Entlebuch LU → Worb BE", 80, ["LU", "BE"], "Circa 1 h 45, a fine mattinata."]] },
+  { code: "A-10", kind: "auto", name: "Raccordo A10 · Muri",
+    desc: "Il raccordo veloce che da Worb e Muri porta verso Berna.",
+    tratti: [[1, "Worb BE → Muri BE", 8, ["BE"], "Da qui si prosegue verso Schönbühl e lo Shoppyland."]] },
+  { code: "A-6", kind: "auto", name: "Autostrada A6",
+    desc: "L'autostrada di Berna verso Thun e Spiez. Per noi è il tratto di casa: l'uscita 12 Bern-Ostring porta al Muristalden.",
+    tratti: [[1, "Muri → Wankdorf · Wankdorf → Bern-Ostring", 8, ["BE"], "La sera si esce all'uscita 12 Bern-Ostring."],
+             [2, "Bern-Ostring ↔ Wankdorf", 8, ["BE"], "Andata e ritorno, all'inizio e alla fine della giornata."]] },
+  { code: "A-1", kind: "auto", name: "Autostrada A1",
+    desc: "La grande autostrada est–ovest della Svizzera, da Ginevra a San Gallo.",
+    tratti: [[1, "Schönbühl BE → Wankdorf", 5, ["BE"], "Dallo Shoppyland al Muristalden, ≈ 15 min."],
+             [2, "Schönbühl BE → Oensingen SO → Aarau AG → Zurigo", 220, ["BE", "SO", "AG", "ZH"], "≈ 110 km per tratta, andata e ritorno: la missione congelatore."]] },
+  { code: "A-1H", kind: "auto", name: "Diramazione A1H",
+    desc: "Breve diramazione che dall'A1 entra in città, all'uscita Zürich-Altstetten.",
+    tratti: [[2, "A1 → Zürich-Altstetten", 6, ["ZH"], "Pochi km all'andata e al ritorno, verso Vegiboss."]] },
+  { code: "A-12", kind: "auto", name: "Autostrada A12",
+    desc: "Da Berna a Friburgo e giù fino a Vevey, sopra il Lago Lemano.",
+    tratti: [[4, "Berna → Friburgo FR → Vevey VD", 85, ["BE", "FR", "VD"], "Partenza alle 9:00 verso il Vallese."]] },
+  { code: "A-9", kind: "auto", name: "Autostrada A9 · Rodano",
+    desc: "L'autostrada del Rodano: dal Lago Lemano risale il Vallese verso Sion e Briga.",
+    tratti: [[4, "Vevey VD → Saxon VS → Sion VS", 75, ["VD", "VS"], "Uscita 23 Saxon per il Landi, poi uscite 26/27 Sion."],
+             [6, "Sion VS → verso Briga", 25, ["VS"], "Dopo la chiesa, si parte verso est."]] },
+  { code: "VS-206", kind: "cant", name: "Strada cantonale VS-206",
+    desc: "La strada della Val d'Hérens, da Sion a Evolène. La facciamo in bus, con l'AutoPostale 381.",
+    tratti: [[5, "Sion VS ↔ Evolène VS", 50, ["VS"], "≈ 25 km per tratta, ≈ 40 min, bus ogni ora ai :45."]] },
+  { code: "CH-9", kind: "princ", name: "Strada principale 9 · Sempione",
+    desc: "La strada del Sempione. Dove finisce l'autostrada A9 ci porta fino a Briga.",
+    tratti: [[6, "Fine A9 → Briga VS", 25, ["VS"], "Si risale l'Alto Vallese."]] },
+  { code: "CH-19", kind: "princ", name: "Strada principale 19 · Goms e Furka",
+    desc: "La strada del Goms, da Briga a Oberwald. D'inverno il passo del Furka è chiuso: si continua in treno e si riprende la strada a Realp.",
+    tratti: [[6, "Briga VS → Oberwald VS · Realp UR → Andermatt UR", 50, ["VS", "UR"], "≈ 40 km fino a Oberwald, ≈ 10 km da Realp ad Andermatt."]] },
+  { code: "TRENO", kind: "treno", name: "Treno-auto del Furka",
+    desc: "Il treno che carica le auto sotto il Furka: si resta seduti in macchina per 15–20 minuti nella galleria di base. Biglietto online, CHF 33.–.",
+    tratti: [[6, "Oberwald VS → Realp UR", 15, ["VS", "UR"], "Galleria di base del Furka, ≈ 15 km."]] },
+  { code: "CH-2", kind: "princ", name: "Strada principale 2 · Schöllenen",
+    desc: "La vecchia strada del Gottardo: da Andermatt scende nella gola della Schöllenen, accanto al Ponte del Diavolo, fino a Göschenen.",
+    tratti: [[6, "Andermatt UR → Göschenen UR", 10, ["UR"], "Poi si entra in autostrada verso il Gottardo."]] }
+];
+var KIND = { auto: "Autostrada", princ: "Strada principale", cant: "Strada cantonale", treno: "Treno-auto" };
+var LEG_ROADS = { 1: ["A-13", "A-2", "CH-10", "A-10", "A-6", "A-1"], 2: ["A-6", "A-1", "A-1H"], 3: [], 4: ["A-12", "A-9"], 5: ["VS-206"],
+                  6: ["A-9", "CH-9", "CH-19", "TRENO", "CH-2", "A-2", "A-13"] };
+var LEG_CANTONS = { 1: ["TI", "UR", "NW", "LU", "BE"], 2: ["BE", "SO", "AG", "ZH"], 3: ["BE"], 4: ["BE", "FR", "VD", "VS"], 5: ["VS"], 6: ["VS", "UR", "TI"] };
+var CANTONI = {
+  TI: ["Ticino", "Casa: si parte da Locarno e si torna a Locarno.", []],
+  UR: ["Uri", "All'andata il Gottardo e Altdorf; al ritorno Realp, Andermatt e la gola della Schöllenen.", []],
+  NW: ["Nidvaldo", "Solo di passaggio sull'A2, all'altezza di Stans.", []],
+  LU: ["Lucerna", "Pieno e caffè all'Agrola di Littau, poi l'Entlebuch e la sua biosfera.", [["#rubrica", "Agrola in rubrica"]]],
+  BE: ["Berna", "Il campo base: 3 notti al Campus Muristalden, sauna al Lorrainebad e tre mercatini.", [["#guida-mercatini", "Mercatini di Berna"], ["#rubrica", "Indirizzi in rubrica"]]],
+  SO: ["Soletta", "Solo di passaggio sull'A1, a Oensingen.", []],
+  AG: ["Argovia", "Solo di passaggio sull'A1, ad Aarau.", []],
+  ZH: ["Zurigo", "Consegna da Vegiboss, il NONAM, cinque mercatini e quattro posti vegani.", [["#guida-mercatini", "Mercatini di Zurigo"], ["#guida-vegano", "Mangiare vegano"]]],
+  FR: ["Friburgo", "Di passaggio sull'A12.", []],
+  VD: ["Vaud", "Vevey e il Lago Lemano, di passaggio tra A12 e A9.", []],
+  VS: ["Vallese", "Landi a Saxon, 2 notti a Sion, racchette a Evolène, poi il Goms e il Furka.", [["#guida-mercatini", "Mercatino di Sion"], ["#guida-vegano", "Mangiare vegano"], ["#guida-racchette", "Racchette"]]]
+};
+var KT_ORDER = ["TI", "UR", "NW", "LU", "BE", "SO", "AG", "ZH", "FR", "VD", "VS"];
+function roadBy(code) { for (var i = 0; i < ROADS.length; i++) if (ROADS[i].code === code) return ROADS[i]; return null; }
+function slug(code) { return code.toLowerCase(); }
+function bySlug(sl) { for (var i = 0; i < ROADS.length; i++) if (slug(ROADS[i].code) === sl) return ROADS[i]; return null; }
+
+/* Tappe da navigare, giorno per giorno. ll = posizione approssimativa, r = raggio "siamo arrivati" in metri. */
+var NAV = {
+  1: [ { name: "Agrola TopShop", where: "Bodenhof 5, Lucerna (Littau)", note: "Pieno e caffè · A13 e A2 per il Gottardo",
+         q: "Agrola TopShop, Bodenhof 5, 6014 Luzern", ll: [47.052, 8.262], r: 1500 },
+       { name: "Shoppyland", where: "Industriestrasse 10, Urtenen-Schönbühl BE", note: "Via Entlebuch e Worb sulla strada 10, poi autostrada · spesa alla Migros",
+         q: "Shoppyland, Industriestrasse 10, 3322 Urtenen-Schönbühl", via: ["Entlebuch", "Worb"], ll: [47.004, 7.498], r: 900 },
+       { name: "Campus Muristalden", where: "Muristrasse 8, Berna", note: "Uscita 12 Bern-Ostring · 3 notti",
+         q: "Muristrasse 8, 3006 Bern", ll: [46.946, 7.461], r: 350 } ],
+  2: [ { name: "Vegiboss AG", where: "Herdernstrasse 71, Zurigo", note: "Consegna del congelatore",
+         q: "Vegiboss AG, Herdernstrasse 71, 8004 Zürich", ll: [47.386, 8.509], r: 450 },
+       { name: "NONAM", where: "Seefeldstrasse 317, Zurigo", note: "Se da Vegiboss non si può lasciare l'auto: P+Rail Tiefenbrunnen, Bellerivestrasse 261",
+         q: "NONAM, Seefeldstrasse 317, 8008 Zürich", ll: [47.352, 8.559], r: 500 },
+       { name: "Campus Muristalden", where: "Muristrasse 8, Berna", note: "Rientro · uscita 12 Bern-Ostring",
+         q: "Muristrasse 8, 3006 Bern", ll: [46.946, 7.461], r: 350 } ],
+  3: { free: "Giornata libera a Berna", sub: "" },
+  4: [ { name: "Landi Saxon", where: "Route du Léman 12, Saxon VS", note: "Lun–ven 8:30–18:30 · A12 e A9",
+         q: "LANDI, Route du Léman 12, 1907 Saxon", ll: [46.148, 7.176], r: 800 },
+       { name: "Le Merle Châtelain", where: "Chemin de la Poudrière 20 B, Sion", note: "Pranzo e giro in città a Sion, poi check-in",
+         q: "Chemin de la Poudrière 20B, 1950 Sion", ll: [46.236, 7.366], r: 400 } ],
+  5: { free: "Racchette in Val d'Hérens", sub: "In bus: AutoPostale 381 per Evolène, ogni ora ai :45." },
+  6: [ { name: "Chiesa", where: "Rue du Grand-Pont 8, Sion", note: "9–12",
+         q: "Rue du Grand-Pont 8, 1950 Sion", ll: [46.2337, 7.3594], r: 200 },
+       { name: "Treno-auto del Furka", where: "Oberwald VS", note: "Biglietto online, CHF 33.– · 15–20 minuti in galleria fino a Realp",
+         q: "Autoverlad Furka, Oberwald", ll: [46.5335, 8.348], r: 700 },
+       { name: "Casa", where: "Locarno TI", note: "Da Realp via Andermatt e Gottardo · entro le 19",
+         q: "Locarno", ll: [46.17, 8.795], r: 2500 } ]
+};
+
+var MERCATINI = [
+  { city: "Berna", color: "#C0362C", accent: "#F2C230", when: "le nostre serate: mar 8, mer 9 e gio 10.12", items: [
+    ["Waisenhausplatz", "lun–sab 10–20", "Waisenhausplatz, 3011 Bern"],
+    ["Münsterplatz", "davanti al Münster · lun–gio 11–18:30", "Münsterplatz, 3011 Bern"],
+    ["Sternenmarkt", "Kleine Schanze · lun–sab 11–22 · si paga solo con carta", "Kleine Schanze, 3011 Bern"] ] },
+  { city: "Zurigo", color: "#1F5BB5", accent: "#FFFFFF", when: "il nostro giorno: mer 9.12", items: [
+    ["Bellevue Noël", "Sechseläutenplatz · 11–22", "Sechseläutenplatz, 8001 Zürich"],
+    ["Münsterhof", "davanti al Fraumünster · 11–21:30", "Münsterhof, 8001 Zürich"],
+    ["Singing Christmas Tree", "Werdmühleplatz · 16–21", "Werdmühleplatz, 8001 Zürich"],
+    ["Weihnachtsmarkt Dörfli", "Niederdorf · 11–21", "Niederdorfstrasse, 8001 Zürich"],
+    ["Polarzauber", "nella stazione centrale · 11–21", "Zürich Hauptbahnhof"] ] },
+  { city: "Sion VS", color: "#5A3A26", accent: "#F3E9D6", when: "le nostre serate: ven 11 e sab 12.12", items: [
+    ["Marché de Noël", "Place du Midi ed Espace des Remparts · ven 14–21 · sab 11–21", "Place du Midi, 1950 Sion"] ] }
+];
+
+var VEGAN = [
+  { city: "Zurigo", items: [
+    ["Hiltl", "Sihlstrasse 28 · 90 % vegano", "Hiltl, Sihlstrasse 28, 8001 Zürich"],
+    ["Vegitat", "Langstrasse 192 · tutto vegano", "Vegitat, Langstrasse 192, 8005 Zürich"],
+    ["Phở Na Vegi", "Quellenstrasse 49 · tutto vegano", "Pho Na Vegi, Quellenstrasse 49, 8005 Zürich"],
+    ["Marktküche", "Feldstrasse 98 · cena vegana", "Marktküche, Feldstrasse 98, 8004 Zürich"] ] },
+  { city: "Sion VS", items: [
+    ["Maharadja Chez Chander", "Av. de Lausanne 52 · tutto vegano", "Maharadja Chez Chander, Avenue de Lausanne 52, 1950 Sion", "+41 79 474 40 80"],
+    ["Abyssinia", "Av. du Ritz 13 · etiope, piatti vegani", "Abyssinia, Avenue du Ritz 13, 1950 Sion"],
+    ["Poke Me", "Av. de la Gare 15 · sushi vegano", "Poke Me, Avenue de la Gare 15, 1950 Sion"],
+    ["La Fabrik'", "Rue du Rhône 11 · sughi vegani", "La Fabrik, Rue du Rhône 11, 1950 Sion"] ] }
+];
+
+var RACCHETTE = [
+  ["facile", "Sentier des traces · Molignon → La Forclaz", "3,3 km · 1 h 30 · +340 m · facile · solo andata", "Molignon, Evolène"],
+  ["medio", "Boucle Les Haudères / Les Rocs", "km n.d. · 3 h · +340 m · medio · anello", "Les Haudères, Evolène"],
+  ["medio", "La Forclaz – Mayen de Bréonaz", "5 km · 2 h 30 · +355 m · medio · anello", "La Forclaz, Evolène"],
+  ["nd", "Sentier raquettes d'Arolla Village", "6,8 km · 3 h 40 · +330 m · difficoltà n.d. · anello", "Arolla, Evolène"]
+];
+
+/* Budget: le cifre si modificano nello scontrino e restano salvate su questo telefono. */
+var BUDGET_DEF = { sion: 180, berna: 0, cibo: 150, litri: 53, prezzo: 1.94, furka: 33, bus: 32, extra: 200 };
+/* Prezzo della benzina: media svizzera TCS (Bleifrei 95), in benzina.json, aggiornato ogni 2 giorni da GitHub.
+   Si usa da solo finché non lo cambi a mano nello scontrino. */
+var tcs = null;
+try { tcs = JSON.parse(localStorage.getItem("rta-tcs") || "null"); } catch (e) {}
+if (tcs && tcs.bleifrei95) BUDGET_DEF.prezzo = tcs.bleifrei95;
+var budget = Object.assign({}, BUDGET_DEF, { manPrezzo: false });
+try { Object.assign(budget, JSON.parse(localStorage.getItem("rta-budget") || "{}")); } catch (e) {}
+if (!budget.manPrezzo) budget.prezzo = BUDGET_DEF.prezzo;
+function dataIt(iso) { var p = String(iso || "").split("-"); return p.length === 3 ? +p[2] + "." + +p[1] + "." + p[0] : ""; }
+function loadTcs() {
+  try {
+    fetch("benzina.json", { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : null; }).then(function (d) {
+      if (!d || !d.bleifrei95) return;
+      var changed = !tcs || tcs.bleifrei95 !== d.bleifrei95 || tcs.data !== d.data;
+      tcs = d; BUDGET_DEF.prezzo = d.bleifrei95;
+      try { localStorage.setItem("rta-tcs", JSON.stringify(d)); } catch (e) {}
+      if (!budget.manPrezzo) budget.prezzo = d.bleifrei95;
+      if (changed && /^(guida|guida-budget|home)$/.test((location.hash || "#home").slice(1))) render();
+    }).catch(function () {});
+  } catch (e) {}
+}
+function saveBudget() { try { localStorage.setItem("rta-budget", JSON.stringify(budget)); } catch (e) {} }
+function budgetLines() {
+  var b = budget;
+  return { alloggio: b.sion + b.berna, cibo: b.cibo, benzina: b.litri * b.prezzo, trasporti: b.furka + b.bus, extra: b.extra };
+}
+function budgetTotal() { var l = budgetLines(); return l.alloggio + l.cibo + l.benzina + l.trasporti + l.extra; }
+function chf(v) { return (Math.round(v * 100) / 100).toFixed(2); }
+
+/* Rubrica: [cantone, categoria, nome, indirizzo, info, indirizzo per Google Maps] */
+var RUBRICA = [
+  ["LU", "Negozi", "Agrola TopShop", "Bodenhof 5, Lucerna (Littau)", "mar 8.12 · 6/7–21, tutto l'anno", "Agrola TopShop, Bodenhof 5, 6014 Luzern"],
+  ["BE", "Alloggi", "Campus Muristalden · WG8", "Muristrasse 8, Berna", "mar 8 → ven 11.12 · 3 notti · CHF 0.–", "Muristrasse 8, 3006 Bern"],
+  ["BE", "Negozi", "Shoppyland", "Industriestrasse 10, Urtenen-Schönbühl", "mar 8.12 · 9–20 · spesa alla Migros", "Shoppyland, Industriestrasse 10, 3322 Urtenen-Schönbühl"],
+  ["BE", "Sauna", "Sauna Lorrainebad", "Uferweg 70, Berna", "gio 10.12 · 10–21:30 · CHF 25 a testa, senza prenotazione · poi tuffo nell'Aare", "Lorrainebad, Uferweg 70, 3013 Bern"],
+  ["ZH", "Consegna", "Vegiboss AG", "Herdernstrasse 71, Zurigo", "mer 9.12 · consegna del congelatore", "Vegiboss AG, Herdernstrasse 71, 8004 Zürich"],
+  ["ZH", "Parcheggio", "P+Rail Tiefenbrunnen", "Bellerivestrasse 261, Zurigo", "piano B · CHF 15 al giorno · app SBB Mobile", "Bellerivestrasse 261, 8008 Zürich"],
+  ["ZH", "Museo", "NONAM", "Seefeldstrasse 317, Zurigo", "mar–sab 13–17 · dom 10–17 · CHF 17", "NONAM, Seefeldstrasse 317, 8008 Zürich"],
+  ["VS", "Alloggi", "Le Merle Châtelain", "Chemin de la Poudrière 20 B, Sion", "ven 11 → dom 13.12 · 2 notti · CHF 180.–", "Chemin de la Poudrière 20B, 1950 Sion"],
+  ["VS", "Negozi", "Landi", "Route du Léman 12, Saxon", "ven 11.12 · lun–ven 8:30–18:30", "LANDI, Route du Léman 12, 1907 Saxon"],
+  ["VS", "Castello", "Castello di Valère", "Sion", "ven 11.12 · mar–dom 11–17", "Château de Valère, Sion"],
+  ["VS", "Chiesa", "Chiesa", "Rue du Grand-Pont 8, Sion", "dom 13.12 · 9–12", "Rue du Grand-Pont 8, 1950 Sion"]
+];
+var RB_KT = [["LU", "#9FC4EA"], ["BE", "#F6C94A"], ["ZH", "#B8D3F2"], ["VS", "#F2A49A"]];   // ordine del viaggio
+var RB_CAT = ["Alloggi", "Consegna", "Parcheggio", "Museo", "Negozi", "Sauna", "Castello", "Chiesa"];
+var rbSel = "";
+
+/* =====================================================================
+   IMPOSTAZIONI (salvate solo su questo telefono)
+   ===================================================================== */
+var DEFAULTS = { theme: "auto", units: "km", test: "" };
+var settings = Object.assign({}, DEFAULTS);
+try { Object.assign(settings, JSON.parse(localStorage.getItem("rta-settings") || "{}")); } catch (e) {}
+function save() { try { localStorage.setItem("rta-settings", JSON.stringify(settings)); } catch (e) {} }
+function applyTheme() {
+  var r = document.documentElement;
+  if (settings.theme === "light") r.setAttribute("data-theme", "light");
+  else if (settings.theme === "dark") r.setAttribute("data-theme", "dark");
+  else r.removeAttribute("data-theme");
+}
+applyTheme();
+
+/* =====================================================================
+   UTILITÀ
+   ===================================================================== */
+function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+
+// Google Maps: "dir" = percorso calcolato, "pin" = solo il punto
+function mapsUrl(q, mode, via) {
+  var e = encodeURIComponent(q);
+  return mode === "dir" ? "https://www.google.com/maps/dir/?api=1&destination=" + e + "&travelmode=driving" +
+                          (via && via.length ? "&waypoints=" + encodeURIComponent(via.join("|")) : "")
+                        : "https://www.google.com/maps/search/?api=1&query=" + e;
+}
+function ext(href) { return 'href="' + esc(href) + '" target="_blank" rel="noopener"'; }
+
+function dist(km, mi, ar) {
+  var s = settings.units === "mi" ? "≈ " + mi + " mi" : settings.units === "both" ? "≈ " + km + " km (" + mi + " mi)" : "≈ " + km + " km";
+  return s + (ar ? " a/r" : "");
+}
+
+function dayDiff(iso) {
+  var p = iso.split("-"), d = new Date(+p[0], +p[1] - 1, +p[2]);
+  var now = new Date(); now.setHours(0, 0, 0, 0);
+  return Math.round((d - now) / 86400000);
+}
+function todayLeg() {
+  if (settings.test) return +settings.test;   // modalità prova dalle impostazioni
+  for (var i = 0; i < LEGS.length; i++) if (dayDiff(LEGS[i].iso) === 0) return LEGS[i].n;
+  return 0;
+}
+
+function shield(code) {
+  if (code === "TRENO") {
+    return '<svg viewBox="0 0 40 44" aria-label="Treno-auto"><rect x="1" y="6" width="38" height="32" rx="4" fill="#1F4E8C" stroke="#fff" stroke-width="2"/>' +
+      '<text x="20" y="20" text-anchor="middle" font-family="Overpass,Arial" font-weight="800" font-size="8" fill="#fff">TRENO</text>' +
+      '<text x="20" y="30" text-anchor="middle" font-family="Overpass,Arial" font-weight="800" font-size="8" fill="#fff">AUTO</text></svg>';
+  }
+  if (/^A-/.test(code)) {
+    return '<svg viewBox="0 0 40 44" aria-label="' + code + '"><path d="M3 5Q20 -1 37 5Q41 27 20 42Q-1 27 3 5Z" fill="#1E4C9A" stroke="#fff" stroke-width="2"/>' +
+      '<path d="M4 6Q20 0.5 36 6L36.9 14H3.1Z" fill="#C0362C"/>' +
+      '<text x="20" y="29" text-anchor="middle" font-family="Overpass,Arial" font-weight="800" font-size="' + (code.length > 3 ? 11 : 13) + '" fill="#fff">' + code + '</text></svg>';
+  }
+  if (/^VS-/.test(code)) {
+    return '<svg viewBox="0 0 40 44" aria-label="' + code + '"><rect x="1" y="3" width="38" height="38" rx="6" fill="#111"/><ellipse cx="20" cy="22" rx="16" ry="12" fill="#fff"/>' +
+      '<text x="20" y="25.5" text-anchor="middle" font-family="Overpass,Arial" font-weight="800" font-size="9" fill="#111">' + code + '</text></svg>';
+  }
+  return '<svg viewBox="0 0 40 44" aria-label="' + code + '"><rect x="1" y="2" width="38" height="40" rx="6" fill="#111"/><path d="M7 8H33V24Q33 34 20 38Q7 34 7 24Z" fill="#fff"/>' +
+    '<text x="20" y="25" text-anchor="middle" font-family="Overpass,Arial" font-weight="800" font-size="9" fill="#111">' + code + '</text></svg>';
+}
+
+function shieldLink(code) { return '<a href="#strada-' + slug(code) + '" aria-label="Strada ' + code + '">' + shield(code) + '</a>'; }
+/* Stemmi cantonali, disegnati in forma semplificata (viewBox 40×48). */
+var kUid = 0;
+function star(x, y, r, fill) {
+  var pts = [];
+  for (var i = 0; i < 10; i++) { var a = -Math.PI / 2 + i * Math.PI / 5, rr = i % 2 ? r * 0.42 : r; pts.push((x + rr * Math.cos(a)).toFixed(2) + "," + (y + rr * Math.sin(a)).toFixed(2)); }
+  return '<polygon points="' + pts.join(" ") + '" fill="' + fill + '"/>';
+}
+function stemma(c) {
+  var id = "ks" + (++kUid), W = "#FFFFFF", R = "#D52B1E", B = "#1F5DAA", K = "#111111", Y = "#F5C400", G = "#1E8A3E", body = "";
+  if (c === "TI") body = '<rect width="20" height="48" fill="' + R + '"/><rect x="20" width="20" height="48" fill="' + B + '"/>';
+  else if (c === "LU") body = '<rect width="20" height="48" fill="' + B + '"/><rect x="20" width="20" height="48" fill="' + W + '"/>';
+  else if (c === "SO") body = '<rect width="40" height="24" fill="' + R + '"/><rect y="24" width="40" height="24" fill="' + W + '"/>';
+  else if (c === "FR") body = '<rect width="40" height="24" fill="' + K + '"/><rect y="24" width="40" height="24" fill="' + W + '"/>';
+  else if (c === "ZH") body = '<rect width="40" height="48" fill="' + W + '"/><polygon points="0,0 40,48 0,48" fill="' + B + '"/>';
+  else if (c === "VD") body = '<rect width="40" height="20" fill="' + W + '"/><rect y="20" width="40" height="28" fill="' + G + '"/>' +
+    '<text x="20" y="9.5" text-anchor="middle" font-family="Georgia,serif" font-weight="700" font-size="4.6" fill="#C9A227">LIBERTÉ</text>' +
+    '<text x="20" y="15.5" text-anchor="middle" font-family="Georgia,serif" font-weight="700" font-size="4.6" fill="#C9A227">ET PATRIE</text>';
+  else if (c === "VS") {
+    body = '<rect width="20" height="48" fill="' + W + '"/><rect x="20" width="20" height="48" fill="' + R + '"/>';
+    [[9, 10], [15, 10], [9, 19], [15, 19], [9, 28], [15, 28], [12, 37]].forEach(function (p) { body += star(p[0], p[1], 2.8, R); });
+    [[25, 10], [31, 10], [25, 19], [31, 19], [25, 28], [31, 28]].forEach(function (p) { body += star(p[0], p[1], 2.8, W); });
+  } else if (c === "AG") {
+    body = '<rect width="20" height="48" fill="' + K + '"/><rect x="20" width="20" height="48" fill="' + B + '"/>' +
+      '<path d="M0 20q2.5-3 5 0t5 0 5 0 5 0M0 28q2.5-3 5 0t5 0 5 0 5 0" fill="none" stroke="' + W + '" stroke-width="2.6"/>' +
+      star(25.5, 14, 4, W) + star(34, 14, 4, W) + star(29.8, 25, 4, W);
+  } else if (c === "NW") {
+    body = '<rect width="40" height="48" fill="' + R + '"/>' +
+      '<circle cx="20" cy="11" r="5" fill="none" stroke="' + W + '" stroke-width="3"/>' +
+      '<rect x="18.4" y="15.5" width="3.2" height="24" fill="' + W + '"/>' +
+      '<path d="M18.5 29H11v9h3v-3h2v3h2.5zM21.5 29H29v9h-3v-3h-2v3h-2.5z" fill="' + W + '"/>';
+  } else if (c === "UR") {
+    body = '<rect width="40" height="48" fill="' + Y + '"/>' +
+      '<path d="M13 17C9 15 8 10 10 6M27 17c4-2 5-7 3-11" fill="none" stroke="' + K + '" stroke-width="2.8" stroke-linecap="round"/>' +
+      '<path d="M12 16Q20 11 28 16L26.5 31Q20 38 13.5 31Z" fill="' + K + '"/>' +
+      '<circle cx="16.3" cy="21" r="1.4" fill="' + Y + '"/><circle cx="23.7" cy="21" r="1.4" fill="' + Y + '"/>' +
+      '<circle cx="20" cy="34.5" r="3.2" fill="none" stroke="' + R + '" stroke-width="1.8"/>';
+  } else if (c === "BE") {
+    body = '<rect width="40" height="48" fill="' + R + '"/><line x1="-4" y1="-5" x2="44" y2="53" stroke="' + Y + '" stroke-width="15"/>' +
+      '<g transform="translate(20 23.5) rotate(50) scale(-1.15 1.15)">' +
+      '<path d="M-10 -1Q-10 -5 -5 -5H5Q7 -8 10 -7Q12.5 -6 12 -3L9.5 -2Q8 2 6 2V6H3.5V2.5H-4V6H-6.5V2Q-10 2 -10 -1Z" fill="' + K + '"/>' +
+      '<rect x="-10.5" y="-2" width="2.5" height="1.2" fill="' + K + '"/><path d="M11 -2.6l1.6 .6-.4 1.1z" fill="' + R + '"/></g>';
+  }
+  return '<svg viewBox="0 0 40 48" aria-label="Stemma del cantone ' + CANTONI[c][0] + '"><defs><clipPath id="' + id + '"><path d="M1 1H39V24Q39 41 20 47Q1 41 1 24Z"/></clipPath></defs>' +
+    '<g clip-path="url(#' + id + ')">' + body + '</g><path d="M1 1H39V24Q39 41 20 47Q1 41 1 24Z" fill="none" stroke="#fff" stroke-width="1.6"/></svg>';
+}
+
+function kt(c, big) { return '<a class="kt' + (big ? ' big' : '') + '" href="#cantone-' + c.toLowerCase() + '"><b>' + c + '</b>' + CANTONI[c][0] + '</a>'; }
+function kts(list) { return '<div class="kts">' + list.map(function (c) { return kt(c); }).join("") + '</div>'; }
+
+function sign(tab, title, right) {
+  return '<header class="sign' + (tab ? ' has-tab' : '') + '">' + (tab ? '<span class="sign-tab">' + esc(tab) + '</span>' : '') +
+    '<h1>' + esc(title) + '</h1>' + (right || '') + '</header>';
+}
+
+var ICON = {
+  casetta: '<svg viewBox="0 0 24 24"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/><path d="M9 20v-5h6v5"/><path d="M7 12h0M10 12h0M14 12h0M17 12h0" stroke-width="2.6"/></svg>',
+  posate: '<svg viewBox="0 0 24 24"><path d="M7 3v8M5 3v5a2 2 0 0 0 4 0V3M7 11v10"/><path d="M17 21V3c-2 1.5-3 4-3 7v3h3"/></svg>',
+  racchetta: '<svg viewBox="0 0 24 24"><ellipse cx="9" cy="9" rx="4" ry="6.5" transform="rotate(-25 9 9)"/><path d="M12 14l5 7M6.5 6l5 6M5 10l6-3"/></svg>',
+  cassa: '<svg viewBox="0 0 24 24"><rect x="3" y="10" width="18" height="10" rx="1.5"/><path d="M7 10V5h8v5M17 6h3v4M7 14h2M11 14h2M15 14h2M7 17h10"/></svg>',
+  radio: '<svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="12" rx="2"/><circle cx="8.5" cy="14" r="2.5"/><path d="M14 12h4M14 15h4M7 8l9-5"/></svg>',
+  strada: '<svg viewBox="0 0 24 24"><path d="M8 21 11 3M16 21 13 3"/></svg>'
+};
+
+/* =====================================================================
+   VISTA 1 · MAPPA
+   ===================================================================== */
+var CITY = {
+  locarno: [558, 634], bellinzona: [604, 627], andermatt: [517, 497], altdorf: [527, 425], stans: [471, 401],
+  lucerna: [436, 372], entlebuch: [410, 391], worb: [309, 409], schoenbuehl: [297, 385], berna: [285, 405],
+  oensingen: [340, 304], aarau: [412, 280], zurigo: [498, 276], friburgo: [228, 447], vevey: [164, 548],
+  saxon: [231, 640], sion: [268, 615], evolene: [295, 651], briga: [395, 590], oberwald: [468, 527], realp: [499, 508]
+};
+var ROUTES = {
+  1: [["", "558,634 604,627 517,497 527,425 495,404 471,401 459,375 436,372 410,391 385,412 360,407 340,413 325,405 309,409 297,385 285,405"]],
+  2: [["", "285,405 297,385 318,335 340,304 372,298 395,300 412,280 440,268 458,256 475,268 498,276"]],
+  4: [["", "285,405 260,422 228,447 196,498 164,548 186,600 208,654 231,640 268,615"]],
+  5: [["bus", "268,615 281,633 295,651"]],
+  6: [["", "268,615 395,590 468,527"], ["treno", "468,527 499,508"], ["", "499,508 517,497 604,627 558,634"]]
+};
+var BADGE = { 1: [548, 455], 2: [388, 322], 3: [258, 372], 4: [174, 492], 5: [314, 628], 6: [418, 548] };
+var MAIN = [["locarno", "Locarno", 552, 662, "middle"], ["lucerna", "Lucerna", 436, 357, "middle"], ["berna", "Berna", 274, 410, "end"],
+            ["zurigo", "Zurigo", 508, 282, "start"], ["sion", "Sion", 258, 606, "end"], ["evolene", "Evolène", 295, 675, "middle"]];
+var MINOR = [["bellinzona", "Bellinzona", 612, 622, "start"], ["andermatt", "Andermatt", 527, 500, "start"], ["altdorf", "Altdorf", 535, 428, "start"],
+             ["stans", "Stans", 473, 416, "middle"], ["entlebuch", "Entlebuch", 405, 380, "end"], ["worb", "Worb", 312, 424, "middle"],
+             ["schoenbuehl", "Schönbühl", 290, 380, "end"], ["oensingen", "Oensingen", 334, 300, "end"], ["aarau", "Aarau", 412, 271, "middle"],
+             ["friburgo", "Friburgo", 220, 450, "end"], ["vevey", "Vevey", 156, 551, "end"], ["saxon", "Saxon", 224, 652, "end"],
+             ["briga", "Briga", 395, 604, "middle"], ["oberwald", "Oberwald", 462, 542, "end"], ["realp", "Realp", 497, 524, "start"]];
+var BASE = { x: 132, y: 240, w: 520, h: 452 };
+
+function mapSvg() {
+  var s = '<svg id="map" viewBox="' + [BASE.x, BASE.y, BASE.w, BASE.h].join(" ") + '" role="img" aria-label="Mappa delle sei leg del viaggio">';
+  s += '<rect class="m-paper" x="-600" y="-600" width="2400" height="2400"/>';
+  s += '<rect class="m-frame" x="' + (BASE.x + 8) + '" y="' + (BASE.y + 8) + '" width="' + (BASE.w - 16) + '" height="' + (BASE.h - 16) + '" rx="6"/>';
+  s += '<ellipse class="m-bio" cx="378" cy="412" rx="28" ry="17"/><text class="m-note m-minor" x="378" y="440" text-anchor="middle">Biosfera UNESCO</text>';
+  // leg 3: giro a piedi attorno a Berna
+  s += '<g class="leg-g" data-leg="3"><circle class="m-hit" cx="285" cy="405" r="17"/><circle class="m-route ring" cx="285" cy="405" r="17"/></g>';
+  [2, 4, 1, 6, 5].forEach(function (n) {
+    var parts = ROUTES[n], hit = "", cas = "", main = "";
+    parts.forEach(function (p) {
+      hit += '<polyline class="m-hit" points="' + p[1] + '"/>';
+      cas += '<polyline class="m-case" points="' + p[1] + '"/>';
+      main += '<polyline class="m-route ' + p[0] + '" points="' + p[1] + '"/>';
+    });
+    s += '<g class="leg-g" data-leg="' + n + '">' + hit + cas + main + '</g>';
+  });
+  // cartello treno-auto
+  s += '<g transform="translate(436 468)"><rect width="34" height="20" rx="2" fill="#1F4E8C" stroke="#fff" stroke-width="1.5"/>' +
+       '<text x="17" y="9" text-anchor="middle" font-family="Overpass,Arial" font-weight="800" font-size="6" fill="#fff">TRENO</text>' +
+       '<text x="17" y="16" text-anchor="middle" font-family="Overpass,Arial" font-weight="800" font-size="6" fill="#fff">AUTO</text></g>';
+  MINOR.forEach(function (m) { var c = CITY[m[0]]; s += '<circle class="m-dot small" cx="' + c[0] + '" cy="' + c[1] + '" r="3"/>'; });
+  MINOR.forEach(function (m) { s += '<text class="m-minor" x="' + m[2] + '" y="' + m[3] + '" text-anchor="' + m[4] + '">' + m[1] + '</text>'; });
+  MAIN.forEach(function (m) { var c = CITY[m[0]]; s += '<circle class="m-dot" cx="' + c[0] + '" cy="' + c[1] + '" r="' + (m[0] === "evolene" ? 4 : 6) + '"/>'; });
+  MAIN.forEach(function (m) { s += '<text class="m-label" x="' + m[2] + '" y="' + m[3] + '" text-anchor="' + m[4] + '"' + (m[0] === "evolene" ? ' style="font-size:14px"' : '') + '>' + m[1] + '</text>'; });
+  Object.keys(BADGE).forEach(function (n) {
+    var b = BADGE[n];
+    s += '<g class="leg-g m-badge" data-leg="' + n + '"><circle cx="' + b[0] + '" cy="' + b[1] + '" r="13.5"/><text x="' + b[0] + '" y="' + (b[1] + 1) + '">' + n + '</text></g>';
+  });
+  // bussola e scala
+  s += '<g transform="translate(160 272)"><circle r="15" fill="var(--card)" stroke="var(--mappa-ink)" stroke-width="1.2"/><path d="M0 -11 4 0 0 11 -4 0Z" fill="var(--mappa-ink)"/><path d="M0 -11 4 0 -4 0Z" fill="#C0362C"/>' +
+       '<text y="-19" text-anchor="middle" class="m-faint">N</text></g>';
+  s += '<g transform="translate(146 672)"><line class="m-scale" x1="0" y1="0" x2="53" y2="0"/><line x1="26.5" y1="0" x2="53" y2="0" stroke="var(--mappa)" stroke-width="1.6"/>' +
+       '<text class="m-faint" x="0" y="13">0</text><text class="m-faint" x="40" y="13">20 km</text></g>';
+  s += '</svg>';
+  return s;
+}
+
+// Calcolato dalla data del telefono: cambia da solo ogni giorno.
+function countdownText() {
+  var d = dayDiff(TRIP.start);
+  if (todayLeg()) return 'Oggi siamo sulla <b>leg ' + todayLeg() + '</b> ›';
+  if (d > 1) return 'Mancano <b>' + d + '</b> giorni alla partenza';
+  if (d === 1) return 'Si parte <b>domani</b>!';
+  if (todayLeg()) return 'Oggi siamo sulla <b>leg ' + todayLeg() + '</b> ›';
+  return 'Viaggio <b>concluso</b>';
+}
+function refreshCountdown() {
+  var el = document.getElementById("countdown");
+  if (!el) return;
+  el.innerHTML = countdownText();
+  if (todayLeg()) el.setAttribute("href", "#leg-" + todayLeg()); else el.removeAttribute("href");
+}
+/* ---------- Prossima tappa ----------
+   Ogni giorno del viaggio la home propone la tappa successiva. Tocchi "Portami lì":
+   si apre il navigatore con il percorso. Quando la posizione dice che siamo arrivati,
+   la card passa da sola alla tappa dopo. A mezzanotte cambia giornata. */
+var navState = { day: "", i: 0, started: false };
+try { Object.assign(navState, JSON.parse(localStorage.getItem("rta-nav") || "{}")); } catch (e) {}
+function saveNav() { try { localStorage.setItem("rta-nav", JSON.stringify(navState)); } catch (e) {} }
+function navDay() { var n = todayLeg(); return n ? (settings.test ? "test-" : "") + LEGS[n - 1].iso : ""; }
+function syncNavDay() {
+  var d = navDay();
+  if (navState.day !== d) { navState = { day: d, i: 0, started: false }; saveNav(); }
+}
+
+function navCardHtml() {
+  var n = todayLeg();
+  if (!n) return "";
+  syncNavDay();
+  var l = LEGS[n - 1], plan = NAV[n], tab = "Oggi · " + l.day + " " + l.date;
+  if (!Array.isArray(plan)) {
+    return '<section class="nextstop"><span class="sign-tab">' + tab + '</span><h2>' + esc(plan.free) + '</h2>' +
+      (plan.sub ? '<p class="note">' + esc(plan.sub) + '</p>' : '') + '<a class="navgo" href="#leg-' + n + '">Programma della giornata ›</a></section>';
+  }
+  if (navState.i >= plan.length) {
+    return '<section class="nextstop"><span class="sign-tab">' + tab + '</span>' +
+      '<h2>' + (n === 6 ? "Bentornati a casa!" : "Giornata finita: buona notte a " + esc(l.night[0])) + '</h2>' +
+      '<div class="row"><button type="button" class="linkbtn" data-nav="back">‹ Tappa precedente</button><a class="linkbtn" href="#leg-' + n + '">Programma ›</a></div></section>';
+  }
+  var st = plan[navState.i], prog = plan.map(function (x, k) { return '<i class="' + (k < navState.i ? "done" : k === navState.i ? "cur" : "") + '"></i>'; }).join("");
+  return '<section class="nextstop"><span class="sign-tab">Prossima tappa · ' + (navState.i + 1) + ' di ' + plan.length + '</span>' +
+    '<div class="prog" aria-hidden="true">' + prog + '</div>' +
+    '<h2>' + esc(st.name) + '</h2><p class="where">' + esc(st.where) + '</p><p class="note">' + esc(st.note) + '</p>' +
+    '<a class="navgo" id="navgo" ' + ext(mapsUrl(st.q, "dir", st.via)) + '>Portami lì ↗</a>' +
+    '<div class="row">' + (navState.i > 0 ? '<button type="button" class="linkbtn" data-nav="back">‹ Indietro</button>' : '<a class="linkbtn" href="#leg-' + n + '">Programma ›</a>') +
+    '<button type="button" class="linkbtn" data-nav="next">Siamo arrivati · prossima ›</button></div></section>';
+}
+
+function renderNavCard() {
+  var box = document.getElementById("navcard");
+  if (!box) return;
+  box.innerHTML = navCardHtml();
+  var go = document.getElementById("navgo");
+  if (go) go.addEventListener("click", function () { navState.started = true; saveNav(); startGeo(true); });
+  box.querySelectorAll("[data-nav]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      navState.i = Math.max(0, navState.i + (b.getAttribute("data-nav") === "next" ? 1 : -1));
+      navState.started = false; saveNav(); renderNavCard();
+    });
+  });
+}
+
+function toast(msg) {
+  var t = document.getElementById("toast");
+  if (!t) { t = document.createElement("div"); t.id = "toast"; t.className = "toast"; t.setAttribute("role", "status"); document.body.appendChild(t); }
+  t.textContent = msg; t.classList.add("show");
+  clearTimeout(toast.tm); toast.tm = setTimeout(function () { t.classList.remove("show"); }, 4000);
+}
+function meters(a, b) {
+  var R = 6371000, r = Math.PI / 180, dLat = (b[0] - a[0]) * r, dLon = (b[1] - a[1]) * r;
+  var h = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(a[0] * r) * Math.cos(b[0] * r) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+var geoWatch = null;
+function onPosition(pos) {
+  var n = todayLeg(), plan = NAV[n];
+  if (!n || !Array.isArray(plan) || !navState.started) return;
+  var st = plan[navState.i];
+  if (!st) return;
+  if (meters([pos.coords.latitude, pos.coords.longitude], st.ll) <= st.r) {
+    navState.i++; navState.started = false; saveNav();
+    var nx = plan[navState.i];
+    toast("Arrivati: " + st.name + (nx ? ". Prossima tappa: " + nx.name : ". Tappe di oggi finite."));
+    renderNavCard();
+  }
+}
+function startGeo(ask) {
+  if (geoWatch !== null || !("geolocation" in navigator)) return;
+  function go() {
+    try {
+      geoWatch = navigator.geolocation.watchPosition(onPosition, function () { geoWatch = null; }, { enableHighAccuracy: false, maximumAge: 60000, timeout: 30000 });
+    } catch (e) { geoWatch = null; }
+  }
+  if (ask) return go();
+  // senza tocco dell'utente: parte solo se il permesso è già stato dato
+  try {
+    navigator.permissions.query({ name: "geolocation" }).then(function (p) { if (p.state === "granted") go(); }).catch(function () {});
+  } catch (e) {}
+}
+if (navState.started) startGeo(false);
+
+var lastDay = new Date().toDateString();
+setInterval(function () {
+  refreshCountdown();
+  var now = new Date().toDateString();
+  if (now !== lastDay) { lastDay = now; renderNavCard(); }   // a mezzanotte passa alla giornata dopo
+}, 60000);
+document.addEventListener("visibilitychange", function () { if (!document.hidden) { refreshCountdown(); renderNavCard(); } });
+
+function viewHome() {
+  var cd = countdownText(), tl = todayLeg();
+  var km = String(TRIP.km).padStart(5, "0").split("");
+  var lead = true, digits = km.map(function (c) { if (c !== "0") lead = false; return '<span class="' + (lead ? "z" : "") + '">' + c + '</span>'; }).join("");
+  return '<section class="hero"><div class="shooting"></div>' +
+      '<a class="gear" href="#impostazioni" aria-label="Impostazioni"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 0 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></a>' +
+      '<div class="hero-inner">' +
+      '<h1>Road trip d\'Avvento</h1><p class="date">8–13 dicembre 2026</p>' +
+      '<a class="countdown" id="countdown"' + (tl ? ' href="#leg-' + tl + '"' : '') + '>' + cd + '</a></div>' +
+      '<svg class="monti" viewBox="0 0 400 78" preserveAspectRatio="none" aria-hidden="true">' +
+      '<path d="M0 50 40 30 70 44 110 18 150 40 190 22 230 42 270 14 300 34 340 8 370 30 400 24V78H0Z" fill="var(--monti-1)"/>' +
+      '<path d="M104 21 110 18 116 22 110 24Z M264 17 270 14 276 18 270 20Z M334 11 340 8 346 12 340 14Z" fill="#F3D9D2"/>' +
+      '<path d="M0 62 50 46 90 58 140 40 190 56 240 44 290 60 340 42 400 56V78H0Z" fill="var(--monti-2)"/>' +
+      '<path d="M0 72H400V78H0Z" fill="var(--carta)"/></svg></section>' +
+    '<div id="navcard">' + navCardHtml() + '</div>' +
+    '<div class="odo"><span class="label">Stima del viaggio in auto</span><div class="odo-row"><span class="u">≈</span><div class="digits">' + digits + '</div>' +
+      '<span class="u">km<small>≈ ' + TRIP.mi + ' mi</small></span></div></div>' +
+    '<div class="stats">' +
+      '<div class="stat"><strong>6 giorni · 5 notti</strong><span>8–13 dicembre</span></div>' +
+      '<div class="stat"><strong>≈ 12 h 40</strong><span>al volante in tutto</span></div>' +
+      '<a class="stat" href="#strade" style="text-decoration:none"><strong>11 su 26</strong><span>cantoni attraversati</span></a>' +
+      '<a class="stat" href="#guida-budget" style="text-decoration:none"><strong>≈ CHF ' + Math.round(budgetTotal()) + '</strong><span>budget, ' + Math.round(budgetTotal() / 2) + ' a testa</span></a>' +
+    '</div>' +
+    '<p class="label">Le sei leg</p>' +
+    '<div class="minilegs">' + LEGS.map(function (l) {
+      return '<a href="#leg-' + l.n + '"><span class="num">' + l.n + '</span><span class="d">' + l.day + ' ' + l.date + (tl === l.n ? ' <span class="today">OGGI</span>' : '') + '</span><span class="r">' + esc(l.title) + '</span></a>';
+    }).join("") + '</div>' +
+    '<p class="trivia"><b>TRIVIA</b>Contando anche quelli attraversati solo in autostrada, tocchiamo 11 cantoni su 26: ' +
+      KT_ORDER.map(function (c) { return '<a href="#cantone-' + c.toLowerCase() + '">' + c + '</a>'; }).join(", ") + '.</p>';
+}
+
+function viewMappa(sel) {
+  return sign("", "Mappa") +
+    '<div class="mapbox">' + (sel && LEGS[sel - 1]
+        ? '<a class="map-sel" href="#leg-' + sel + '"><span class="num">' + sel + '</span><span><b>' + esc(LEGS[sel - 1].title) + '</b>' + LEGS[sel - 1].day + ' ' + LEGS[sel - 1].date + ' · apri la leg</span><span class="chev">›</span></a>'
+        : '') + mapSvg() +
+      '<div class="map-ctrl"><button type="button" id="zin" aria-label="Ingrandisci">+</button><button type="button" id="zout" aria-label="Riduci">−</button><button type="button" id="zreset" aria-label="Rimetti a posto la mappa">⟲</button></div></div>' +
+    '<div class="chips">' + LEGS.map(function (l) {
+      return '<a class="chip" href="#leg-' + l.n + '"><span class="num">' + l.n + '</span>' + l.day + ' ' + l.date + '</a>';
+    }).join("") + '</div>' +
+    '<div class="legend"><span><i></i>In auto</span><span><i class="t"></i>Treno-auto</span><span><i class="b"></i>Bus</span></div>';
+}
+
+function initMap(sel) {
+  var svg = document.getElementById("map");
+  if (!svg) return;
+  if (sel) {
+    svg.classList.add("focus");
+    svg.querySelectorAll('.leg-g[data-leg="' + sel + '"]').forEach(function (g) { g.classList.add("sel"); });
+  }
+  var vb = { x: BASE.x, y: BASE.y, w: BASE.w, h: BASE.h };
+  var MINW = BASE.w / 5;
+
+  function apply() {
+    svg.setAttribute("viewBox", vb.x + " " + vb.y + " " + vb.w + " " + vb.h);
+    svg.classList.toggle("zoomed", BASE.w / vb.w > 1.45);
+  }
+  function clamp() {
+    vb.x = Math.min(Math.max(vb.x, BASE.x - vb.w * 0.4), BASE.x + BASE.w - vb.w * 0.6);
+    vb.y = Math.min(Math.max(vb.y, BASE.y - vb.h * 0.4), BASE.y + BASE.h - vb.h * 0.6);
+  }
+  function toSvg(cx, cy) {
+    var pt = svg.createSVGPoint(); pt.x = cx; pt.y = cy;
+    return pt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+  function zoomAt(f, sx, sy) {
+    var nw = Math.min(BASE.w, Math.max(MINW, vb.w / f)), k = nw / vb.w;
+    vb.x = sx - (sx - vb.x) * k; vb.y = sy - (sy - vb.y) * k;
+    vb.w = nw; vb.h = nw * BASE.h / BASE.w;
+    clamp(); apply();
+  }
+  function zoomCenter(f) { zoomAt(f, vb.x + vb.w / 2, vb.y + vb.h / 2); }
+
+  document.getElementById("zin").onclick = function () { zoomCenter(1.5); };
+  document.getElementById("zout").onclick = function () { zoomCenter(1 / 1.5); };
+  document.getElementById("zreset").onclick = function () { vb = { x: BASE.x, y: BASE.y, w: BASE.w, h: BASE.h }; apply(); };
+
+  function goLeg(target) {
+    var g = target && target.closest && target.closest(".leg-g");
+    if (g) location.hash = "leg-" + g.getAttribute("data-leg");
+  }
+
+  /* Telefono: un dito scorre la pagina (e tocca le leg), due dita spostano e ingrandiscono la mappa. */
+  var hint = document.createElement("div");
+  hint.className = "map-2dita"; hint.textContent = "Usa due dita per muovere la mappa";
+  svg.parentNode.appendChild(hint);
+  var hintTm, pinch = null, oneStart = null;
+  function showHint() { hint.classList.add("show"); clearTimeout(hintTm); hintTm = setTimeout(function () { hint.classList.remove("show"); }, 1300); }
+  function two(t) {
+    return { d: Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY), mx: (t[0].clientX + t[1].clientX) / 2, my: (t[0].clientY + t[1].clientY) / 2 };
+  }
+  svg.addEventListener("touchstart", function (e) {
+    if (e.touches.length === 2) { e.preventDefault(); pinch = two(e.touches); oneStart = null; hint.classList.remove("show"); }
+    else if (e.touches.length === 1) { oneStart = { x: e.touches[0].clientX, y: e.touches[0].clientY, warned: false }; }
+  }, { passive: false });
+  svg.addEventListener("touchmove", function (e) {
+    if (e.touches.length === 2 && pinch) {
+      e.preventDefault();
+      var n = two(e.touches), scale = svg.getScreenCTM().a;
+      vb.x -= (n.mx - pinch.mx) / scale; vb.y -= (n.my - pinch.my) / scale;
+      var p = toSvg(n.mx, n.my);
+      zoomAt(n.d / pinch.d, p.x, p.y);
+      pinch = n;
+    } else if (e.touches.length === 1 && oneStart && !oneStart.warned) {
+      // un dito che si muove soprattutto in orizzontale: ricorda di usarne due
+      var dx = Math.abs(e.touches[0].clientX - oneStart.x), dy = Math.abs(e.touches[0].clientY - oneStart.y);
+      if (dx > 24 && dx > dy * 1.5) { oneStart.warned = true; showHint(); }
+    }
+  }, { passive: false });
+  svg.addEventListener("touchend", function (e) { if (e.touches.length < 2) pinch = null; });
+  svg.addEventListener("touchcancel", function () { pinch = null; });
+
+  /* Computer: trascina con il mouse. */
+  var drag = null, moved = false;
+  svg.addEventListener("pointerdown", function (e) {
+    if (e.pointerType !== "mouse") return;
+    drag = { x: e.clientX, y: e.clientY }; moved = false;
+    try { svg.setPointerCapture(e.pointerId); } catch (er) {}
+  });
+  svg.addEventListener("pointermove", function (e) {
+    if (!drag || e.pointerType !== "mouse") return;
+    if (!moved && Math.hypot(e.clientX - drag.x, e.clientY - drag.y) > 6) { moved = true; svg.classList.add("dragging"); }
+    if (moved) {
+      var scale = svg.getScreenCTM().a;
+      vb.x -= (e.clientX - drag.x) / scale; vb.y -= (e.clientY - drag.y) / scale;
+      drag = { x: e.clientX, y: e.clientY };
+      clamp(); apply();
+    }
+  });
+  function endDrag() { drag = null; svg.classList.remove("dragging"); }
+  svg.addEventListener("pointerup", endDrag);
+  svg.addEventListener("pointercancel", endDrag);
+
+  /* Tocco o clic su una leg: la apre (non dopo un trascinamento). */
+  svg.addEventListener("click", function (e) {
+    if (moved) { moved = false; return; }
+    goLeg(e.target);
+  });
+  svg.addEventListener("wheel", function (e) {
+    e.preventDefault();
+    var p = toSvg(e.clientX, e.clientY);
+    zoomAt(Math.pow(1.0018, -e.deltaY), p.x, p.y);
+  }, { passive: false });
+  if (sel) {
+    // inquadra la leg scelta
+    var box = null;
+    svg.querySelectorAll('.leg-g[data-leg="' + sel + '"]').forEach(function (g) {
+      var b = g.getBBox();
+      box = box ? { x1: Math.min(box.x1, b.x), y1: Math.min(box.y1, b.y), x2: Math.max(box.x2, b.x + b.width), y2: Math.max(box.y2, b.y + b.height) }
+                : { x1: b.x, y1: b.y, x2: b.x + b.width, y2: b.y + b.height };
+    });
+    if (box) {
+      var w = Math.max(box.x2 - box.x1 + 90, BASE.w / 3.2), h = box.y2 - box.y1 + 130;
+      if (h > w * BASE.h / BASE.w) w = h * BASE.w / BASE.h;
+      w = Math.min(w, BASE.w);
+      vb.w = w; vb.h = w * BASE.h / BASE.w;
+      vb.x = (box.x1 + box.x2) / 2 - vb.w / 2; vb.y = (box.y1 + box.y2) / 2 - vb.h / 2 + 22;
+      clamp();
+    }
+  }
+  apply();
+}
+
+/* =====================================================================
+   VISTA 2 · LEG
+   ===================================================================== */
+function legMeta(l) {
+  var move = l.byBus ? "in bus" : l.noCar ? "senza auto" : dist(l.km, l.mi, l.ar) + " · " + l.drive;
+  return move + " · notte a " + l.night[0];
+}
+function viewLegList() {
+  var t = todayLeg();
+  return sign("", "Leg") +
+    '<div class="leglist">' + LEGS.map(function (l) {
+      return '<a class="legcard" href="#leg-' + l.n + '"><span class="num big">' + l.n + '</span>' +
+        '<span class="body"><span class="when">' + l.day + ' ' + l.date + (t === l.n ? '<span class="today">OGGI</span>' : '') + '</span>' +
+        '<span class="route">' + esc(l.title) + '</span><span class="meta">' + esc(legMeta(l)) + '</span></span><span class="chev" aria-hidden="true">›</span></a>';
+    }).join("") + '</div>';
+}
+
+function extraBlock(key) {
+  if (key === "nonam") return '<article class="museo"><header><small>PROPOSTA PER LA GIORNATA</small><b>NONAM</b><i>Nordamerika Native Museum</i></header>' +
+    '<dl><dt>DOVE</dt><dd>Seefeldstrasse 317</dd><dt>FERMATA</dt><dd>Tiefenbrunnen</dd><dt>MEZZI</dt><dd>tram 11 e 15 · S6 e S16</dd>' +
+    '<dt>ORARI</dt><dd>mar–sab 13–17 · dom 10–17</dd><dt>PREZZI</dt><dd>CHF 17 a persona</dd></dl>' +
+    '<a class="go" ' + ext(mapsUrl("NONAM, Seefeldstrasse 317, 8008 Zürich", "dir")) + '>Portami lì ↗</a></article>';
+  if (key === "vegan-zh" || key === "vegan-vs") return '<a class="linkcard" href="#guida-vegano"><span class="poi">' + ICON.posate + '</span><span><b>Mangiare vegano a ' + (key === "vegan-zh" ? "Zurigo" : "Sion") + '</b><span>4 posti, con indirizzi</span></span><span class="chev">›</span></a>';
+  if (key === "racchette") return '<a class="linkcard" href="#guida-racchette"><span class="poi">' + ICON.racchetta + '</span><span><b>Escursioni in racchette</b><span>4 sentieri in Val d\'Hérens</span></span><span class="chev">›</span></a>';
+  if (key === "motel") return '<div class="motel" aria-label="Le Merle Châtelain"><div class="motel-v" aria-hidden="true"><span>M</span><span>O</span><span>T</span><span>E</span><span>L</span></div>' +
+    '<div class="motel-s"><div class="motel-board"><b>Le Merle Châtelain</b><ul><li>NATURA</li><li>CENTRO A 10 MIN</li><li>POSTEGGIO GRATIS</li><li>BUS A DUE PASSI</li></ul>' +
+    '<span class="vacancy"><s>NO</s> VACANCY</span></div></div></div>';
+  if (key === "furka") return '<section class="panel blu"><h3>Treno-auto · come funziona</h3><ol>' +
+    '<li>Biglietto online, poi in coda a Oberwald VS.</li><li>Si sale in auto sul vagone e si resta seduti dentro.</li>' +
+    '<li>Circa 15–20 minuti in galleria sotto il Furka Pass, poi a Realp UR si riparte.</li></ol><p>D\'inverno il passo è chiuso: si passa sotto, in treno.</p></section>';
+  return "";
+}
+
+function viewLeg(n) {
+  var l = LEGS[n - 1];
+  if (!l) return viewLegList();
+  var right = l.todo ? '<div class="diamond"><span>Da<br>decidere</span></div>' : (l.shields ? '<div class="shields">' + l.shields.map(shieldLink).join("") + '</div>' : "");
+  var facts = "";
+  if (l.facts) {
+    facts = l.facts.map(function (f) { return '<div class="fact ' + f[0] + '"><small>' + f[1] + '</small><b>' + esc(f[2]) + ' <em>· ' + esc(f[3]) + '</em></b></div>'; }).join("");
+  } else {
+    facts = '<div class="fact g wide"><small>Strada</small><b>' + esc(l.roads) + '</b></div>' +
+      '<div class="fact"><small>Km</small><b>' + dist(l.km, l.mi, l.ar) + '</b></div>' +
+      '<div class="fact"><small>Al volante</small><b>' + l.drive + '</b></div>';
+    (l.pit || []).forEach(function (p) {
+      facts += '<div class="fact' + ((l.pit.length === 1) ? ' wide' : '') + '"><small>' + (l.pitLabel || "Pit stop") + '</small><b>' + esc(p[0]) + ' <em>· ' + esc(p[1]) + '</em></b></div>';
+    });
+  }
+  facts += '<div class="fact wide"><small>' + (l.nightLabel || "Notte") + '</small><b>' + esc(l.night[0]) + ' <em>· ' + esc(l.night[1]) + '</em></b></div>';
+
+  // momento della giornata solo quando cambia; nessuna pillola se la giornata non ha orari
+  var noPills = l.plan.every(function (p) { return !p[0]; }), prevPill = "";
+  var plan = l.plan.map(function (p) {
+    var show = p[0] && p[0] !== prevPill; if (p[0]) prevPill = p[0];
+    return '<div class="tl' + (noPills ? ' nopill' : '') + '">' + (noPills ? '' : show ? '<span class="pill">' + esc(p[0]) + '</span>' : '<span></span>') +
+      '<div class="t"><b>' + esc(p[1]) + '</b>' +
+      (p[2] ? '<span>' + esc(p[2]) + '</span>' : '') +
+      (p[3] ? '<a class="go" ' + ext(mapsUrl(p[3], "dir")) + '>Portami lì ↗</a>' : '') + '</div></div>';
+  }).join("");
+
+  var prev = LEGS[n - 2], next = LEGS[n];
+  return '<a class="back" href="#leg">‹ Tutte le leg</a>' +
+    sign("Leg " + l.n + " · " + l.day + " " + l.date, l.title, right) +
+    '<div class="road"><div class="road-inner">' + l.stops.map(function (s) { return '<div class="stop"><i></i><span>' + esc(s) + '</span></div>'; }).join("") + '</div></div>' +
+    '<div class="facts">' + facts + '</div>' +
+    (LEG_ROADS[l.n].length ? '<p class="label">Le strade di oggi</p><div class="roadrow">' + LEG_ROADS[l.n].map(function (c) {
+        var r = roadBy(c), t = r.tratti.filter(function (x) { return x[0] === l.n; })[0];
+        return '<a href="#strada-' + slug(c) + '">' + shield(c) + '<span>' + esc(t[1]) + '</span></a>';
+      }).join("") + '</div>' : '<p class="label">Oggi senza auto</p>') +
+    '<p class="label">Cantoni</p>' + kts(LEG_CANTONS[l.n]) +
+    '<a class="go pin tolink" href="#mappa-leg' + l.n + '">Vedi sulla mappa</a>' +
+    '<p class="label">Il programma</p><div class="timeline">' + plan + '</div>' +
+    (l.extra || []).map(extraBlock).join("") +
+    '<nav class="pager" aria-label="Altre leg">' +
+      (prev ? '<a href="#leg-' + prev.n + '">‹ Leg ' + prev.n + '<b>' + prev.day + ' ' + prev.date + '</b></a>' : '') +
+      (next ? '<a class="next" href="#leg-' + next.n + '">Leg ' + next.n + ' ›<b>' + next.day + ' ' + next.date + '</b></a>' : '') +
+    '</nav>';
+}
+
+/* =====================================================================
+   VISTA 3 · GUIDA
+   ===================================================================== */
+function viewGuida() {
+  var tiles = [
+    ["#guida-mercatini", ICON.casetta, "Mercatini di Natale", "Berna, Zurigo e Sion · 9 mercatini"],
+    ["#guida-vegano", ICON.posate, "Mangiare vegano", "Zurigo e Sion · 8 posti"],
+    ["#guida-racchette", ICON.racchetta, "Racchette in Val d'Hérens", "4 sentieri da Evolène"],
+    ["#guida-budget", ICON.cassa, "Budget stimato", "≈ CHF " + Math.round(budgetTotal()) + " in due"]
+  ];
+  return sign("", "Guida") +
+    '<div class="tiles">' + tiles.map(function (t) {
+      return '<a class="linkcard" href="' + t[0] + '"><span class="poi">' + t[1] + '</span><span><b>' + t[2] + '</b><span>' + t[3] + '</span></span><span class="chev">›</span></a>';
+    }).join("") +
+    '</div>';
+}
+
+var LIGHTS = ["#E8433A", "#F2C230", "#3FA36B", "#3B7DD8", "#F08A24"];
+function viewMercatini() {
+  var casette = MERCATINI.map(function (m, i) {
+    var lights = ""; for (var k = 0; k < 11; k++) lights += '<i style="background:' + LIGHTS[(k + i) % LIGHTS.length] + '"></i>';
+    var mugs = ""; for (var j = 0; j < 7; j++) mugs += '<i style="background:' + ["#C0362C", "#D9A066", "#1F4E8C"][j % 3] + '"></i>';
+    return '<article class="casa" id="casa-' + i + '" aria-label="Mercatini di ' + esc(m.city) + '">' +
+      '<div class="casa-roof"></div><div class="lights">' + lights + '</div>' +
+      '<div class="casa-body"><span class="casa-sign" style="background:' + m.color + ';color:' + m.accent + '">' + esc(m.city) + '</span>' +
+      '<div class="casa-panel"><p class="when">' + esc(m.when) + '</p>' +
+      m.items.map(function (it) { return '<a class="mkt" ' + ext(mapsUrl(it[2], "pin")) + '><b>' + esc(it[0]) + '</b><span>' + esc(it[1]) + '</span></a>'; }).join("") +
+      '</div></div><div class="counter">' + mugs + '</div><div class="snow"></div></article>';
+  }).join("");
+  return '<a class="back" href="#guida">‹ Guida</a>' + sign("", "Mercatini") +
+    '<div class="towns" role="tablist">' + MERCATINI.map(function (m, i) { return '<button type="button" role="tab" data-casa="' + i + '" aria-selected="' + (i === 0) + '">' + esc(m.city) + '</button>'; }).join("") + '</div>' +
+    '<div class="carousel" id="carousel">' + casette + '</div>' +
+    '<div class="dots" aria-hidden="true">' + MERCATINI.map(function (m, i) { return '<i class="' + (i === 0 ? "on" : "") + '"></i>'; }).join("") + '</div>' +
+    '<p class="nb-note">Fonte: swissactivities.com</p>';
+}
+function initMercatini() {
+  var car = document.getElementById("carousel");
+  if (!car) return;
+  var btns = document.querySelectorAll(".towns button"), dots = document.querySelectorAll(".dots i");
+  function mark(i) {
+    btns.forEach(function (b, k) { b.setAttribute("aria-selected", String(k === i)); });
+    dots.forEach(function (d, k) { d.classList.toggle("on", k === i); });
+  }
+  car.addEventListener("scroll", function () { mark(Math.round(car.scrollLeft / car.clientWidth)); }, { passive: true });
+  btns.forEach(function (b) {
+    b.addEventListener("click", function () {
+      var i = +b.getAttribute("data-casa");
+      car.scrollTo({ left: document.getElementById("casa-" + i).offsetLeft - car.offsetLeft - parseFloat(getComputedStyle(car).paddingLeft), behavior: "smooth" });
+    });
+  });
+}
+
+function viewVegano() {
+  return '<a class="back" href="#guida">‹ Guida</a>' + sign("", "Vegano") +
+    '<section class="vegan"><h3>' + ICON.posate.replace("<svg", '<svg aria-hidden="true"') + 'MANGIARE VEGANO</h3>' +
+    VEGAN.map(function (g) {
+      return '<div class="vgroup"><span class="label">' + esc(g.city) + '</span>' + g.items.map(function (it) {
+        return '<a class="vitem" ' + ext(mapsUrl(it[2], "pin")) + '><b>' + esc(it[0]) + '</b><span>' + esc(it[1]) + '</span>' +
+          (it[3] ? '<span class="tel">da prenotare: ' + esc(it[3]) + '</span>' : '') + '</a>';
+      }).join("") + '</div>';
+    }).join("") +
+    '<p class="fonti">Fonti: HappyCow · zuerich.com · recensioni</p></section>';
+}
+
+function viewRacchette() {
+  return '<a class="back" href="#guida">‹ Guida</a>' + sign("Leg 5 · SAB 12.12", "Racchette") +
+    '<div class="facts"><div class="fact g"><small>Andata</small><b>AutoPostale 381 <em>· ogni ora ai :45</em></b></div><div class="fact"><small>Biglietto</small><b>CHF 16.– <em>· a/r a persona</em></b></div></div>' +
+    '<section class="board"><h3>Escursioni in racchette · Val d\'Hérens</h3>' +
+    RACCHETTE.map(function (r) {
+      return '<a class="trail" ' + ext(mapsUrl(r[3], "pin")) + '><i class="diff ' + r[0] + '" aria-label="' + (r[0] === "nd" ? "difficoltà non indicata" : r[0]) + '"></i><span><b>' + esc(r[1]) + '</b><span>' + esc(r[2]) + '</span></span></a>';
+    }).join("") +
+    '<p class="fonti">● facile · ■ medio · ◌ n.d. — Fonti: valdherens.ch · evolene-region.ch</p></section>';
+}
+
+function numIn(k, label) {
+  var v = String(budget[k]);
+  return '<input class="num-in" type="text" inputmode="decimal" enterkeyhint="done" autocomplete="off" data-k="' + k + '" value="' + v +
+    '" style="--w:' + Math.max(v.length, 1) + '" aria-label="' + esc(label) + '">';
+}
+function viewBudget() {
+  return '<a class="back" href="#guida">‹ Guida</a>' + sign("", "Budget") +
+    '<section class="receipt" aria-label="Scontrino stimato"><h3>ROAD TRIP D\'AVVENTO</h3><p class="sub">SCONTRINO STIMATO · 8–13.12.2026 · CHF</p><hr>' +
+    '<div class="r-row"><b>ALLOGGIO</b><span class="v" id="b-alloggio"></span><small>Sion ' + numIn("sion", "Alloggio a Sion in franchi") + ' · Berna ' + numIn("berna", "Alloggio a Berna in franchi") + '</small></div>' +
+    '<div class="r-row"><b>CIBO</b><span class="v">' + numIn("cibo", "Cibo in franchi") + '</span><small>stima per il viaggio</small></div>' +
+    '<div class="r-row"><b>BENZINA</b><span class="v" id="b-benzina"></span><small>' + numIn("litri", "Litri di benzina") + ' l × CHF ' + numIn("prezzo", "Prezzo al litro") + '</small></div>' +
+    '<div class="r-row"><b>TRASPORTI</b><span class="v" id="b-trasporti"></span><small>Furka ' + numIn("furka", "Treno-auto Furka in franchi") + ' · bus Evolène ' + numIn("bus", "Bus Evolène in franchi") + '</small></div>' +
+    '<div class="r-row"><b>EXTRA</b><span class="v">' + numIn("extra", "Extra in franchi") + '</span><small>stima per il viaggio</small></div>' +
+    '<hr class="d"><div class="r-tot"><span>TOTALE</span><span class="v" id="b-tot"></span></div>' +
+    '<div class="r-small"><span>A PERSONA (÷ 2)</span><span id="b-pp"></span></div>' +
+    '<div class="r-small"><span>A PERSONA AL GIORNO (÷ 6)</span><span id="b-pg"></span></div>' +
+    '<p class="thanks">*** GRAZIE E BUON VIAGGIO ***</p>' +
+    '<button type="button" class="r-reset" id="b-reset">Ripristina la stima iniziale</button></section>' +
+    '<p class="nb-note" id="b-nota"></p>';
+}
+function updateBudgetTotals() {
+  var l = budgetLines(), t = budgetTotal();
+  document.getElementById("b-alloggio").textContent = chf(l.alloggio);
+  document.getElementById("b-benzina").textContent = chf(l.benzina);
+  document.getElementById("b-trasporti").textContent = chf(l.trasporti);
+  document.getElementById("b-tot").textContent = "≈ " + chf(t);
+  document.getElementById("b-pp").textContent = chf(t / 2);
+  document.getElementById("b-pg").textContent = chf(t / 12);
+  var nota = "Benzina: Škoda Kamiq, 6 l/100 km. ";
+  if (budget.manPrezzo) nota += "Prezzo inserito a mano." + (tcs ? ' <button type="button" class="r-reset" id="b-tcs">Usa il prezzo TCS (' + tcs.bleifrei95.toFixed(2) + ')</button>' : "");
+  else nota += tcs ? "Prezzo medio svizzero TCS (Bleifrei 95) del " + dataIt(tcs.data) + ", aggiornato ogni 2 giorni." : "Prezzo TCS del 18.11.2026.";
+  var el = document.getElementById("b-nota");
+  el.innerHTML = nota;
+  var bt = document.getElementById("b-tcs");
+  if (bt) bt.onclick = function () { budget.manPrezzo = false; budget.prezzo = tcs.bleifrei95; saveBudget(); render(); };
+}
+function initBudget() {
+  updateBudgetTotals();
+  document.querySelectorAll(".num-in").forEach(function (inp) {
+    // al tocco il campo si svuota (la cifra vecchia resta in grigio); se non scrivi niente torna com'era
+    inp.addEventListener("focus", function () { inp.placeholder = inp.value; inp.value = ""; });
+    inp.addEventListener("input", function () {
+      var clean = inp.value.replace(/,/g, ".").replace(/[^0-9.]/g, "").replace(/(\..*)\./g, "$1");
+      if (clean !== inp.value) inp.value = clean;
+      inp.style.setProperty("--w", Math.max(inp.value.length, 1));
+      if (clean === "" || clean === ".") return;   // campo appena svuotato: il totale resta quello di prima
+      var v = parseFloat(clean);
+      budget[inp.getAttribute("data-k")] = isNaN(v) ? 0 : v;
+      if (inp.getAttribute("data-k") === "prezzo") budget.manPrezzo = true;
+      saveBudget(); updateBudgetTotals();
+    });
+    inp.addEventListener("keydown", function (e) { if (e.key === "Enter") inp.blur(); });
+    inp.addEventListener("blur", function () {
+      if (inp.value === "" || inp.value === ".") {
+        inp.value = inp.placeholder || "0";
+        var v = parseFloat(inp.value); budget[inp.getAttribute("data-k")] = isNaN(v) ? 0 : v;
+        saveBudget(); updateBudgetTotals();
+      }
+      inp.style.setProperty("--w", Math.max(inp.value.length, 1));
+    });
+  });
+  document.getElementById("b-reset").addEventListener("click", function () {
+    budget = Object.assign({}, BUDGET_DEF, { manPrezzo: false }); saveBudget(); render();
+  });
+}
+
+/* =====================================================================
+   VISTA 4 · RUBRICA
+   ===================================================================== */
+function viewRubrica() {
+  var kts = RB_KT.map(function (k) { return k[0]; }).filter(function (c) { return !rbSel || c === rbSel; });
+  var secs = kts.map(function (c) {
+    var cats = RB_CAT.map(function (cat) {
+      var items = RUBRICA.filter(function (r) { return r[0] === c && r[1] === cat; });
+      if (!items.length) return "";
+      return '<h3>' + cat.toUpperCase() + '</h3>' + items.map(function (it) {
+        return '<div class="nb-e"><span class="n">' + esc(it[2]) + '</span><a ' + ext(mapsUrl(it[5], "dir")) + '>' + esc(it[3]) + '</a><span class="i">' + esc(it[4]) + '</span></div>';
+      }).join("");
+    }).join("");
+    return '<section class="nb-sec"><h2>' + esc(CANTONI[c][0].toUpperCase()) + ' · ' + c + '</h2>' + cats + '</section>';
+  }).join("");
+  return sign("", "Rubrica") +
+    '<div class="nb" id="nb"><div class="nb-rings"></div><nav class="nb-tabs" aria-label="Cantoni della rubrica">' +
+      '<button type="button" data-rb="" aria-pressed="' + (!rbSel) + '" style="background:#E9E4F2" aria-label="Tutti i cantoni">A–Z</button>' +
+      RB_KT.map(function (k) { return '<button type="button" data-rb="' + k[0] + '" aria-pressed="' + (rbSel === k[0]) + '" style="background:' + k[1] + '" aria-label="' + CANTONI[k[0]][0] + '">' + k[0] + '</button>'; }).join("") +
+    '</nav><div class="nb-page">' + secs +
+    '<svg class="nb-pen" viewBox="0 0 150 26" aria-hidden="true"><path d="M4 18 112 6l4 8L8 22z" fill="#E9E4F2" stroke="#2747A0" stroke-width="1.5"/><path d="M112 6l24-3 4 8-24 3z" fill="#2747A0"/><path d="M4 18 0 21l8 1" fill="#2747A0"/></svg>' +
+    '</div></div>';
+}
+function initRubrica() {
+  document.querySelectorAll("[data-rb]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var c = b.getAttribute("data-rb");
+      rbSel = (rbSel === c) ? "" : c;
+      var y = window.scrollY;
+      app.innerHTML = viewRubrica(); initRubrica(); window.scrollTo(0, y);
+    });
+  });
+}
+
+/* =====================================================================
+   VISTA 5 · STRADE E CANTONI
+   ===================================================================== */
+function roadKm(r) { return r.tratti.reduce(function (a, t) { return a + t[2]; }, 0); }
+function roadCantons(r) {
+  var set = {}; r.tratti.forEach(function (t) { t[3].forEach(function (c) { set[c] = 1; }); });
+  return KT_ORDER.filter(function (c) { return set[c]; });
+}
+function distKm(km) { return dist(km, Math.round(km * 0.621)); }
+
+function viewStrade() {
+  var groups = [["auto", "Autostrade"], ["princ", "Strade principali"], ["cant", "Strade cantonali e treno"]];
+  return sign("", "Strade") +
+    groups.map(function (g) {
+      var list = ROADS.filter(function (r) { return r.kind === g[0] || (g[0] === "cant" && r.kind === "treno"); });
+      return '<p class="label">' + g[1] + '</p><div class="roadgrid">' + list.map(function (r) {
+        var legs = r.tratti.map(function (t) { return t[0]; }).filter(function (v, i, a) { return a.indexOf(v) === i; });
+        return '<a class="roadbtn" href="#strada-' + slug(r.code) + '">' + shield(r.code) + '<span>leg ' + legs.join(" e ") + '<br>' + distKm(roadKm(r)) + '</span></a>';
+      }).join("") + '</div>';
+    }).join("") +
+    '<p class="label">Cantoni · 11 su 26</p>' +
+    '<div class="kts">' + KT_ORDER.map(function (c) { return kt(c, true); }).join("") + '</div>'  +
+    '<p class="label">Cartelli</p>' +
+    '<div class="cartelli"><div>' + shield("A-9") + 'Autostrade (A-…)</div><div>' + shield("CH-19") + 'Strade principali (CH-…)</div>' +
+    '<div>' + shield("VS-206") + 'Strade cantonali (VS-…)</div><div>' + shield("TRENO") + 'Treno-auto del Furka</div></div>';
+}
+
+function viewStrada(r) {
+  if (!r) return viewStrade();
+  var idx = ROADS.indexOf(r), prev = ROADS[idx - 1], next = ROADS[idx + 1];
+  var legs = r.tratti.map(function (t) { return t[0]; });
+  return '<a class="back" href="#strade">‹ Tutte le strade</a>' +
+    '<section class="roadhead">' + shield(r.code) + '<div><p class="kind">' + KIND[r.kind] + '</p><h2>' + esc(r.name) + '</h2><p>' + esc(r.desc) + '</p></div></section>' +
+    '<div class="sumrow">' +
+      '<div class="stat"><strong>' + distKm(roadKm(r)) + '</strong><span>sul nostro viaggio</span></div>' +
+      '<div class="stat"><strong>' + (legs.length === 1 ? "Leg " + legs[0] : "Leg " + legs.join(" e ")) + '</strong><span>' + (legs.length === 1 ? "una giornata" : legs.length + " giornate") + '</span></div>' +
+      '<div class="stat"><strong>' + roadCantons(r).length + (roadCantons(r).length === 1 ? " cantone" : " cantoni") + '</strong><span>attraversati</span></div>' +
+    '</div>' +
+    '<p class="label">Dove la incontriamo</p><div class="tratti">' + r.tratti.map(function (t) {
+      var l = LEGS[t[0] - 1];
+      return '<article class="tratto"><a class="tratto-top" href="#leg-' + l.n + '"><span class="num big">' + l.n + '</span><span><span class="when">' + l.day + ' ' + l.date + '</span><b>' + esc(l.title) + '</b></span><span class="chev">›</span></a>' +
+        '<p class="km">' + esc(t[1]) + ' · ' + distKm(t[2]) + '</p><p>' + esc(t[4]) + '</p>' + kts(t[3]) +
+        '<a class="go pin tolink" href="#mappa-leg' + l.n + '">Vedi la leg ' + l.n + ' sulla mappa</a></article>';
+    }).join("") + '</div>' +
+    '<nav class="pager" aria-label="Altre strade">' +
+      (prev ? '<a href="#strada-' + slug(prev.code) + '">‹ Prima<b>' + prev.code.replace("TRENO", "Treno-auto") + '</b></a>' : '') +
+      (next ? '<a class="next" href="#strada-' + slug(next.code) + '">Dopo ›<b>' + next.code.replace("TRENO", "Treno-auto") + '</b></a>' : '') +
+    '</nav>';
+}
+
+function viewCantone(c) {
+  var k = CANTONI[c];
+  if (!k) return viewStrade();
+  var legs = LEGS.filter(function (l) { return LEG_CANTONS[l.n].indexOf(c) !== -1; });
+  var roads = ROADS.filter(function (r) { return roadCantons(r).indexOf(c) !== -1; });
+  return '<a class="back" href="#strade">‹ Strade e cantoni</a>' +
+    sign("", k[0], '<div class="kshield">' + stemma(c) + '</div>') +
+    '<p class="lead">' + esc(k[1]) + '</p>' +
+    '<p class="label">In quali leg</p><div class="leglist">' + legs.map(function (l) {
+      return '<a class="legcard" href="#leg-' + l.n + '"><span class="num big">' + l.n + '</span><span class="body"><span class="when">' + l.day + ' ' + l.date + '</span><span class="route">' + esc(l.title) + '</span></span><span class="chev">›</span></a>';
+    }).join("") + '</div>' +
+    (roads.length ? '<p class="label">Le strade che ci passano</p><div class="roadrow">' + roads.map(function (r) {
+      return '<a href="#strada-' + slug(r.code) + '">' + shield(r.code) + '<span>' + esc(r.name) + '</span></a>';
+    }).join("") + '</div>' : '') +
+    (k[2].length ? '<p class="label">Da vedere qui</p><div class="tiles">' + k[2].map(function (x) {
+      return '<a class="linkcard" href="' + x[0] + '"><span class="poi">' + ICON.casetta + '</span><span><b>' + esc(x[1]) + '</b></span><span class="chev">›</span></a>';
+    }).join("") + '</div>' : '');
+}
+
+/* =====================================================================
+   VISTA 7 · RADIO (l'autoradio della slide 6)
+   ===================================================================== */
+var HPR_URL = "https://hpr.org/hpr3-heartland-christmas-player/";
+var HPR_STREAM = "https://us2.maindigitalstream.com/ssl/7791";   // flusso diretto di HPR3: la radio suona dentro l'app e OFF la spegne
+var radioOn = false, radioAudio = null;
+
+function radioSvg() {
+  var eq = "", hs = [26, 40, 30, 46, 22, 38, 48, 28, 36, 20];
+  for (var i = 0; i < 10; i++) eq += '<rect x="' + (474 + i * 10) + '" y="' + (212 - hs[i]) + '" width="7" height="' + hs[i] + '" rx="1" fill="' + (i === 4 ? "#D23B2B" : "#F2B33D") + '"/>';
+  var presets = "";
+  [["1", 470, 66], ["2", 516, 66], ["3", 562, 66], ["4", 470, 112], ["5", 516, 112], ["6", 562, 112]].forEach(function (b) {
+    presets += '<g><rect x="' + (b[1] - 19) + '" y="' + (b[2] - 18) + '" width="38" height="34" rx="6" fill="#4A4D53" stroke="#2A2C30" stroke-width="2"/>' +
+      (b[0] === "3" ? '<rect class="p3-on" x="' + (b[1] - 19) + '" y="' + (b[2] - 18) + '" width="38" height="34" rx="6" fill="#C8402F" stroke="#FF7A5C" stroke-width="2"/>' : '') +
+      '<text x="' + b[1] + '" y="' + (b[2] + 6) + '" text-anchor="middle" font-size="17" font-weight="800" fill="#E6E6E6">' + b[0] + '</text></g>';
+  });
+  var btns = "";
+  ["BAND", "SCAN", "LOUD", "AS/PS", "DISP"].forEach(function (t, i) {
+    btns += '<rect x="' + (150 + i * 62) + '" y="228" width="54" height="22" rx="3" fill="#46494E" stroke="#2A2C30"/><text x="' + (177 + i * 62) + '" y="243" text-anchor="middle" font-size="10" font-weight="700" fill="#C9CCD1">' + t + '</text>';
+  });
+  var ticks = "";
+  for (var k = 0; k < 11; k++) { var a = (-210 + k * 24) * Math.PI / 180; ticks += '<line x1="' + (92 + 47 * Math.cos(a)).toFixed(1) + '" y1="' + (112 + 47 * Math.sin(a)).toFixed(1) + '" x2="' + (92 + 52 * Math.cos(a)).toFixed(1) + '" y2="' + (112 + 52 * Math.sin(a)).toFixed(1) + '" stroke="#8C9096" stroke-width="2"/>'; }
+
+  return '<svg class="radio' + (radioOn ? ' on' : '') + '" id="radio" viewBox="0 0 600 292" role="group" aria-label="Autoradio HPR3">' +
+    '<defs><linearGradient id="chrome" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E4E7EB"/><stop offset=".5" stop-color="#A9AEB5"/><stop offset="1" stop-color="#7E848C"/></linearGradient>' +
+    '<radialGradient id="knob" cx=".4" cy=".35" r=".7"><stop offset="0" stop-color="#6B6F76"/><stop offset="1" stop-color="#232427"/></radialGradient>' +
+    '<linearGradient id="lcd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3B2A0C"/><stop offset="1" stop-color="#1E1606"/></linearGradient>' +
+    '<filter id="worn" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency=".09" numOctaves="3" seed="11" result="n"/>' +
+      '<feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -14 10" result="m"/>' +
+      '<feComposite in="SourceGraphic" in2="m" operator="in" result="g"/>' +
+      '<feTurbulence type="turbulence" baseFrequency=".05" numOctaves="2" seed="3" result="w"/><feDisplacementMap in="g" in2="w" scale="1.6"/></filter>' +
+    '<filter id="glow" x="-20%" y="-40%" width="140%" height="180%"><feGaussianBlur stdDeviation="2.4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>' +
+    '<rect x="4" y="8" width="592" height="276" rx="20" fill="url(#chrome)" stroke="#3A3C40" stroke-width="3"/>' +
+    '<rect x="18" y="22" width="564" height="248" rx="10" fill="#2B2D31" stroke="#17181A" stroke-width="2"/>' +
+    '<text x="150" y="44" font-size="12" font-weight="700" letter-spacing="3" fill="#9EA3AA">STEREO · 1994</text>' +
+    /* manopola VOL = accensione */
+    '<g class="pwr" id="pwr" role="button" tabindex="0" aria-label="Accendi o spegni la radio" aria-pressed="' + radioOn + '">' +
+      '<circle cx="92" cy="112" r="56" fill="transparent"/>' + ticks +
+      '<circle class="ring" cx="92" cy="112" r="42" fill="url(#knob)" stroke="#111" stroke-width="2"/>' +
+      '<circle cx="92" cy="112" r="30" fill="none" stroke="#3E4146" stroke-width="2"/>' +
+      '<g class="knob-rot"><rect x="89.5" y="74" width="5" height="18" rx="2.5" fill="#F2B33D"/></g>' +
+      '<text x="92" y="186" text-anchor="middle" font-size="15" font-weight="800" fill="#E6E6E6">VOL</text>' +
+      '<text x="92" y="201" text-anchor="middle" font-size="9" font-weight="700" letter-spacing="1.5" fill="#9EA3AA">PUSH ⏻ POWER</text>' +
+    '</g>' +
+    /* display */
+    '<rect x="148" y="56" width="298" height="104" rx="9" fill="#141414" stroke="#55585D" stroke-width="2"/>' +
+    '<rect x="158" y="64" width="278" height="88" rx="5" fill="#1C1A15"/>' +
+    '<rect class="lcd-glow" x="158" y="64" width="278" height="88" rx="5" fill="url(#lcd)"/>' +
+    '<g class="lcd-txt" filter="url(#glow)" fill="#F5B53A">' +
+      '<text x="172" y="126" font-size="46" font-weight="800" letter-spacing="1">HPR3</text>' +
+      '<text x="300" y="102" font-size="15" font-weight="800" letter-spacing="2.5">HEARTLAND</text>' +
+      '<text x="300" y="126" font-size="15" font-weight="800" letter-spacing="2.5">CHRISTMAS</text>' +
+      '<text x="398" y="82" font-size="10" font-weight="800" fill="#7CF08A">ST</text><circle cx="420" cy="78" r="3.2" fill="#7CF08A"/>' +
+    '</g>' +
+    presets +
+    /* vano cassetta */
+    '<rect x="148" y="170" width="298" height="46" rx="6" fill="#1E1F22" stroke="#4A4C50" stroke-width="2"/>' +
+    '<circle cx="163" cy="186" r="3.6" fill="#3A1A16"/><circle class="led-on" cx="163" cy="186" r="3.6" fill="#FF4B3A" filter="url(#glow)"/>' +
+    '<rect x="176" y="181" width="226" height="9" rx="2" fill="#0B0B0C"/>' +
+    '<text x="176" y="207" font-size="10" font-weight="700" letter-spacing="1.6" fill="#9EA3AA">AUTO REVERSE · DOLBY NR</text>' +
+    '<rect x="410" y="178" width="28" height="28" rx="4" fill="#4A4D53" stroke="#2A2C30"/><path d="M416 196h16l-8-9zM416 199h16v3h-16z" fill="#D0D3D8"/>' +
+    /* equalizzatore */
+    '<rect x="466" y="160" width="106" height="56" rx="4" fill="#202124"/><g class="eq">' + eq + '</g>' +
+    btns +
+    '<text x="519" y="243" text-anchor="middle" font-size="10" font-weight="700" letter-spacing="1.2" fill="#9EA3AA">FM · MW · RDS</text>' +
+    /* sticker del Missouri */
+    '<g transform="translate(38 214) rotate(-9)" filter="url(#worn)">' +
+      '<path d="M-3 -3H65L73 5V47H-3Z" fill="#EFE6D2"/>' +
+      '<rect x="0" y="0" width="70" height="15" fill="#A8483F"/><rect x="0" y="15" width="70" height="14" fill="#EFE6D2"/><rect x="0" y="29" width="70" height="15" fill="#3D5487"/>' +
+      '<circle cx="35" cy="22" r="12.5" fill="#EFE6D2" stroke="#3D5487" stroke-width="2.6"/><circle cx="35" cy="22" r="8" fill="#3D5487"/>' +
+      '<path d="M30.5 22h9M35 17.5v9" stroke="#D9B65A" stroke-width="2"/><circle cx="35" cy="22" r="3" fill="#A8483F"/>' +
+      '<rect x="-3" y="-3" width="76" height="50" fill="#C9A86A" opacity=".22"/>' +
+      '<path d="M8 6l22 9M44 34l18-6M14 38l9-2" stroke="#EFE6D2" stroke-width=".9" opacity=".8"/>' +
+    '</g>' +
+    /* angolo scollato */
+    '<g transform="translate(38 214) rotate(-9)"><path d="M65 -3 73 5 66 4Z" fill="#D8CDB4"/><path d="M65 -3 66 4 73 5" fill="none" stroke="#000" stroke-opacity=".25" stroke-width=".8"/></g>' +
+    '</svg>';
+}
+
+function viewRadio() {
+  return sign("", "Radio") +
+    '<div class="radio-wrap">' + radioSvg() + '</div>' +
+    '<section class="onair"><button type="button" class="onair-btn" id="onair" aria-pressed="' + radioOn + '">ON AIR</button>' +
+      '<div class="t"><b>HPR3 · HEARTLAND CHRISTMAS</b><i>Che Babbo Natale venisse dalla Coca-Cola già si sapeva, ma da Branson, MO?</i>' +
+      '<span>Classic country, western e bluegrass di Natale: lo spirito del nostro road trip.</span>' +
+      '<a ' + ext(HPR_URL) + '>hpr.org ↗</a></div></section>';
+}
+
+function setRadio(on) {
+  radioOn = on;
+  var r = document.getElementById("radio"), p = document.getElementById("pwr"), b = document.getElementById("onair");
+  if (r) { r.classList.toggle("on", on); if (!on) r.classList.remove("tuning"); }
+  if (p) p.setAttribute("aria-pressed", String(on));
+  if (b) b.setAttribute("aria-pressed", String(on));
+  if (!HPR_STREAM) return;
+  if (on) {
+    if (!radioAudio) {
+      radioAudio = new Audio();
+      radioAudio.preload = "none";
+      radioAudio.addEventListener("playing", function () { var x = document.getElementById("radio"); if (x) x.classList.remove("tuning"); });
+      radioAudio.addEventListener("waiting", function () { var x = document.getElementById("radio"); if (x && radioOn) x.classList.add("tuning"); });
+      radioAudio.addEventListener("error", function () {
+        if (!radioOn) return;
+        setRadio(false);
+        toast("HPR3 non risponde: prova più tardi o apri hpr.org dal link qui sotto");
+      });
+    }
+    if (r) r.classList.add("tuning");
+    radioAudio.src = HPR_STREAM;
+    var pr = radioAudio.play();
+    if (pr && pr.catch) pr.catch(function () {});
+    mediaSession();
+  } else if (radioAudio) {
+    radioAudio.pause(); radioAudio.removeAttribute("src"); radioAudio.load();
+  }
+  try { if ("mediaSession" in navigator) navigator.mediaSession.playbackState = on ? "playing" : "paused"; } catch (e) {}
+}
+// comandi sulla schermata di blocco e nelle notifiche
+function mediaSession() {
+  if (!("mediaSession" in navigator) || mediaSession.done) return;
+  mediaSession.done = true;
+  try {
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: "HPR3 · Heartland Christmas", artist: "Heartland Public Radio", album: "Road trip d'Avvento",
+      artwork: [{ src: "icona-512.png", sizes: "512x512", type: "image/png" }]
+    });
+    navigator.mediaSession.setActionHandler("play", function () { setRadio(true); });
+    navigator.mediaSession.setActionHandler("pause", function () { setRadio(false); });
+    navigator.mediaSession.setActionHandler("stop", function () { setRadio(false); });
+  } catch (e) {}
+}
+function toggleRadio() {
+  var on = !radioOn;
+  setRadio(on);
+  // senza flusso diretto: all'accensione si apre il player di HPR3 (sito o app)
+  if (on && !HPR_STREAM) {
+    var w = null;
+    try { w = window.open(HPR_URL, "_blank"); if (w) w.opener = null; } catch (e) {}
+    if (!w) toast("Apri hpr.org dal link qui sotto per far partire la musica");
+  }
+}
+function initRadio() {
+  var p = document.getElementById("pwr");
+  p.addEventListener("click", toggleRadio);
+  p.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggleRadio(); } });
+  document.getElementById("onair").addEventListener("click", toggleRadio);
+}
+
+/* =====================================================================
+   VISTA 6 · IMPOSTAZIONI
+   ===================================================================== */
+var deferredInstall = null;
+window.addEventListener("beforeinstallprompt", function (e) { e.preventDefault(); deferredInstall = e; var b = document.getElementById("install"); if (b) b.hidden = false; });
+
+function seg(key, opts) {
+  return '<div class="seg" role="group">' + opts.map(function (o) {
+    return '<button type="button" data-set="' + key + '" data-val="' + o[0] + '" aria-pressed="' + (settings[key] === o[0]) + '">' + o[1] + '</button>';
+  }).join("") + '</div>';
+}
+/* Impostazioni a tema officina: pannello forato, lamiera mandorlata, etichette Dymo, pulsante d'emergenza. */
+function viewImpostazioni() {
+  function drawer(label, color, inner) {
+    return '<section class="drawer"><span class="rivet tl"></span><span class="rivet tr"></span><span class="rivet bl"></span><span class="rivet br"></span>' +
+      '<span class="dymo" style="background:' + color + '">' + label + '</span><div class="drawer-in">' + inner + '</div></section>';
+  }
+  return '<a class="back" href="#home">‹ Viaggio</a>' +
+    '<div class="officina">' +
+      '<header class="plate"><span class="rivet tl"></span><span class="rivet tr"></span><span class="rivet bl"></span><span class="rivet br"></span>' +
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/></svg>' +
+        '<h1>Impostazioni</h1></header>' +
+      '<div class="hazard" aria-hidden="true"></div>' +
+      drawer("TEMA", "#1B1B1B", seg("theme", [["auto", "Auto"], ["light", "Giorno"], ["dark", "Notte"]])) +
+      drawer("DISTANZE", "#B3261E", seg("units", [["km", "km"], ["mi", "miglia"], ["both", "entrambe"]])) +
+      drawer("PROVA UN GIORNO", "#1F4E8C", seg("test", [["", "No"], ["1", "8"], ["2", "9"], ["3", "10"], ["4", "11"], ["5", "12"], ["6", "13"]])) +
+      drawer("INSTALLA SUL TELEFONO", "#1B1B1B",
+        '<p><b>Android (Chrome):</b> menu ⋮ → Installa app.</p><p><b>iPhone (Safari):</b> Condividi → Aggiungi alla schermata Home.</p>' +
+        '<button type="button" class="btn" id="install" hidden>Installa adesso</button>') +
+      '<section class="bolla"><span class="clip" aria-hidden="true"></span>' +
+        '<p class="bolla-h">ORDINE DI LAVORO · N. 2026-12</p>' +
+        '<p><b>Una bozza da scrivere insieme.</b> Il percorso e le attività sono un punto di partenza, non un programma fisso. Ogni punto può cambiare, anche all\'ultimo momento, in itinere.</p>' +
+        '<p><b>Fonti.</b> Prezzi e orari verificati tra ottobre e novembre 2026. Le fonti sono nella presentazione.</p>' +
+        '<p class="firma">Officina Road trip · bozza 0.1</p></section>' +
+      '<div class="stopbtn"><button type="button" class="emergenza" id="reset" aria-label="Ripristina le impostazioni"></button><span>RIPRISTINA</span></div>' +
+    '</div>';
+}
+function initImpostazioni() {
+  document.querySelectorAll("[data-set]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      settings[b.getAttribute("data-set")] = b.getAttribute("data-val");
+      save(); applyTheme(); render();
+    });
+  });
+  var r = document.getElementById("reset");
+  if (r) r.onclick = function () { settings = Object.assign({}, DEFAULTS); save(); applyTheme(); render(); };
+  var ib = document.getElementById("install");
+  if (ib) {
+    ib.hidden = !deferredInstall;
+    ib.onclick = function () { if (deferredInstall) { deferredInstall.prompt(); deferredInstall = null; ib.hidden = true; } };
+  }
+}
+
+/* =====================================================================
+   ROUTER (hash: #mappa, #leg, #leg-3, #guida-mercatini, …)
+   ===================================================================== */
+var app = document.getElementById("app");
+var lastHash = null;
+function render() {
+  var h = (location.hash || "#home").slice(1) || "home", tab = h.split("-")[0], html = "", init = null;
+  if (h === "home") { html = viewHome(); init = renderNavCard; }
+  else if (h === "mappa") { html = viewMappa(); init = initMap; }
+  else if (/^mappa-leg\d$/.test(h)) { var sl = +h.slice(9); html = viewMappa(sl); init = function () { initMap(sl); }; }
+  else if (h === "strade") html = viewStrade();
+  else if (/^strada-/.test(h)) { html = viewStrada(bySlug(h.slice(7))); tab = "strade"; }
+  else if (/^cantone-/.test(h)) { html = viewCantone(h.slice(8).toUpperCase()); tab = "strade"; }
+  else if (h === "leg") html = viewLegList();
+  else if (/^leg-\d$/.test(h)) html = viewLeg(+h.slice(4));
+  else if (h === "guida") html = viewGuida();
+  else if (h === "guida-mercatini") { html = viewMercatini(); init = initMercatini; }
+  else if (h === "guida-vegano") html = viewVegano();
+  else if (h === "guida-racchette") html = viewRacchette();
+  else if (h === "guida-budget") { html = viewBudget(); init = initBudget; }
+  else if (h === "rubrica") { html = viewRubrica(); init = initRubrica; }
+  else if (h === "impostazioni") { html = viewImpostazioni(); init = initImpostazioni; }
+  else if (h === "radio") { html = viewRadio(); init = initRadio; }
+  else { html = viewHome(); init = renderNavCard; tab = "home"; }
+  app.innerHTML = html;
+  if (init) init();
+  document.querySelectorAll(".tabbar a").forEach(function (a) {
+    if (a.getAttribute("data-tab") === tab) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
+  });
+  if (lastHash !== h) window.scrollTo(0, 0);
+  lastHash = h;
+}
+window.addEventListener("hashchange", render);
+render();
+loadTcs();
+
+if ("serviceWorker" in navigator && location.protocol === "https:") {
+  try { navigator.serviceWorker.register("sw.js").catch(function () {}); } catch (e) {}
+}
+})();
+</script>
+</body>
+</html>
