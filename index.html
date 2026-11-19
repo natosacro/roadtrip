@@ -823,7 +823,7 @@ nav.tabbar {
   border-top: 1.5px solid var(--bordo);
   padding: 6px var(--gutter-r) calc(6px + env(safe-area-inset-bottom, 0px)) var(--gutter-l);
 }
-.tabbar-in { max-width: 40rem; margin-inline: auto; display: grid; grid-template-columns: repeat(7, 1fr); }
+.tabbar-in { max-width: 40rem; margin-inline: auto; display: grid; grid-template-columns: repeat(6, 1fr); }
 .tabbar a {
   text-decoration: none; display: grid; justify-items: center; gap: 2px; padding: 6px 0 4px; border-radius: 10px;
   font-family: var(--f-cartello); font-weight: 700; font-size: .6rem; letter-spacing: 0; color: var(--testo-2);
@@ -855,8 +855,6 @@ nav.tabbar {
       <svg viewBox="0 0 24 24"><path d="M6 21 10 3M18 21 14 3"/><path d="M12 6v2M12 11v2M12 16v2"/></svg>Leg</a>
     <a href="#strade" data-tab="strade">
       <svg viewBox="0 0 24 24"><path d="M4 5.5Q12 2 20 5.5Q21.5 15 12 22Q2.5 15 4 5.5Z"/><path d="M4.3 9.5h15.4"/></svg>Strade</a>
-    <a href="#rubrica" data-tab="rubrica">
-      <svg viewBox="0 0 24 24"><path d="M6 3h12a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H6z"/><path d="M6 3v18M3.5 7H8M3.5 12H8M3.5 17H8M10 8h6M10 11h4"/></svg>Rubrica</a>
     <a href="#guida" data-tab="guida">
       <svg viewBox="0 0 24 24"><path d="M12 2.5l1.2 2.3 2.5.3-1.8 1.7.5 2.5L12 8.1 9.6 9.3l.5-2.5-1.8-1.7 2.5-.3z"/><path d="M12 10 6 19h12z"/><path d="M12 19v2.5"/></svg>Guida</a>
     <a href="#radio" data-tab="radio">
@@ -1256,6 +1254,7 @@ function sign(tab, title, right) {
 }
 
 var ICON = {
+  rubrica: '<svg viewBox="0 0 24 24"><path d="M6 3h12a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H6z"/><path d="M6 3v18M3.5 7H8M3.5 12H8M3.5 17H8M10 8h6M10 11h4"/></svg>',
   casetta: '<svg viewBox="0 0 24 24"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/><path d="M9 20v-5h6v5"/><path d="M7 12h0M10 12h0M14 12h0M17 12h0" stroke-width="2.6"/></svg>',
   posate: '<svg viewBox="0 0 24 24"><path d="M7 3v8M5 3v5a2 2 0 0 0 4 0V3M7 11v10"/><path d="M17 21V3c-2 1.5-3 4-3 7v3h3"/></svg>',
   racchetta: '<svg viewBox="0 0 24 24"><ellipse cx="9" cy="9" rx="4" ry="6.5" transform="rotate(-25 9 9)"/><path d="M12 14l5 7M6.5 6l5 6M5 10l6-3"/></svg>',
@@ -1687,6 +1686,7 @@ function viewLeg(n) {
    ===================================================================== */
 function viewGuida() {
   var tiles = [
+    ["#rubrica", ICON.rubrica, "Rubrica", "Tutti gli indirizzi del viaggio, per cantone"],
     ["#guida-mercatini", ICON.casetta, "Mercatini di Natale", "Berna, Zurigo e Sion · 9 mercatini"],
     ["#guida-vegano", ICON.posate, "Mangiare vegano", "Zurigo e Sion · 8 posti"],
     ["#guida-racchette", ICON.racchetta, "Racchette in Val d'Hérens", "4 sentieri da Evolène"],
@@ -1837,7 +1837,7 @@ function viewRubrica() {
     }).join("");
     return '<section class="nb-sec"><h2>' + esc(CANTONI[c][0].toUpperCase()) + ' · ' + c + '</h2>' + cats + '</section>';
   }).join("");
-  return sign("", "Rubrica") +
+  return '<a class="back" href="#guida">‹ Guida</a>' + sign("", "Rubrica") +
     '<div class="nb" id="nb"><div class="nb-rings"></div><nav class="nb-tabs" aria-label="Cantoni della rubrica">' +
       '<button type="button" data-rb="" aria-pressed="' + (!rbSel) + '" style="background:#E9E4F2" aria-label="Tutti i cantoni">A–Z</button>' +
       RB_KT.map(function (k) { return '<button type="button" data-rb="' + k[0] + '" aria-pressed="' + (rbSel === k[0]) + '" style="background:' + k[1] + '" aria-label="' + CANTONI[k[0]][0] + '">' + k[0] + '</button>'; }).join("") +
@@ -2186,7 +2186,7 @@ function render() {
   else if (h === "guida-vegano") html = viewVegano();
   else if (h === "guida-racchette") html = viewRacchette();
   else if (h === "guida-budget") { html = viewBudget(); init = initBudget; }
-  else if (h === "rubrica") { html = viewRubrica(); init = initRubrica; }
+  else if (h === "rubrica") { html = viewRubrica(); init = initRubrica; tab = "guida"; }
   else if (h === "impostazioni") { html = viewImpostazioni(); init = initImpostazioni; }
   else if (h === "radio") { html = viewRadio(); init = initRadio; }
   else { html = viewHome(); init = renderNavCard; tab = "home"; }
@@ -2205,8 +2205,8 @@ render();
    Scorrendo a sinistra o a destra la pagina segue il dito; lasciando, scivola fuori e il tab vicino entra
    dal lato opposto. Non vale sulla barra in basso, sulla mappa, sulle casette dei mercatini e sui campi. */
 (function () {
-  var ORDINE = ["home", "mappa", "leg", "strade", "rubrica", "guida", "radio"];
-  var TAB_DI = { strada: "strade", cantone: "strade" };
+  var ORDINE = ["home", "mappa", "leg", "strade", "guida", "radio"];
+  var TAB_DI = { strada: "strade", cantone: "strade", rubrica: "guida" };
   function tabCorrente() {
     var h = (location.hash || "#home").slice(1) || "home", t = h.split("-")[0];
     t = TAB_DI[t] || t;
