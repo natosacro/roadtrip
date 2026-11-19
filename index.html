@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Road trip d'Avvento</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="theme-color" content="#0F6B4C">
@@ -86,7 +86,10 @@
 }
 
 * { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+/* pagine fisse come in Agrolandia: niente zoom con due dita né doppio tocco (la mappa ha i suoi gesti) */
+html, body { touch-action: pan-y; }
+.carousel { touch-action: pan-x pan-y; }
 body {
   margin: 0; background: var(--carta); color: var(--testo);
   font-family: var(--f-testo); font-size: 1rem; line-height: 1.45;
@@ -854,6 +857,9 @@ nav.tabbar {
 <script>
 (function () {
 "use strict";
+// Blocca lo zoom della pagina (iPhone ignora user-scalable=no): due dita fuori dalla mappa non fanno niente
+["gesturestart", "gesturechange"].forEach(function (t) { document.addEventListener(t, function (e) { e.preventDefault(); }, { passive: false }); });
+document.addEventListener("touchmove", function (e) { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
 
 /* =====================================================================
    DATI DEL VIAGGIO (dalla presentazione e dal resoconto)
