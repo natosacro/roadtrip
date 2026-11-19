@@ -1444,7 +1444,7 @@ function viewHome() {
   var km = String(TRIP.km).padStart(5, "0").split("");
   var lead = true, digits = km.map(function (c) { if (c !== "0") lead = false; return '<span class="' + (lead ? "z" : "") + '">' + c + '</span>'; }).join("");
   return '<section class="hero"><div class="shooting"></div>' +
-      '<a class="gear" href="#impostazioni" aria-label="Nota\'s Auto Repair, impostazioni"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 0 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></a>' +
+      '<a class="gear" href="#impostazioni" aria-label="The Notas\' Auto Repair, impostazioni"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 0 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></a>' +
       '<div class="hero-inner">' +
       '<h1>Road trip d\'Avvento</h1><p class="date">8–13 dicembre 2026</p>' +
       '<a class="countdown" id="countdown"' + (tl ? ' href="#leg-' + tl + '"' : '') + '>' + cd + '</a></div>' +
@@ -2130,11 +2130,11 @@ function viewImpostazioni() {
   return '<a class="back" href="#home">‹ Viaggio</a>' +
     '<div class="officina">' +
       '<header class="garage"><span class="rivet rv-tl"></span><span class="rivet rv-tr"></span><span class="rivet rv-bl"></span><span class="rivet rv-br"></span>' +
-        '<span class="g-nome">Nota\'s</span>' +
+        '<span class="g-nome">The Notas\'</span>' +
         '<div class="g-mid"><svg class="g-wr" viewBox="0 0 48 48" aria-hidden="true"><g transform="rotate(45 24 24)"><path d="M21 6a7 7 0 0 0 0 13v19a3 3 0 0 0 6 0V19a7 7 0 0 0 0-13v6h-6z"/></g><g transform="rotate(-45 24 24)"><path d="M21 6a7 7 0 0 0 0 13v19a3 3 0 0 0 6 0V19a7 7 0 0 0 0-13v6h-6z"/></g></svg><h1>Auto Repair</h1><svg class="g-wr" viewBox="0 0 48 48" aria-hidden="true"><g transform="rotate(45 24 24)"><path d="M21 6a7 7 0 0 0 0 13v19a3 3 0 0 0 6 0V19a7 7 0 0 0 0-13v6h-6z"/></g><g transform="rotate(-45 24 24)"><path d="M21 6a7 7 0 0 0 0 13v19a3 3 0 0 0 6 0V19a7 7 0 0 0 0-13v6h-6z"/></g></svg></div>' +
         '<span class="g-righe" aria-hidden="true"><i></i><i></i><i></i></span>' +
-        '<span class="g-sub">Mechanic on duty · Engine · Brakes · Tune-ups</span>' +
-        '<span class="g-since">Since 1979</span></header>' +
+        '<span class="g-sub">Family owned · Engine · Brakes · Tune-ups</span>' +
+        '<span class="g-since">Since 2020</span></header>' +
       '<div class="hazard" aria-hidden="true"></div>' +
       drawer("TEMA", "#1B1B1B", seg("theme", [["auto", "Auto"], ["light", "Giorno"], ["dark", "Notte"]])) +
       drawer("DISTANZE", "#B3261E", seg("units", [["km", "km"], ["mi", "miglia"], ["both", "entrambe"]])) +
@@ -2205,7 +2205,7 @@ render();
    Scorrendo a sinistra o a destra la pagina segue il dito; lasciando, scivola fuori e il tab vicino entra
    dal lato opposto. Non vale sulla barra in basso, sulla mappa, sulle casette dei mercatini e sui campi. */
 (function () {
-  var ORDINE = ["impostazioni", "home", "mappa", "leg", "strade", "rubrica", "guida", "radio"];
+  var ORDINE = ["home", "mappa", "leg", "strade", "rubrica", "guida", "radio"];
   var TAB_DI = { strada: "strade", cantone: "strade" };
   function tabCorrente() {
     var h = (location.hash || "#home").slice(1) || "home", t = h.split("-")[0];
@@ -2220,7 +2220,7 @@ render();
     main.style.opacity = op === 1 ? "" : op;
   }
   document.addEventListener("touchstart", function (e) {
-    if (e.touches.length !== 1 || e.target.closest(".tabbar, input, select, textarea, button.num-in, #map, .carousel")) { x0 = null; return; }
+    if (location.hash === "#impostazioni" || e.touches.length !== 1 || e.target.closest(".tabbar, input, select, textarea, button.num-in, #map, .carousel")) { x0 = null; return; }
     x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; t0 = Date.now(); dx = 0; dir = null;
   }, { passive: true });
   document.addEventListener("touchmove", function (e) {
