@@ -685,7 +685,7 @@ svg.zoomed .m-minor { opacity: 1; }
 .g-righe { display: grid; gap: 3px; width: 100%; margin: 4px 0 2px; }
 .g-righe i { display: block; height: 4px; border-radius: 2px; }
 .g-righe i:nth-child(1) { background: #E8762B; } .g-righe i:nth-child(2) { background: #E9B43A; } .g-righe i:nth-child(3) { background: #8A4A22; }
-.g-sub { font-family: var(--f-cartello); font-weight: 800; font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; color: #5A2E14; text-align: center; }
+.g-sub { font-family: var(--f-cartello); font-weight: 800; font-size: .74rem; letter-spacing: .18em; text-transform: uppercase; color: #5A2E14; text-align: center; }
 .g-since { margin-top: 4px; font-family: var(--f-titolo); font-style: italic; font-weight: 700; font-size: .8rem; color: #F3E6C8; background: #C9562A; border-radius: 999px; padding: 1px 12px; }
 .hazard { height: 12px; border-radius: 3px; margin-top: -4px; background: repeating-linear-gradient(-45deg, var(--giallo) 0 11px, var(--nero) 11px 22px); box-shadow: 0 2px 0 rgba(0,0,0,.3); }
 .drawer {
@@ -1215,6 +1215,8 @@ var DEFAULTS = { theme: "auto", units: "km", test: "" };
 var settings = Object.assign({}, DEFAULTS);
 try { Object.assign(settings, JSON.parse(localStorage.getItem("rta-settings") || "{}")); } catch (e) {}
 function save() { try { localStorage.setItem("rta-settings", JSON.stringify(settings)); } catch (e) {} }
+function tripStarted() { var n = new Date(), d = new Date(2026, 11, 8); return n >= d; }
+if (tripStarted() && settings.test) { settings.test = ""; save(); }
 function applyTheme() {
   var r = document.documentElement;
   if (settings.theme === "light") r.setAttribute("data-theme", "light");
@@ -2322,12 +2324,12 @@ function viewImpostazioni() {
         '<span class="g-nome">The Notas\'</span>' +
         '<div class="g-mid"><svg class="g-wr" viewBox="0 0 48 48" aria-hidden="true"><g transform="rotate(45 24 24)"><path d="M21 6a7 7 0 0 0 0 13v19a3 3 0 0 0 6 0V19a7 7 0 0 0 0-13v6h-6z"/></g><g transform="rotate(-45 24 24)"><path d="M21 6a7 7 0 0 0 0 13v19a3 3 0 0 0 6 0V19a7 7 0 0 0 0-13v6h-6z"/></g></svg><h1>Auto Repair</h1><svg class="g-wr" viewBox="0 0 48 48" aria-hidden="true"><g transform="rotate(45 24 24)"><path d="M21 6a7 7 0 0 0 0 13v19a3 3 0 0 0 6 0V19a7 7 0 0 0 0-13v6h-6z"/></g><g transform="rotate(-45 24 24)"><path d="M21 6a7 7 0 0 0 0 13v19a3 3 0 0 0 6 0V19a7 7 0 0 0 0-13v6h-6z"/></g></svg></div>' +
         '<span class="g-righe" aria-hidden="true"><i></i><i></i><i></i></span>' +
-        '<span class="g-sub">Family owned · Engine · Brakes · Tune-ups</span>' +
-        '<span class="g-since">Since 2020</span></header>' +
+        '<span class="g-sub">Family owned since 2020</span></header>' +
       '<div class="hazard" aria-hidden="true"></div>' +
       drawer("TEMA", "#1B1B1B", seg("theme", [["auto", "Auto"], ["light", "Giorno"], ["dark", "Notte"]])) +
       drawer("DISTANZE", "#B3261E", seg("units", [["km", "km"], ["mi", "miglia"], ["both", "entrambe"]])) +
-      drawer("PROVA UN GIORNO", "#1F4E8C", seg("test", [["", "No"], ["1", "8"], ["2", "9"], ["3", "10"], ["4", "11"], ["5", "12"], ["6", "13"]])) +
+      // la prova serve solo prima della partenza: dall'8 dicembre sparisce
+      (tripStarted() ? '' : drawer("PROVA UN GIORNO", "#1F4E8C", seg("test", [["", "No"], ["1", "8"], ["2", "9"], ["3", "10"], ["4", "11"], ["5", "12"], ["6", "13"]]))) +
       drawer("INSTALLA SUL TELEFONO", "#1B1B1B",
         '<p><b>Android (Chrome):</b> menu ⋮ → Installa app.</p><p><b>iPhone (Safari):</b> Condividi → Aggiungi alla schermata Home.</p>' +
         '<button type="button" class="btn" id="install" hidden>Installa adesso</button>') +
