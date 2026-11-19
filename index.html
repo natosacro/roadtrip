@@ -797,6 +797,71 @@ svg.focus .leg-g:not(.sel) { opacity: .25; }
 .leg-g.sel .m-route { stroke-width: 6.5; }
 .tolink { justify-self: start; }
 
+/* ---------- Agenda anni '90 ---------- */
+.book { position: relative; margin-right: 32px; perspective: 1600px; }
+.bk-pages { position: absolute; inset: 0; touch-action: none; }
+.pg {
+  position: absolute; inset: 0; transform-origin: left center; backface-visibility: hidden; border-radius: 4px 10px 10px 4px;
+  background-color: var(--nb-carta);
+  background-image:
+    linear-gradient(90deg, rgba(0,0,0,.12), transparent 18px),
+    linear-gradient(90deg, transparent 46px, var(--nb-margine) 46px, var(--nb-margine) 47.5px, transparent 47.5px),
+    repeating-linear-gradient(180deg, transparent 0 27px, var(--nb-riga) 27px 28px);
+  background-position: 0 0, 0 0, 0 10px;
+  box-shadow: 0 2px 0 #E6DCC6, 0 4px 0 #D9CDB4, 0 6px 8px rgba(0,0,0,.25);
+  color: var(--nb-ink); font-family: var(--f-mano); font-size: 1.12rem; line-height: 28px;
+}
+.pg-in { position: absolute; inset: 10px 12px 34px 58px; overflow: hidden; }
+.pg-n { position: absolute; right: 14px; bottom: 6px; font-family: var(--f-mano); font-size: .95rem; color: #8A97B8; }
+.pg h2 { font-family: var(--f-mano); font-weight: 400; font-size: 1.4rem; line-height: 28px; display: inline-block; border-bottom: 2px solid var(--nb-ink); padding-right: 10px; margin: 0 0 0; }
+.pg h2 small, .pg h3 small { font-size: .8rem; opacity: .7; }
+.pg h3 { font-family: var(--f-mano); font-weight: 400; font-size: 1.05rem; line-height: 28px; color: var(--rosso); letter-spacing: .06em; margin: 0; }
+.pg .blk + .blk h3 { margin-top: 14px; }
+.pg .own { margin-top: 28px; }
+.pg .own span { font-size: 1.6rem; color: var(--rosso); }
+.pg .idx { list-style: none; margin: 28px 0 0; padding: 0; }
+.pg .idx li { display: flex; justify-content: space-between; gap: 8px; border-bottom: 1.5px dotted #8A97B8; }
+.pg .idx button { background: none; border: 0; padding: 0; font: inherit; color: inherit; cursor: pointer; text-align: left; }
+.pg .ret { margin-top: 28px; font-size: .95rem; color: #6A7BA8; }
+.bk-rings {
+  position: absolute; left: 8px; top: 8px; bottom: 8px; width: 30px; z-index: 6; pointer-events: none;
+  background: radial-gradient(ellipse 15px 6px at 50% 50%, transparent 3.4px, #5E5E68 4px, #C9C9D2 5.4px, #8C8C96 6.2px, transparent 6.8px) 0 0 / 30px 24px repeat-y;
+}
+.bk-tabs { position: absolute; right: -32px; top: 18px; display: grid; gap: 6px; z-index: 1; justify-items: start; }
+.bk-tabs button {
+  width: 32px; padding: 10px 0; border: 0; border-radius: 0 7px 7px 0; cursor: pointer; text-align: center;
+  font-family: var(--f-cartello); font-weight: 800; font-size: .66rem; color: #2B2019; box-shadow: inset 3px 0 0 rgba(0,0,0,.12);
+}
+.bk-tabs button[data-rb=""] { font-size: .6rem; }
+.bk-tabs button[aria-pressed="true"] { width: 38px; box-shadow: inset 3px 0 0 rgba(0,0,0,.12), 0 0 0 2px #2B2019; }
+.bk-cover {
+  position: absolute; inset: -4px -6px -4px -4px; z-index: 10; transform-origin: left center; border-radius: 6px 14px 14px 6px;
+  background-color: #6B1F27;
+  background-image:
+    radial-gradient(rgba(255,255,255,.06) 1px, transparent 1.2px), radial-gradient(rgba(0,0,0,.18) 1px, transparent 1.2px),
+    linear-gradient(90deg, rgba(0,0,0,.35), transparent 26px, transparent 92%, rgba(0,0,0,.25));
+  background-size: 5px 5px, 7px 7px, 100% 100%; background-position: 0 0, 2px 3px, 0 0;
+  box-shadow: 0 8px 16px rgba(0,0,0,.35);
+  display: grid; place-items: center;
+}
+.bk-cover-in {
+  display: grid; justify-items: center; gap: 6px; text-align: center; padding: 26px 22px; margin: 18px;
+  border: 2px dashed rgba(240,205,140,.55); border-radius: 8px; color: #E9C77A;
+  text-shadow: 0 1px 0 rgba(0,0,0,.6), 0 -1px 0 rgba(255,240,200,.25);
+}
+.bk-cover-in b { font-family: var(--f-titolo); font-style: italic; font-weight: 700; font-size: 2.1rem; line-height: 1.05; }
+.bk-cover-in i { font-family: var(--f-cartello); font-style: normal; font-weight: 800; font-size: .72rem; letter-spacing: .24em; text-transform: uppercase; }
+.bk-cover-in .bk-star { font-size: 1.4rem; }
+.bk-owner { margin-top: 18px; font-family: var(--f-mano); font-size: 1.1rem; color: #F3E6C8; background: rgba(0,0,0,.25); padding: 2px 12px; border-radius: 4px; transform: rotate(-3deg); text-shadow: none; }
+.bk-strap { position: absolute; right: 26px; top: 0; bottom: 0; width: 16px; background: linear-gradient(90deg, #2A1A12, #4A2E1E 50%, #2A1A12); box-shadow: 0 0 4px rgba(0,0,0,.5); }
+.bk-bar { display: flex; justify-content: center; align-items: center; gap: 18px; margin-top: -4px; }
+.bk-bar button {
+  width: 40px; height: 34px; border-radius: 10px; border: 1.5px solid var(--bordo); background: var(--card); color: var(--testo);
+  font-size: 1.3rem; line-height: 1; cursor: pointer;
+}
+.bk-bar button:disabled { opacity: .35; cursor: default; }
+#bk-num { font-family: var(--f-mano); font-size: 1.1rem; color: var(--testo-2); min-width: 4ch; text-align: center; }
+
 /* ---------- Impostazioni ---------- */
 .group { background: var(--card); border: 1.5px solid var(--bordo); border-radius: 12px; overflow: hidden; }
 .group > div { padding: 12px 14px; display: grid; gap: 8px; }
@@ -1825,35 +1890,142 @@ function initBudget() {
 /* =====================================================================
    VISTA 4 · RUBRICA
    ===================================================================== */
+/* Rubrica: agenda anni '90 che si apre e si sfoglia. Occupa lo schermo senza scorrere:
+   le pagine si girano con lo swipe (o con le frecce), le linguette portano al cantone. */
 function viewRubrica() {
-  var kts = RB_KT.map(function (k) { return k[0]; }).filter(function (c) { return !rbSel || c === rbSel; });
-  var secs = kts.map(function (c) {
-    var cats = RB_CAT.map(function (cat) {
-      var items = RUBRICA.filter(function (r) { return r[0] === c && r[1] === cat; });
-      if (!items.length) return "";
-      return '<h3>' + cat.toUpperCase() + '</h3>' + items.map(function (it) {
-        return '<div class="nb-e"><span class="n">' + esc(it[2]) + '</span><a ' + ext(mapsUrl(it[5], "dir")) + '>' + esc(it[3]) + '</a><span class="i">' + esc(it[4]) + '</span></div>';
-      }).join("");
-    }).join("");
-    return '<section class="nb-sec"><h2>' + esc(CANTONI[c][0].toUpperCase()) + ' · ' + c + '</h2>' + cats + '</section>';
-  }).join("");
-  return '<a class="back" href="#guida">‹ Guida</a>' + sign("", "Rubrica") +
-    '<div class="nb" id="nb"><div class="nb-rings"></div><nav class="nb-tabs" aria-label="Cantoni della rubrica">' +
-      '<button type="button" data-rb="" aria-pressed="' + (!rbSel) + '" style="background:#E9E4F2" aria-label="Tutti i cantoni">A–Z</button>' +
-      RB_KT.map(function (k) { return '<button type="button" data-rb="' + k[0] + '" aria-pressed="' + (rbSel === k[0]) + '" style="background:' + k[1] + '" aria-label="' + CANTONI[k[0]][0] + '">' + k[0] + '</button>'; }).join("") +
-    '</nav><div class="nb-page">' + secs +
-    '<svg class="nb-pen" viewBox="0 0 150 26" aria-hidden="true"><path d="M4 18 112 6l4 8L8 22z" fill="#E9E4F2" stroke="#2747A0" stroke-width="1.5"/><path d="M112 6l24-3 4 8-24 3z" fill="#2747A0"/><path d="M4 18 0 21l8 1" fill="#2747A0"/></svg>' +
-    '</div></div>';
+  return '<a class="back" href="#guida">‹ Guida</a>' +
+    '<div class="book" id="book">' +
+      '<div class="bk-pages" id="bk-pages"></div>' +
+      '<div class="bk-rings" aria-hidden="true"></div>' +
+      '<nav class="bk-tabs" aria-label="Cantoni della rubrica">' +
+        '<button type="button" data-rb="" style="background:#E9E4F2" aria-label="Indice">A–Z</button>' +
+        RB_KT.map(function (k) { return '<button type="button" data-rb="' + k[0] + '" style="background:' + k[1] + '" aria-label="' + CANTONI[k[0]][0] + '">' + k[0] + '</button>'; }).join("") +
+      '</nav>' +
+      '<div class="bk-cover" id="bk-cover" aria-hidden="true">' +
+        '<div class="bk-cover-in"><span class="bk-star">★</span><b>Address Book</b><i>Road Trip · Dec 2026</i><span class="bk-owner">The Notas\'</span></div>' +
+        '<span class="bk-strap"></span></div>' +
+    '</div>' +
+    '<div class="bk-bar"><button type="button" id="bk-prev" aria-label="Pagina precedente">‹</button><span id="bk-num"></span><button type="button" id="bk-next" aria-label="Pagina successiva">›</button></div>';
 }
+
+function rbEntry(it) {
+  return '<div class="nb-e"><span class="n">' + esc(it[2]) + '</span><a ' + ext(mapsUrl(it[5], "dir")) + '>' + esc(it[3]) + '</a><span class="i">' + esc(it[4]) + '</span></div>';
+}
+
 function initRubrica() {
-  document.querySelectorAll("[data-rb]").forEach(function (b) {
-    b.addEventListener("click", function () {
-      var c = b.getAttribute("data-rb");
-      rbSel = (rbSel === c) ? "" : c;
-      var y = window.scrollY;
-      app.innerHTML = viewRubrica(); initRubrica(); window.scrollTo(0, y);
+  var book = document.getElementById("book"), box = document.getElementById("bk-pages");
+  if (!book) return;
+  // altezza: tutto lo spazio fino alla barra in basso, senza scorrere
+  var nav = document.querySelector(".tabbar"), bar = document.querySelector(".bk-bar");
+  var top = book.getBoundingClientRect().top + window.scrollY;
+  var H = Math.max(360, window.innerHeight - top - (nav ? nav.offsetHeight : 64) - (bar ? bar.offsetHeight : 40) - 14);
+  book.style.height = H + "px";
+  var extra = document.documentElement.scrollHeight - window.innerHeight;   // niente scorrimento della pagina
+  if (extra > 0) { H = Math.max(340, H - extra); book.style.height = H + "px"; }
+
+  // impaginazione: ogni cantone parte su una pagina nuova; se non ci sta, continua sulla pagina dopo
+  var pages = [], kStart = {};
+  function newPage(html) {
+    var pg = document.createElement("div");
+    pg.className = "pg"; pg.innerHTML = '<div class="pg-in">' + (html || "") + '</div><span class="pg-n"></span>';
+    box.appendChild(pg); pages.push(pg); return pg.firstChild;
+  }
+  function fits(inner) { return inner.scrollHeight <= inner.clientHeight + 1; }
+  newPage("");   // indice, riempito dopo
+  RB_KT.forEach(function (k) {
+    var c = k[0], title = esc(CANTONI[c][0].toUpperCase()) + ' · ' + c;
+    kStart[c] = pages.length;
+    var inner = newPage('<h2>' + title + '</h2>');
+    RB_CAT.forEach(function (cat) {
+      var items = RUBRICA.filter(function (r) { return r[0] === c && r[1] === cat; });
+      items.forEach(function (it, i) {
+        var html = (i === 0 ? '<h3>' + cat.toUpperCase() + '</h3>' : '') + rbEntry(it);
+        var blk = document.createElement("div"); blk.className = "blk"; blk.innerHTML = html;
+        inner.appendChild(blk);
+        if (!fits(inner) && inner.children.length > 1) {
+          inner.removeChild(blk);
+          inner = newPage('<h2>' + title + ' <small>(segue)</small></h2>');
+          if (i > 0) blk.innerHTML = '<h3>' + cat.toUpperCase() + ' <small>(segue)</small></h3>' + rbEntry(it);
+          inner.appendChild(blk);
+        }
+      });
     });
   });
+  pages[0].firstChild.innerHTML =
+    '<h2>ADDRESS BOOK</h2>' +
+    '<p class="own">This book belongs to<br><span>The Notas\'</span></p>' +
+    '<ul class="idx">' + RB_KT.map(function (k) {
+      return '<li><button type="button" data-go="' + k[0] + '">' + esc(CANTONI[k[0]][0]) + ' · ' + k[0] + '</button><span>p. ' + (kStart[k[0]] + 1) + '</span></li>';
+    }).join("") + '</ul>' +
+    '<p class="ret">If found, please return.<br>Reward: one Christmas cookie.</p>';
+  pages.forEach(function (pg, i) { pg.querySelector(".pg-n").textContent = (i + 1); });
+
+  var cur = 0, busy = false;
+  var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function show() {
+    pages.forEach(function (pg, i) { pg.style.zIndex = i === cur ? 3 : 1; pg.hidden = i !== cur; pg.style.transform = ""; pg.style.opacity = ""; });
+    document.getElementById("bk-num").textContent = (cur + 1) + " / " + pages.length;
+    var k = null; Object.keys(kStart).forEach(function (c) { if (cur >= kStart[c]) k = c; });
+    book.querySelectorAll("[data-rb]").forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-rb") === (cur === 0 ? "" : k))); });
+    document.getElementById("bk-prev").disabled = cur === 0;
+    document.getElementById("bk-next").disabled = cur === pages.length - 1;
+  }
+  function go(n) {
+    if (busy || n === cur || n < 0 || n >= pages.length) return;
+    var from = pages[cur], to = pages[n], fwd = n > cur;
+    if (reduce || !from.animate) { cur = n; show(); return; }
+    busy = true;
+    to.hidden = false;
+    var P = "perspective(1600px) ";
+    if (fwd) {
+      // la pagina corrente si gira verso sinistra e scopre quella dopo
+      to.style.zIndex = 2; from.style.zIndex = 3;
+      var a = from.animate([{ transform: P + "rotateY(0deg)", filter: "brightness(1)" }, { transform: P + "rotateY(-100deg)", filter: "brightness(.75)", opacity: 0 }],
+        { duration: 520, easing: "cubic-bezier(.45,.05,.35,1)" });
+      a.onfinish = function () { cur = n; busy = false; show(); };
+    } else {
+      // la pagina prima torna sopra
+      to.style.zIndex = 4;
+      var b = to.animate([{ transform: P + "rotateY(-100deg)", filter: "brightness(.75)", opacity: 0 }, { transform: P + "rotateY(0deg)", filter: "brightness(1)", opacity: 1 }],
+        { duration: 520, easing: "cubic-bezier(.45,.05,.35,1)" });
+      b.onfinish = function () { cur = n; busy = false; show(); };
+    }
+  }
+  show();
+
+  document.getElementById("bk-prev").onclick = function () { go(cur - 1); };
+  document.getElementById("bk-next").onclick = function () { go(cur + 1); };
+  book.querySelectorAll("[data-rb]").forEach(function (b) {
+    b.addEventListener("click", function () { var c = b.getAttribute("data-rb"); go(c ? kStart[c] : 0); });
+  });
+  book.addEventListener("click", function (e) { var g = e.target.closest("[data-go]"); if (g) go(kStart[g.getAttribute("data-go")]); });
+
+  // swipe sull'agenda: sinistra o su = pagina dopo, destra o giù = pagina prima
+  var sx = null, sy = 0;
+  box.addEventListener("touchstart", function (e) { if (e.touches.length === 1) { sx = e.touches[0].clientX; sy = e.touches[0].clientY; } }, { passive: true });
+  box.addEventListener("touchmove", function (e) { if (sx !== null) e.preventDefault(); }, { passive: false });
+  box.addEventListener("touchend", function (e) {
+    if (sx === null) return;
+    var t = e.changedTouches[0], dx = t.clientX - sx, dy = t.clientY - sy; sx = null;
+    if (Math.max(Math.abs(dx), Math.abs(dy)) < 35) return;
+    if (Math.abs(dx) > Math.abs(dy)) go(cur + (dx < 0 ? 1 : -1)); else go(cur + (dy < 0 ? 1 : -1));
+  });
+  document.addEventListener("keydown", function k(e) {
+    if (!document.getElementById("book")) { document.removeEventListener("keydown", k); return; }
+    if (e.key === "ArrowRight") go(cur + 1); if (e.key === "ArrowLeft") go(cur - 1);
+  });
+
+  // copertina che si apre
+  var cover = document.getElementById("bk-cover");
+  if (reduce || !cover.animate) { cover.remove(); return; }
+  setTimeout(function () {
+    var an = cover.animate([
+      { transform: "perspective(1600px) rotateY(0deg)", opacity: 1 },
+      { transform: "perspective(1600px) rotateY(-75deg)", opacity: 1, offset: .6 },
+      { transform: "perspective(1600px) rotateY(-110deg)", opacity: 0 }
+    ], { duration: 1100, easing: "cubic-bezier(.5,.05,.3,1)", fill: "forwards" });
+    an.onfinish = function () { cover.remove(); };
+  }, 450);
 }
 
 /* =====================================================================
@@ -2220,7 +2392,7 @@ render();
     main.style.opacity = op === 1 ? "" : op;
   }
   document.addEventListener("touchstart", function (e) {
-    if (location.hash === "#impostazioni" || e.touches.length !== 1 || e.target.closest(".tabbar, input, select, textarea, button.num-in, #map, .carousel")) { x0 = null; return; }
+    if (location.hash === "#impostazioni" || e.touches.length !== 1 || e.target.closest(".tabbar, input, select, textarea, button.num-in, #map, .carousel, .book")) { x0 = null; return; }
     x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; t0 = Date.now(); dx = 0; dir = null;
   }, { passive: true });
   document.addEventListener("touchmove", function (e) {
