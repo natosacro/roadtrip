@@ -8,8 +8,8 @@
 <meta name="theme-color" content="#0F6B4C">
 <meta name="description" content="Il nostro road trip d'Avvento, 8–13 dicembre 2026: mappa, leg, mercatini e rubrica.">
 <link rel="manifest" href="manifest.json">
-<link rel="icon" href="icona-192.png">
-<link rel="apple-touch-icon" href="icona-180.png">
+<link rel="icon" href="icona2-192.png">
+<link rel="apple-touch-icon" href="icona2-180.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -2039,7 +2039,7 @@ function mediaSession() {
   try {
     navigator.mediaSession.metadata = new MediaMetadata({
       title: "HPR3 · Heartland Christmas", artist: "Heartland Public Radio", album: "Road trip d'Avvento",
-      artwork: [{ src: "icona-512.png", sizes: "512x512", type: "image/png" }]
+      artwork: [{ src: "icona2-512.png", sizes: "512x512", type: "image/png" }]
     });
     navigator.mediaSession.setActionHandler("play", function () { setRadio(true); });
     navigator.mediaSession.setActionHandler("pause", function () { setRadio(false); });
@@ -2083,7 +2083,7 @@ function isIos() { return /iphone|ipad|ipod/i.test(navigator.userAgent) || (navi
 function installBannerHtml() {
   if (isInstalled()) return "";
   try { var d = +localStorage.getItem("rta-dopo") || 0; if (Date.now() - d < 3 * 86400000) return ""; } catch (e) {}
-  return '<section class="instbar" id="instbar"><img src="icona-192.png" alt="" onerror="this.remove()">' +
+  return '<section class="instbar" id="instbar"><img src="icona2-192.png" alt="" onerror="this.remove()">' +
     '<div class="instbar-t"><b>Installa l\'app sul telefono</b><span id="inst-aiuto">Si apre a schermo intero e funziona anche senza rete.</span></div>' +
     '<div class="instbar-b"><button type="button" class="btn" id="inst-si">Installa</button><button type="button" class="linkbtn2" id="inst-dopo">Dopo</button></div></section>';
 }

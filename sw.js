@@ -1,6 +1,6 @@
 // Road trip d'Avvento: funziona anche offline (in galleria o in montagna senza rete).
-const CACHE = "roadtrip-v21";
-const FILES = ["./", "./index.html", "./manifest.json", "./icona-192.png", "./icona-512.png", "./icona-180.png"];
+const CACHE = "roadtrip-v22";
+const FILES = ["./", "./index.html", "./manifest.json", "./icona2-192.png", "./icona2-512.png", "./icona2-180.png"];
 
 self.addEventListener("install", (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(FILES)).then(() => self.skipWaiting()));
