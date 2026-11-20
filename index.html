@@ -768,7 +768,19 @@ svg.zoomed .m-minor { opacity: 1; }
 .st-row .t b { font-family: var(--f-cartello); font-weight: 800; font-size: .95rem; }
 .st-row .t span { font-size: .82rem; opacity: .8; }
 .st-row:disabled .t { opacity: .55; }
+.popup-back {
+  position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; background: rgba(20,14,10,.55);
+  padding: 24px max(24px, env(safe-area-inset-right, 0px)) 24px max(24px, env(safe-area-inset-left, 0px));
+}
+.popup-back[hidden] { display: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .popup-back:not([hidden]) { animation: fade-in .2s ease-out; }
+  .popup-back:not([hidden]) .sticker-note { animation: pop-in .32s cubic-bezier(.3,1.4,.5,1); }
+}
+@keyframes fade-in { from { opacity: 0; } }
+@keyframes pop-in { from { transform: rotate(-6deg) scale(.6); opacity: 0; } }
 .sticker-note {
+  max-width: 22rem; width: 100%;
   position: relative; background: #FBF3DC; color: #2B2019; border-radius: 3px; padding: 18px 16px 14px; transform: rotate(-1deg);
   box-shadow: 0 4px 8px rgba(0,0,0,.25); display: grid; gap: 6px; font-size: .92rem;
 }
@@ -2198,23 +2210,59 @@ function clickSound() {
   og.gain.setValueAtTime(.3, t); og.gain.exponentialRampToValueAtTime(.001, t + .09);
   o.connect(og); og.connect(c.destination); o.start(t); o.stop(t + .1);
 }
-// leggera interferenza tra una stazione e l'altra (≈ 1 s): fruscio basso che tremola, qualche crepitio
+// sintonia tra una stazione e l'altra (≈ 1,5 s): fruscio FM che va e viene, voci e musica di altre stazioni
+// che passano per un attimo, un fischio di battimento appena udibile e qualche crepitio
 function staticSound() {
-  var c = ac(); if (!c) return; var t = c.currentTime, D = 1.0;
+  var c = ac(); if (!c) return; var t = c.currentTime, D = 1.5, out = c.createGain();
+  out.gain.value = .9; out.connect(c.destination);
+  // fruscio di fondo, con l'intensità che oscilla come quando si gira la manopola
   var n = c.createBufferSource(); n.buffer = noiseBuf(c, D);
-  var f = c.createBiquadFilter(); f.type = "bandpass"; f.frequency.value = 1600; f.Q.value = .5;
-  var lp = c.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 4200;
-  var g = c.createGain();
-  g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.11, t + .12); g.gain.setValueAtTime(.11, t + D * .6); g.gain.linearRampToValueAtTime(0, t + D);
-  // tremolio dell'interferenza
-  var lfo = c.createOscillator(), lg = c.createGain(); lfo.frequency.value = 11; lg.gain.value = .035;
-  lfo.connect(lg); lg.connect(g.gain);
-  n.connect(f); f.connect(lp); lp.connect(g); g.connect(c.destination);
-  n.start(t); n.stop(t + D); lfo.start(t); lfo.stop(t + D);
-  for (var k = 0; k < 5; k++) {
-    var tk = t + .1 + Math.random() * (D - .25), cb = c.createBufferSource(), cg = c.createGain();
-    cb.buffer = noiseBuf(c, .01); cg.gain.setValueAtTime(.12, tk); cg.gain.exponentialRampToValueAtTime(.001, tk + .01);
-    cb.connect(cg); cg.connect(c.destination); cb.start(tk);
+  var hp = c.createBiquadFilter(); hp.type = "highpass"; hp.frequency.value = 350;
+  var lp = c.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.setValueAtTime(3200, t); lp.frequency.linearRampToValueAtTime(5200, t + D * .5); lp.frequency.linearRampToValueAtTime(3800, t + D);
+  var g = c.createGain(); g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.13, t + .1);
+  for (var k = .1; k < D - .2; k += .05) g.gain.linearRampToValueAtTime(.07 + Math.random() * .09, t + k);
+  // nei momenti in cui "passa" un'altra stazione il fruscio si abbassa
+  g.gain.linearRampToValueAtTime(.05, t + .36); g.gain.linearRampToValueAtTime(.12, t + .6);
+  g.gain.linearRampToValueAtTime(.05, t + .9); g.gain.linearRampToValueAtTime(.11, t + 1.12);
+  g.gain.linearRampToValueAtTime(0, t + D);
+  n.connect(hp); hp.connect(lp); lp.connect(g); g.connect(out); n.start(t); n.stop(t + D);
+
+  // voce lontana di un'altra stazione: tono a dente di sega con formanti e sillabe
+  (function (t0, dur) {
+    var o = c.createOscillator(); o.type = "sawtooth";
+    o.frequency.setValueAtTime(150, t0);
+    for (var i = 0; i < 6; i++) o.frequency.linearRampToValueAtTime(120 + Math.random() * 90, t0 + dur * (i + 1) / 6);
+    var f1 = c.createBiquadFilter(); f1.type = "bandpass"; f1.frequency.value = 900; f1.Q.value = 3;
+    var f2 = c.createBiquadFilter(); f2.type = "bandpass"; f2.frequency.value = 2300; f2.Q.value = 5;
+    var vg = c.createGain(); vg.gain.setValueAtTime(0, t0);
+    var syl = 0; for (var x = 0; x < dur; x += .09) { vg.gain.linearRampToValueAtTime(syl % 2 ? .012 : .07, t0 + x); syl++; }
+    vg.gain.linearRampToValueAtTime(0, t0 + dur);
+    o.connect(f1); o.connect(f2); f1.connect(vg); f2.connect(vg); vg.connect(out); o.start(t0); o.stop(t0 + dur + .02);
+  })(t + .3, .32);
+
+  // musica lontana: un accordo che compare e sparisce
+  [261.6, 329.6, 392].forEach(function (fr, i) {
+    var o = c.createOscillator(), og = c.createGain(); o.type = i ? "triangle" : "square";
+    o.frequency.value = fr * (1 + (Math.random() - .5) * .01);
+    var bp = c.createBiquadFilter(); bp.type = "bandpass"; bp.frequency.value = 1000; bp.Q.value = .8;
+    og.gain.setValueAtTime(0, t + .85); og.gain.linearRampToValueAtTime(i ? .018 : .01, t + .93);
+    og.gain.linearRampToValueAtTime(i ? .014 : .008, t + 1.05); og.gain.linearRampToValueAtTime(0, t + 1.15);
+    o.connect(bp); bp.connect(og); og.connect(out); o.start(t + .85); o.stop(t + 1.2);
+  });
+
+  // fischio di battimento tra le stazioni, appena udibile
+  var w = c.createOscillator(), wg = c.createGain(); w.type = "sine";
+  w.frequency.setValueAtTime(3100, t + .15); w.frequency.exponentialRampToValueAtTime(900, t + .32);
+  w.frequency.setValueAtTime(2600, t + .7); w.frequency.exponentialRampToValueAtTime(700, t + .88);
+  wg.gain.setValueAtTime(0, t); wg.gain.linearRampToValueAtTime(.012, t + .2); wg.gain.linearRampToValueAtTime(0, t + .34);
+  wg.gain.linearRampToValueAtTime(.01, t + .74); wg.gain.linearRampToValueAtTime(0, t + .9);
+  w.connect(wg); wg.connect(out); w.start(t); w.stop(t + 1);
+
+  // crepitii
+  for (var q = 0; q < 8; q++) {
+    var tk = t + .08 + Math.random() * (D - .2), cb = c.createBufferSource(), cg = c.createGain();
+    cb.buffer = noiseBuf(c, .008); cg.gain.setValueAtTime(.1 + Math.random() * .12, tk); cg.gain.exponentialRampToValueAtTime(.001, tk + .008);
+    cb.connect(cg); cg.connect(out); cb.start(tk);
   }
 }
 
@@ -2303,10 +2351,11 @@ function stationRows() {
 function viewRadio() {
   return sign("", "Radio") +
     '<div class="radio-wrap">' + radioSvg() + '</div>' +
-    '<section class="sticker-note" id="note" hidden><button type="button" class="x" id="note-x" aria-label="Chiudi">×</button>' +
+    '<div class="popup-back" id="note" hidden><section class="sticker-note" role="dialog" aria-modal="true" aria-label="La curiosità sulla radio">' +
+      '<button type="button" class="x" id="note-x" aria-label="Chiudi">×</button>' +
       '<b>HPR3 · HEARTLAND CHRISTMAS</b><i>Che Babbo Natale venisse dalla Coca-Cola già si sapeva, ma da Branson, MO?</i>' +
       '<span>Classic country, western e bluegrass di Natale: lo spirito del nostro road trip.</span>' +
-      '<a ' + ext(HPR_URL) + '>hpr.org ↗</a></section>' +
+      '<a ' + ext(HPR_URL) + '>hpr.org ↗</a></section></div>' +
     '<section class="stations"><div class="stations-head"><button type="button" class="onair-btn" id="onair" aria-pressed="' + radioOn + '">ON AIR</button><b>STAZIONI</b></div>' +
       '<div class="st-list" id="st-list" style="display:grid;gap:8px">' + stationRows() + '</div></section>';
 }
@@ -2383,7 +2432,7 @@ function selectStation(n) {
   stopStation();
   var r = document.getElementById("radio"); if (r) r.classList.add("tuning");
   staticSound();
-  switchTm = setTimeout(function () { if (radioOn) playStation(); }, 650);
+  switchTm = setTimeout(function () { if (radioOn) playStation(); }, 1000);
 }
 // comandi sulla schermata di blocco e nelle notifiche
 function mediaSession() {
@@ -2418,10 +2467,13 @@ function initRadio() {
     row.addEventListener("click", function () { selectStation(row.getAttribute("data-st")); });
   });
   var note = document.getElementById("note"), stk = document.getElementById("sticker");
-  function toggleNote() { note.hidden = !note.hidden; }
-  stk.addEventListener("click", toggleNote);
-  stk.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggleNote(); } });
-  document.getElementById("note-x").addEventListener("click", function () { note.hidden = true; });
+  function openNote() { note.hidden = false; document.getElementById("note-x").focus(); }
+  function closeNote() { note.hidden = true; }
+  stk.addEventListener("click", openNote);
+  stk.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openNote(); } });
+  document.getElementById("note-x").addEventListener("click", closeNote);
+  note.addEventListener("click", function (e) { if (e.target === note) closeNote(); });
+  document.addEventListener("keydown", function esc(e) { if (!document.getElementById("note")) { document.removeEventListener("keydown", esc); return; } if (e.key === "Escape") closeNote(); });
 }
 
 /* =====================================================================
