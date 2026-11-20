@@ -765,7 +765,7 @@ svg.zoomed .m-minor { opacity: 1; }
 .st-row:not(:disabled):active .st-key { transform: translateY(2px); box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 1px 0 #1A1B1D; }
 .st-row[aria-pressed="true"] .st-key { background: linear-gradient(#E3563F, #B8341F); border-color: #FF7A5C; box-shadow: 0 0 14px rgba(255,90,60,.55), inset 0 1px 0 rgba(255,255,255,.25), 0 3px 0 #6A1A10; }
 .st-row .t { display: grid; gap: 1px; min-width: 0; }
-.st-row .t b { font-family: var(--f-cartello); font-weight: 800; font-size: .95rem; }
+.st-row .t b { font-family: var(--f-cartello); font-weight: 800; font-size: 1.1rem; letter-spacing: .04em; }
 .st-row .t span { font-size: .82rem; opacity: .8; }
 .st-row:disabled .t { opacity: .55; }
 .popup-back {
@@ -2170,18 +2170,18 @@ function viewCantone(c) {
 var HPR_URL = "https://hpr.org/hpr3-heartland-christmas-player/";
 // Stazioni sui tasti di memoria. Se un indirizzo non suona, si prova la variante successiva.
 var STATIONS = {
-  1: { big: "HPR1", l1: "TRADITIONAL", l2: "COUNTRY", name: "HPR1 · Traditional Classic Country", genre: "Heartland Public Radio · country classico",
+  1: { big: "HPR1", label: "HPR1", l1: "TRADITIONAL", l2: "COUNTRY", name: "HPR1 · Traditional Classic Country", genre: "Heartland Public Radio · country classico",
        src: ["https://us2.maindigitalstream.com/ssl/7713"] },
-  2: { big: "HPR2", l1: "TODAY'S", l2: "COUNTRY", name: "HPR2 · Today's Classic Country", genre: "Heartland Public Radio · country",
+  2: { big: "HPR2", label: "HPR2", l1: "TODAY'S", l2: "COUNTRY", name: "HPR2 · Today's Classic Country", genre: "Heartland Public Radio · country",
        src: ["https://us2.maindigitalstream.com/ssl/7735"] },
-  3: { big: "HPR3", l1: "HEARTLAND", l2: "CHRISTMAS", name: "HPR3 · Heartland Christmas", genre: "Heartland Public Radio · country di Natale",
+  3: { big: "HPR3", label: "HPR3", l1: "HEARTLAND", l2: "CHRISTMAS", name: "HPR3 · Heartland Christmas", genre: "Heartland Public Radio · country di Natale",
        src: ["https://us2.maindigitalstream.com/ssl/7791"] },
-  4: { big: "HPR4", l1: "BLUEGRASS", l2: "GOSPEL", name: "HPR4 · Bluegrass Gospel", genre: "Heartland Public Radio · bluegrass",
+  4: { big: "HPR4", label: "HPR4", l1: "BLUEGRASS", l2: "GOSPEL", name: "HPR4 · Bluegrass Gospel", genre: "Heartland Public Radio · bluegrass",
        src: ["https://us2.maindigitalstream.com/ssl/7739"] },
-  5: { big: "106.3", l1: "LA", l2: "MEXICANA", name: "La Mexicana 106.3", genre: "Regional mexicano",
+  5: { big: "106.3", label: "La Mexicana 106.3", l1: "LA", l2: "MEXICANA", name: "La Mexicana 106.3", genre: "Regional mexicano",
        src: ["https://ice42.securenetsystems.net/KDLWFM"] },
   // tasto 6: niente stream, apre Spotify (l'app se c'è, altrimenti il sito)
-  6: { big: "SPOTIFY", l1: "", l2: "", name: "Spotify", genre: "Apre l'app Spotify", app: "https://open.spotify.com/" }
+  6: { big: "SPOTIFY", label: "Spotify", l1: "", l2: "", name: "Spotify", genre: "Apre l'app Spotify", app: "https://open.spotify.com/" }
 };
 function lcdSize(t) { return t.length > 5 ? 34 : t.length > 4 ? 40 : 46; }
 var radioOn = false, radioAudio = null, radioSt = 3, srcTry = 0, switchTm = null;
@@ -2345,7 +2345,7 @@ function stationRows() {
   return Object.keys(STATIONS).map(function (n) {
     var st = STATIONS[n];
     return '<button type="button" class="st-row" data-st="' + n + '" aria-pressed="' + (radioOn && +n === radioSt) + '"' + (radioOn ? '' : ' disabled') + '>' +
-      '<span class="st-key">' + n + '</span><span class="t"><b>' + esc(st.name) + '</b><span>' + esc(st.genre) + '</span></span></button>';
+      '<span class="st-key">' + n + '</span><span class="t"><b>' + esc(st.label || st.name) + '</b></span></button>';
   }).join("");
 }
 function viewRadio() {
