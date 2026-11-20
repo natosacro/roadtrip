@@ -613,8 +613,12 @@ svg.zoomed .m-minor { opacity: 1; }
 .radio-wrap { margin-left: calc(6px - var(--gutter-l)); margin-right: calc(6px - var(--gutter-r)); }
 .radio { width: 100%; height: auto; display: block; filter: drop-shadow(0 6px 6px rgba(0,0,0,.25)); }
 .radio text { font-family: var(--f-cartello); }
-.radio .lcd-txt, .radio .lcd-glow, .radio .eq, .radio .led-on, .radio .p3-on { opacity: 0; transition: opacity .35s; }
-.radio.on .lcd-txt, .radio.on .lcd-glow, .radio.on .eq, .radio.on .led-on, .radio.on .p3-on { opacity: 1; }
+.radio .lcd-txt, .radio .lcd-glow, .radio .eq, .radio .led-on, .radio .pon { opacity: 0; transition: opacity .35s; }
+.radio.on .lcd-txt, .radio.on .lcd-glow, .radio.on .eq, .radio.on .led-on, .radio.on .preset.sel .pon { opacity: 1; }
+.radio.on .preset[data-st] { cursor: pointer; }
+.radio .preset:active rect.base { transform: translateY(1px); }
+.radio .sticker { cursor: pointer; }
+.radio .sticker:focus { outline: none; }
 .radio .knob-rot { transition: transform .5s cubic-bezier(.3,1.4,.5,1); transform-box: view-box; transform-origin: 92px 112px; transform: rotate(-120deg); }
 .radio.on .knob-rot { transform: rotate(40deg); }
 .radio .pwr { cursor: pointer; }
@@ -741,6 +745,38 @@ svg.zoomed .m-minor { opacity: 1; }
 .instbar-b { grid-column: 1 / -1; display: flex; gap: 14px; align-items: center; }
 .instbar .btn { background: var(--oro); color: #2B2019; }
 .linkbtn2 { background: none; border: 0; padding: 6px 2px; cursor: pointer; color: var(--su-marrone); opacity: .8; text-decoration: underline; font-family: var(--f-cartello); font-weight: 700; font-size: .85rem; }
+
+/* ---------- Stazioni ---------- */
+.stations { background: var(--marrone); color: var(--su-marrone); border-radius: 12px; padding: 12px; display: grid; gap: 10px; }
+.stations-head { display: flex; align-items: center; gap: 12px; }
+.stations-head b { font-family: var(--f-cartello); font-weight: 800; letter-spacing: .14em; font-size: .8rem; color: var(--etichetta); }
+.st-row {
+  display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: center; text-align: left; cursor: pointer;
+  background: rgba(255,255,255,.05); border: 0; border-radius: 10px; padding: 7px 10px 7px 7px; color: inherit; font: inherit;
+}
+.st-row:disabled { cursor: default; }
+.st-key {
+  width: 54px; height: 46px; border-radius: 8px; display: grid; place-items: center; transition: background .2s, box-shadow .2s, opacity .2s;
+  border: 2px solid #2A2C30; background: linear-gradient(#5E6268, #3E4248); color: #E6E6E6;
+  font-family: var(--f-cartello); font-weight: 800; font-size: 1.35rem;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 3px 0 #1A1B1D;
+}
+.st-row:disabled .st-key { opacity: .45; }
+.st-row:not(:disabled):active .st-key { transform: translateY(2px); box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 1px 0 #1A1B1D; }
+.st-row[aria-pressed="true"] .st-key { background: linear-gradient(#E3563F, #B8341F); border-color: #FF7A5C; box-shadow: 0 0 14px rgba(255,90,60,.55), inset 0 1px 0 rgba(255,255,255,.25), 0 3px 0 #6A1A10; }
+.st-row .t { display: grid; gap: 1px; min-width: 0; }
+.st-row .t b { font-family: var(--f-cartello); font-weight: 800; font-size: .95rem; }
+.st-row .t span { font-size: .82rem; opacity: .8; }
+.st-row:disabled .t { opacity: .55; }
+.sticker-note {
+  position: relative; background: #FBF3DC; color: #2B2019; border-radius: 3px; padding: 18px 16px 14px; transform: rotate(-1deg);
+  box-shadow: 0 4px 8px rgba(0,0,0,.25); display: grid; gap: 6px; font-size: .92rem;
+}
+.sticker-note::before { content: ""; position: absolute; top: -10px; left: 50%; width: 80px; height: 20px; transform: translateX(-50%) rotate(2deg); background: rgba(214,196,150,.7); }
+.sticker-note b { font-family: var(--f-cartello); font-weight: 800; letter-spacing: .12em; font-size: .78rem; color: #A8483F; }
+.sticker-note i { font-family: var(--f-titolo); font-size: 1.02rem; }
+.sticker-note a { color: inherit; font-weight: 700; }
+.sticker-note .x { position: absolute; top: 6px; right: 8px; background: none; border: 0; font-size: 1.2rem; cursor: pointer; color: #6B5A4C; }
 
 /* ---------- Strade e cantoni ---------- */
 .roadgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(86px, 1fr)); gap: 10px; }
@@ -2120,16 +2156,76 @@ function viewCantone(c) {
    VISTA 7 · RADIO (l'autoradio della slide 6)
    ===================================================================== */
 var HPR_URL = "https://hpr.org/hpr3-heartland-christmas-player/";
-var HPR_STREAM = "https://us2.maindigitalstream.com/ssl/7791";   // flusso diretto di HPR3: la radio suona dentro l'app e OFF la spegne
-var radioOn = false, radioAudio = null;
+// Stazioni sui tasti di memoria. Se un indirizzo non suona, si prova la variante successiva.
+var STATIONS = {
+  1: { big: "HPR1", l1: "TRADITIONAL", l2: "COUNTRY", name: "HPR1 · Traditional Classic Country", genre: "Heartland Public Radio · country classico",
+       src: ["https://us7.maindigitalstream.com/4420/", "https://us7.maindigitalstream.com/4420/;", "https://us7.maindigitalstream.com/4420/stream"] },
+  2: { big: "HPR2", l1: "TODAY'S", l2: "COUNTRY", name: "HPR2 · Today's Classic Country", genre: "Heartland Public Radio · country",
+       src: ["https://us7.maindigitalstream.com/4422/", "https://us7.maindigitalstream.com/4422/;", "https://us7.maindigitalstream.com/4422/stream"] },
+  3: { big: "HPR3", l1: "HEARTLAND", l2: "CHRISTMAS", name: "HPR3 · Heartland Christmas", genre: "Heartland Public Radio · country di Natale",
+       src: ["https://us2.maindigitalstream.com/ssl/7791"] },
+  4: { big: "HPR4", l1: "BLUEGRASS", l2: "GOSPEL", name: "HPR4 · Bluegrass Gospel", genre: "Heartland Public Radio · bluegrass",
+       src: ["https://us7.maindigitalstream.com/4424/", "https://us7.maindigitalstream.com/4424/;", "https://us7.maindigitalstream.com/4424/stream"] },
+  5: { big: "106.3", l1: "LA", l2: "MEXICANA", name: "La Mexicana 106.3", genre: "Regional mexicano",
+       src: ["https://streamdb9web.securenetsystems.net/v5/KDLWFM", "https://ice9.securenetsystems.net/KDLWFM"] }
+};
+var radioOn = false, radioAudio = null, radioSt = 3, srcTry = 0, switchTm = null;
+
+/* Suoni dell'autoradio, generati al momento (niente file da scaricare) */
+var actx = null;
+function ac() {
+  if (!actx) { try { actx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { return null; } }
+  if (actx.state === "suspended") { try { actx.resume(); } catch (e) {} }
+  return actx;
+}
+function noiseBuf(c, sec) {
+  var len = Math.floor(c.sampleRate * sec), buf = c.createBuffer(1, len, c.sampleRate), d = buf.getChannelData(0);
+  for (var i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+  return buf;
+}
+// clic meccanico del tasto di accensione
+function clickSound() {
+  var c = ac(); if (!c) return; var t = c.currentTime;
+  var n = c.createBufferSource(); n.buffer = noiseBuf(c, .03);
+  var f = c.createBiquadFilter(); f.type = "bandpass"; f.frequency.value = 2400; f.Q.value = .9;
+  var g = c.createGain(); g.gain.setValueAtTime(.55, t); g.gain.exponentialRampToValueAtTime(.001, t + .03);
+  n.connect(f); f.connect(g); g.connect(c.destination); n.start(t);
+  var o = c.createOscillator(), og = c.createGain();
+  o.frequency.setValueAtTime(150, t); o.frequency.exponentialRampToValueAtTime(55, t + .07);
+  og.gain.setValueAtTime(.3, t); og.gain.exponentialRampToValueAtTime(.001, t + .09);
+  o.connect(og); og.connect(c.destination); o.start(t); o.stop(t + .1);
+}
+// fruscio di sintonia tra una stazione e l'altra (≈ 1,2 s)
+function staticSound() {
+  var c = ac(); if (!c) return; var t = c.currentTime, D = 1.2;
+  var n = c.createBufferSource(); n.buffer = noiseBuf(c, D);
+  var f = c.createBiquadFilter(); f.type = "bandpass"; f.Q.value = .7;
+  f.frequency.setValueAtTime(700, t); f.frequency.linearRampToValueAtTime(2600, t + D * .45); f.frequency.linearRampToValueAtTime(1300, t + D);
+  var g = c.createGain();
+  g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.26, t + .08); g.gain.setValueAtTime(.26, t + D * .55); g.gain.linearRampToValueAtTime(0, t + D);
+  n.connect(f); f.connect(g); g.connect(c.destination); n.start(t); n.stop(t + D);
+  // fischio che scorre, come la manopola di sintonia
+  var o = c.createOscillator(), og = c.createGain(); o.type = "sine";
+  o.frequency.setValueAtTime(1800, t + .1); o.frequency.exponentialRampToValueAtTime(600, t + .5); o.frequency.exponentialRampToValueAtTime(1100, t + D * .85);
+  og.gain.setValueAtTime(0, t); og.gain.linearRampToValueAtTime(.035, t + .2); og.gain.linearRampToValueAtTime(0, t + D * .9);
+  o.connect(og); og.connect(c.destination); o.start(t); o.stop(t + D);
+  // qualche crepitio
+  for (var k = 0; k < 6; k++) {
+    var tk = t + .1 + Math.random() * (D - .2), cb = c.createBufferSource(), cg = c.createGain();
+    cb.buffer = noiseBuf(c, .015); cg.gain.setValueAtTime(.35, tk); cg.gain.exponentialRampToValueAtTime(.001, tk + .015);
+    cb.connect(cg); cg.connect(c.destination); cb.start(tk);
+  }
+}
 
 function radioSvg() {
   var eq = "", hs = [26, 40, 30, 46, 22, 38, 48, 28, 36, 20];
   for (var i = 0; i < 10; i++) eq += '<rect x="' + (474 + i * 10) + '" y="' + (212 - hs[i]) + '" width="7" height="' + hs[i] + '" rx="1" fill="' + (i === 4 ? "#D23B2B" : "#F2B33D") + '"/>';
   var presets = "";
   [["1", 470, 66], ["2", 516, 66], ["3", 562, 66], ["4", 470, 112], ["5", 516, 112], ["6", 562, 112]].forEach(function (b) {
-    presets += '<g><rect x="' + (b[1] - 19) + '" y="' + (b[2] - 18) + '" width="38" height="34" rx="6" fill="#4A4D53" stroke="#2A2C30" stroke-width="2"/>' +
-      (b[0] === "3" ? '<rect class="p3-on" x="' + (b[1] - 19) + '" y="' + (b[2] - 18) + '" width="38" height="34" rx="6" fill="#C8402F" stroke="#FF7A5C" stroke-width="2"/>' : '') +
+    var has = STATIONS[b[0]];
+    presets += '<g class="preset' + (+b[0] === radioSt ? ' sel' : '') + '"' + (has ? ' data-st="' + b[0] + '" role="button" aria-label="Stazione ' + b[0] + '"' : '') + '>' +
+      '<rect class="base" x="' + (b[1] - 19) + '" y="' + (b[2] - 18) + '" width="38" height="34" rx="6" fill="#4A4D53" stroke="#2A2C30" stroke-width="2"/>' +
+      '<rect class="pon" x="' + (b[1] - 19) + '" y="' + (b[2] - 18) + '" width="38" height="34" rx="6" fill="#C8402F" stroke="#FF7A5C" stroke-width="2"/>' +
       '<text x="' + b[1] + '" y="' + (b[2] + 6) + '" text-anchor="middle" font-size="17" font-weight="800" fill="#E6E6E6">' + b[0] + '</text></g>';
   });
   var btns = "";
@@ -2138,8 +2234,9 @@ function radioSvg() {
   });
   var ticks = "";
   for (var k = 0; k < 11; k++) { var a = (-210 + k * 24) * Math.PI / 180; ticks += '<line x1="' + (92 + 47 * Math.cos(a)).toFixed(1) + '" y1="' + (112 + 47 * Math.sin(a)).toFixed(1) + '" x2="' + (92 + 52 * Math.cos(a)).toFixed(1) + '" y2="' + (112 + 52 * Math.sin(a)).toFixed(1) + '" stroke="#8C9096" stroke-width="2"/>'; }
+  var st = STATIONS[radioSt];
 
-  return '<svg class="radio' + (radioOn ? ' on' : '') + '" id="radio" viewBox="0 0 600 292" role="group" aria-label="Autoradio HPR3">' +
+  return '<svg class="radio' + (radioOn ? ' on' : '') + '" id="radio" viewBox="0 0 600 292" role="group" aria-label="Autoradio">' +
     '<defs><linearGradient id="chrome" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E4E7EB"/><stop offset=".5" stop-color="#A9AEB5"/><stop offset="1" stop-color="#7E848C"/></linearGradient>' +
     '<radialGradient id="knob" cx=".4" cy=".35" r=".7"><stop offset="0" stop-color="#6B6F76"/><stop offset="1" stop-color="#232427"/></radialGradient>' +
     '<linearGradient id="lcd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3B2A0C"/><stop offset="1" stop-color="#1E1606"/></linearGradient>' +
@@ -2160,14 +2257,14 @@ function radioSvg() {
       '<text x="92" y="186" text-anchor="middle" font-size="15" font-weight="800" fill="#E6E6E6">VOL</text>' +
       '<text x="92" y="201" text-anchor="middle" font-size="9" font-weight="700" letter-spacing="1.5" fill="#9EA3AA">PUSH ⏻ POWER</text>' +
     '</g>' +
-    /* display */
+    /* display con il nome della stazione */
     '<rect x="148" y="56" width="298" height="104" rx="9" fill="#141414" stroke="#55585D" stroke-width="2"/>' +
     '<rect x="158" y="64" width="278" height="88" rx="5" fill="#1C1A15"/>' +
     '<rect class="lcd-glow" x="158" y="64" width="278" height="88" rx="5" fill="url(#lcd)"/>' +
     '<g class="lcd-txt" filter="url(#glow)" fill="#F5B53A">' +
-      '<text x="172" y="126" font-size="46" font-weight="800" letter-spacing="1">HPR3</text>' +
-      '<text x="300" y="102" font-size="15" font-weight="800" letter-spacing="2.5">HEARTLAND</text>' +
-      '<text x="300" y="126" font-size="15" font-weight="800" letter-spacing="2.5">CHRISTMAS</text>' +
+      '<text id="lcd-big" x="172" y="126" font-size="' + (st.big.length > 4 ? 40 : 46) + '" font-weight="800" letter-spacing="1">' + st.big + '</text>' +
+      '<text id="lcd-l1" x="300" y="102" font-size="15" font-weight="800" letter-spacing="2.5">' + st.l1 + '</text>' +
+      '<text id="lcd-l2" x="300" y="126" font-size="15" font-weight="800" letter-spacing="2.5">' + st.l2 + '</text>' +
       '<text x="398" y="82" font-size="10" font-weight="800" fill="#7CF08A">ST</text><circle cx="420" cy="78" r="3.2" fill="#7CF08A"/>' +
     '</g>' +
     presets +
@@ -2181,7 +2278,8 @@ function radioSvg() {
     '<rect x="466" y="160" width="106" height="56" rx="4" fill="#202124"/><g class="eq">' + eq + '</g>' +
     btns +
     '<text x="519" y="243" text-anchor="middle" font-size="10" font-weight="700" letter-spacing="1.2" fill="#9EA3AA">FM · MW · RDS</text>' +
-    /* sticker del Missouri */
+    /* sticker del Missouri: toccandolo compare la curiosità */
+    '<g class="sticker" id="sticker" role="button" tabindex="0" aria-label="La curiosità sulla radio">' +
     '<g transform="translate(38 214) rotate(-9)" filter="url(#worn)">' +
       '<path d="M-3 -3H65L73 5V47H-3Z" fill="#EFE6D2"/>' +
       '<rect x="0" y="0" width="70" height="15" fill="#A8483F"/><rect x="0" y="15" width="70" height="14" fill="#EFE6D2"/><rect x="0" y="29" width="70" height="15" fill="#3D5487"/>' +
@@ -2190,78 +2288,129 @@ function radioSvg() {
       '<rect x="-3" y="-3" width="76" height="50" fill="#C9A86A" opacity=".22"/>' +
       '<path d="M8 6l22 9M44 34l18-6M14 38l9-2" stroke="#EFE6D2" stroke-width=".9" opacity=".8"/>' +
     '</g>' +
-    /* angolo scollato */
     '<g transform="translate(38 214) rotate(-9)"><path d="M65 -3 73 5 66 4Z" fill="#D8CDB4"/><path d="M65 -3 66 4 73 5" fill="none" stroke="#000" stroke-opacity=".25" stroke-width=".8"/></g>' +
-    '</svg>';
+    '</g></svg>';
 }
 
+function stationRows() {
+  return Object.keys(STATIONS).map(function (n) {
+    var st = STATIONS[n];
+    return '<button type="button" class="st-row" data-st="' + n + '" aria-pressed="' + (radioOn && +n === radioSt) + '"' + (radioOn ? '' : ' disabled') + '>' +
+      '<span class="st-key">' + n + '</span><span class="t"><b>' + esc(st.name) + '</b><span>' + esc(st.genre) + '</span></span></button>';
+  }).join("");
+}
 function viewRadio() {
   return sign("", "Radio") +
     '<div class="radio-wrap">' + radioSvg() + '</div>' +
-    '<section class="onair"><button type="button" class="onair-btn" id="onair" aria-pressed="' + radioOn + '">ON AIR</button>' +
-      '<div class="t"><b>HPR3 · HEARTLAND CHRISTMAS</b><i>Che Babbo Natale venisse dalla Coca-Cola già si sapeva, ma da Branson, MO?</i>' +
+    '<section class="sticker-note" id="note" hidden><button type="button" class="x" id="note-x" aria-label="Chiudi">×</button>' +
+      '<b>HPR3 · HEARTLAND CHRISTMAS</b><i>Che Babbo Natale venisse dalla Coca-Cola già si sapeva, ma da Branson, MO?</i>' +
       '<span>Classic country, western e bluegrass di Natale: lo spirito del nostro road trip.</span>' +
-      '<a ' + ext(HPR_URL) + '>hpr.org ↗</a></div></section>';
+      '<a ' + ext(HPR_URL) + '>hpr.org ↗</a></section>' +
+    '<section class="stations"><div class="stations-head"><button type="button" class="onair-btn" id="onair" aria-pressed="' + radioOn + '">ON AIR</button><b>STAZIONI</b></div>' +
+      '<div class="st-list" id="st-list" style="display:grid;gap:8px">' + stationRows() + '</div></section>';
+}
+
+function radioUi() {
+  var st = STATIONS[radioSt], r = document.getElementById("radio");
+  if (r) {
+    r.classList.toggle("on", radioOn); if (!radioOn) r.classList.remove("tuning");
+    r.querySelectorAll(".preset").forEach(function (g) { g.classList.toggle("sel", g.getAttribute("data-st") === String(radioSt)); });
+    var big = document.getElementById("lcd-big");
+    if (big) { big.textContent = st.big; big.setAttribute("font-size", st.big.length > 4 ? 40 : 46); }
+    var l1 = document.getElementById("lcd-l1"), l2 = document.getElementById("lcd-l2");
+    if (l1) l1.textContent = st.l1; if (l2) l2.textContent = st.l2;
+  }
+  var p = document.getElementById("pwr"), b = document.getElementById("onair");
+  if (p) p.setAttribute("aria-pressed", String(radioOn));
+  if (b) b.setAttribute("aria-pressed", String(radioOn));
+  document.querySelectorAll(".st-row").forEach(function (row) {
+    row.disabled = !radioOn;
+    row.setAttribute("aria-pressed", String(radioOn && row.getAttribute("data-st") === String(radioSt)));
+  });
+}
+
+function playStation() {
+  var st = STATIONS[radioSt];
+  if (!radioAudio) {
+    radioAudio = new Audio();
+    radioAudio.preload = "none";
+    radioAudio.addEventListener("playing", function () { var x = document.getElementById("radio"); if (x) x.classList.remove("tuning"); });
+    radioAudio.addEventListener("waiting", function () { var x = document.getElementById("radio"); if (x && radioOn) x.classList.add("tuning"); });
+    radioAudio.addEventListener("error", function () {
+      if (!radioOn || !radioAudio.getAttribute("src")) return;
+      var s2 = STATIONS[radioSt];
+      if (srcTry + 1 < s2.src.length) { srcTry++; radioAudio.src = s2.src[srcTry]; var q = radioAudio.play(); if (q && q.catch) q.catch(function () {}); return; }
+      var x = document.getElementById("radio"); if (x) x.classList.remove("tuning");
+      toast(s2.name + " non risponde: prova un'altra stazione");
+    });
+  }
+  var r = document.getElementById("radio"); if (r) r.classList.add("tuning");
+  srcTry = 0;
+  radioAudio.src = st.src[0];
+  var pr = radioAudio.play(); if (pr && pr.catch) pr.catch(function () {});
+  mediaSession();
+}
+function stopStation() {
+  clearTimeout(switchTm);
+  if (radioAudio) { radioAudio.pause(); radioAudio.removeAttribute("src"); radioAudio.load(); }
 }
 
 function setRadio(on) {
   radioOn = on;
-  var r = document.getElementById("radio"), p = document.getElementById("pwr"), b = document.getElementById("onair");
-  if (r) { r.classList.toggle("on", on); if (!on) r.classList.remove("tuning"); }
-  if (p) p.setAttribute("aria-pressed", String(on));
-  if (b) b.setAttribute("aria-pressed", String(on));
-  if (!HPR_STREAM) return;
-  if (on) {
-    if (!radioAudio) {
-      radioAudio = new Audio();
-      radioAudio.preload = "none";
-      radioAudio.addEventListener("playing", function () { var x = document.getElementById("radio"); if (x) x.classList.remove("tuning"); });
-      radioAudio.addEventListener("waiting", function () { var x = document.getElementById("radio"); if (x && radioOn) x.classList.add("tuning"); });
-      radioAudio.addEventListener("error", function () {
-        if (!radioOn) return;
-        setRadio(false);
-        toast("HPR3 non risponde: prova più tardi o apri hpr.org dal link qui sotto");
-      });
-    }
-    if (r) r.classList.add("tuning");
-    radioAudio.src = HPR_STREAM;
-    var pr = radioAudio.play();
-    if (pr && pr.catch) pr.catch(function () {});
-    mediaSession();
-  } else if (radioAudio) {
-    radioAudio.pause(); radioAudio.removeAttribute("src"); radioAudio.load();
-  }
+  radioUi();
+  if (on) playStation(); else stopStation();
   try { if ("mediaSession" in navigator) navigator.mediaSession.playbackState = on ? "playing" : "paused"; } catch (e) {}
+}
+function selectStation(n) {
+  n = +n;
+  if (!radioOn || !STATIONS[n]) return;
+  clickSound();
+  if (n === radioSt) return;
+  radioSt = n;
+  radioUi();
+  // tra una stazione e l'altra: fruscio di sintonia, poi parte la nuova
+  stopStation();
+  var r = document.getElementById("radio"); if (r) r.classList.add("tuning");
+  staticSound();
+  switchTm = setTimeout(function () { if (radioOn) playStation(); }, 650);
 }
 // comandi sulla schermata di blocco e nelle notifiche
 function mediaSession() {
-  if (!("mediaSession" in navigator) || mediaSession.done) return;
-  mediaSession.done = true;
+  if (!("mediaSession" in navigator)) return;
   try {
+    var st = STATIONS[radioSt];
     navigator.mediaSession.metadata = new MediaMetadata({
-      title: "HPR3 · Heartland Christmas", artist: "Heartland Public Radio", album: "Road trip d'Avvento",
+      title: st.name, artist: st.genre, album: "Road trip d'Avvento",
       artwork: [{ src: "icona2-512.png", sizes: "512x512", type: "image/png" }]
     });
-    navigator.mediaSession.setActionHandler("play", function () { setRadio(true); });
-    navigator.mediaSession.setActionHandler("pause", function () { setRadio(false); });
-    navigator.mediaSession.setActionHandler("stop", function () { setRadio(false); });
+    if (!mediaSession.done) {
+      mediaSession.done = true;
+      navigator.mediaSession.setActionHandler("play", function () { setRadio(true); });
+      navigator.mediaSession.setActionHandler("pause", function () { setRadio(false); });
+      navigator.mediaSession.setActionHandler("stop", function () { setRadio(false); });
+    }
   } catch (e) {}
 }
 function toggleRadio() {
-  var on = !radioOn;
-  setRadio(on);
-  // senza flusso diretto: all'accensione si apre il player di HPR3 (sito o app)
-  if (on && !HPR_STREAM) {
-    var w = null;
-    try { w = window.open(HPR_URL, "_blank"); if (w) w.opener = null; } catch (e) {}
-    if (!w) toast("Apri hpr.org dal link qui sotto per far partire la musica");
-  }
+  clickSound();
+  setRadio(!radioOn);
 }
 function initRadio() {
   var p = document.getElementById("pwr");
   p.addEventListener("click", toggleRadio);
   p.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggleRadio(); } });
   document.getElementById("onair").addEventListener("click", toggleRadio);
+  document.querySelectorAll("#radio .preset[data-st]").forEach(function (g) {
+    g.addEventListener("click", function () { selectStation(g.getAttribute("data-st")); });
+  });
+  document.querySelectorAll(".st-row").forEach(function (row) {
+    row.addEventListener("click", function () { selectStation(row.getAttribute("data-st")); });
+  });
+  var note = document.getElementById("note"), stk = document.getElementById("sticker");
+  function toggleNote() { note.hidden = !note.hidden; }
+  stk.addEventListener("click", toggleNote);
+  stk.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggleNote(); } });
+  document.getElementById("note-x").addEventListener("click", function () { note.hidden = true; });
 }
 
 /* =====================================================================
