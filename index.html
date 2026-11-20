@@ -2535,6 +2535,11 @@ function mediaSession() {
       navigator.mediaSession.setActionHandler("play", function () { setRadio(true); });
       navigator.mediaSession.setActionHandler("pause", function () { setRadio(false); });
       navigator.mediaSession.setActionHandler("stop", function () { setRadio(false); });
+      // frecce avanti / indietro (schermata di blocco, cuffie, autoradio): stazioni 1 → 5 a giro
+      try {
+        navigator.mediaSession.setActionHandler("nexttrack", function () { if (radioOn) selectStation(radioSt >= 5 ? 1 : radioSt + 1); });
+        navigator.mediaSession.setActionHandler("previoustrack", function () { if (radioOn) selectStation(radioSt <= 1 ? 5 : radioSt - 1); });
+      } catch (e2) {}
     }
   } catch (e) {}
 }
