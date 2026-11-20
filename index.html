@@ -766,6 +766,7 @@ svg.zoomed .m-minor { opacity: 1; }
 .st-row[aria-pressed="true"] .st-key { background: linear-gradient(#E3563F, #B8341F); border-color: #FF7A5C; box-shadow: 0 0 14px rgba(255,90,60,.55), inset 0 1px 0 rgba(255,255,255,.25), 0 3px 0 #6A1A10; }
 .st-row .t { display: grid; gap: 1px; min-width: 0; }
 .st-row .t b { font-family: var(--f-cartello); font-weight: 800; font-size: 1.1rem; letter-spacing: .04em; }
+.st-row .t b .st-sub { font-weight: 700; font-size: .85rem; letter-spacing: .1em; opacity: .85; margin-left: 6px; }
 .st-row .t span { font-size: .82rem; opacity: .8; }
 .st-row:disabled .t { opacity: .55; }
 .popup-back {
@@ -2383,7 +2384,7 @@ function stationRows() {
   return Object.keys(STATIONS).map(function (n) {
     var st = STATIONS[n];
     return '<button type="button" class="st-row" data-st="' + n + '" aria-pressed="' + (radioOn && +n === radioSt) + '"' + (radioOn ? '' : ' disabled') + '>' +
-      '<span class="st-key">' + n + '</span><span class="t"><b>' + esc(st.label || st.name) + '</b></span></button>';
+      '<span class="st-key">' + n + '</span><span class="t"><b>' + esc(st.big) + (st.l1 ? ' <span class="st-sub">' + esc(st.l1 + ' ' + st.l2) + '</span>' : '') + '</b></span></button>';
   }).join("");
 }
 function viewRadio() {
