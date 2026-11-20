@@ -2453,7 +2453,7 @@ function stopStation() {
 }
 
 function setRadio(on) {
-  if (on && STATIONS[radioSt].app) radioSt = 3;   // all'accensione si riparte da HPR3, non da Spotify
+  if (on) radioSt = 3;   // ogni volta che si accende, la radio riparte da HPR3
   radioOn = on;
   radioUi();
   if (on) playStation(); else stopStation();
