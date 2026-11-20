@@ -2159,15 +2159,15 @@ var HPR_URL = "https://hpr.org/hpr3-heartland-christmas-player/";
 // Stazioni sui tasti di memoria. Se un indirizzo non suona, si prova la variante successiva.
 var STATIONS = {
   1: { big: "HPR1", l1: "TRADITIONAL", l2: "COUNTRY", name: "HPR1 · Traditional Classic Country", genre: "Heartland Public Radio · country classico",
-       src: ["https://us7.maindigitalstream.com/4420/", "https://us7.maindigitalstream.com/4420/;", "https://us7.maindigitalstream.com/4420/stream"] },
+       src: ["https://us2.maindigitalstream.com/ssl/7713"] },
   2: { big: "HPR2", l1: "TODAY'S", l2: "COUNTRY", name: "HPR2 · Today's Classic Country", genre: "Heartland Public Radio · country",
-       src: ["https://us7.maindigitalstream.com/4422/", "https://us7.maindigitalstream.com/4422/;", "https://us7.maindigitalstream.com/4422/stream"] },
+       src: ["https://us2.maindigitalstream.com/ssl/7735"] },
   3: { big: "HPR3", l1: "HEARTLAND", l2: "CHRISTMAS", name: "HPR3 · Heartland Christmas", genre: "Heartland Public Radio · country di Natale",
        src: ["https://us2.maindigitalstream.com/ssl/7791"] },
   4: { big: "HPR4", l1: "BLUEGRASS", l2: "GOSPEL", name: "HPR4 · Bluegrass Gospel", genre: "Heartland Public Radio · bluegrass",
-       src: ["https://us7.maindigitalstream.com/4424/", "https://us7.maindigitalstream.com/4424/;", "https://us7.maindigitalstream.com/4424/stream"] },
+       src: ["https://us2.maindigitalstream.com/ssl/7739"] },
   5: { big: "106.3", l1: "LA", l2: "MEXICANA", name: "La Mexicana 106.3", genre: "Regional mexicano",
-       src: ["https://streamdb9web.securenetsystems.net/v5/KDLWFM", "https://ice9.securenetsystems.net/KDLWFM"] },
+       src: ["https://ice42.securenetsystems.net/KDLWFM"] },
   // tasto 6: niente stream, apre Spotify (l'app se c'è, altrimenti il sito)
   6: { big: "SPOTIFY", l1: "", l2: "", name: "Spotify", genre: "Apre l'app Spotify", app: "https://open.spotify.com/" }
 };
@@ -2198,24 +2198,22 @@ function clickSound() {
   og.gain.setValueAtTime(.3, t); og.gain.exponentialRampToValueAtTime(.001, t + .09);
   o.connect(og); og.connect(c.destination); o.start(t); o.stop(t + .1);
 }
-// fruscio di sintonia tra una stazione e l'altra (≈ 1,2 s)
+// leggera interferenza tra una stazione e l'altra (≈ 1 s): fruscio basso che tremola, qualche crepitio
 function staticSound() {
-  var c = ac(); if (!c) return; var t = c.currentTime, D = 1.2;
+  var c = ac(); if (!c) return; var t = c.currentTime, D = 1.0;
   var n = c.createBufferSource(); n.buffer = noiseBuf(c, D);
-  var f = c.createBiquadFilter(); f.type = "bandpass"; f.Q.value = .7;
-  f.frequency.setValueAtTime(700, t); f.frequency.linearRampToValueAtTime(2600, t + D * .45); f.frequency.linearRampToValueAtTime(1300, t + D);
+  var f = c.createBiquadFilter(); f.type = "bandpass"; f.frequency.value = 1600; f.Q.value = .5;
+  var lp = c.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 4200;
   var g = c.createGain();
-  g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.26, t + .08); g.gain.setValueAtTime(.26, t + D * .55); g.gain.linearRampToValueAtTime(0, t + D);
-  n.connect(f); f.connect(g); g.connect(c.destination); n.start(t); n.stop(t + D);
-  // fischio che scorre, come la manopola di sintonia
-  var o = c.createOscillator(), og = c.createGain(); o.type = "sine";
-  o.frequency.setValueAtTime(1800, t + .1); o.frequency.exponentialRampToValueAtTime(600, t + .5); o.frequency.exponentialRampToValueAtTime(1100, t + D * .85);
-  og.gain.setValueAtTime(0, t); og.gain.linearRampToValueAtTime(.035, t + .2); og.gain.linearRampToValueAtTime(0, t + D * .9);
-  o.connect(og); og.connect(c.destination); o.start(t); o.stop(t + D);
-  // qualche crepitio
-  for (var k = 0; k < 6; k++) {
-    var tk = t + .1 + Math.random() * (D - .2), cb = c.createBufferSource(), cg = c.createGain();
-    cb.buffer = noiseBuf(c, .015); cg.gain.setValueAtTime(.35, tk); cg.gain.exponentialRampToValueAtTime(.001, tk + .015);
+  g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.11, t + .12); g.gain.setValueAtTime(.11, t + D * .6); g.gain.linearRampToValueAtTime(0, t + D);
+  // tremolio dell'interferenza
+  var lfo = c.createOscillator(), lg = c.createGain(); lfo.frequency.value = 11; lg.gain.value = .035;
+  lfo.connect(lg); lg.connect(g.gain);
+  n.connect(f); f.connect(lp); lp.connect(g); g.connect(c.destination);
+  n.start(t); n.stop(t + D); lfo.start(t); lfo.stop(t + D);
+  for (var k = 0; k < 5; k++) {
+    var tk = t + .1 + Math.random() * (D - .25), cb = c.createBufferSource(), cg = c.createGain();
+    cb.buffer = noiseBuf(c, .01); cg.gain.setValueAtTime(.12, tk); cg.gain.exponentialRampToValueAtTime(.001, tk + .01);
     cb.connect(cg); cg.connect(c.destination); cb.start(tk);
   }
 }
