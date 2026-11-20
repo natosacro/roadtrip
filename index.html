@@ -2258,10 +2258,37 @@ function staticSound() {
   wg.gain.linearRampToValueAtTime(.01, t + .74); wg.gain.linearRampToValueAtTime(0, t + .9);
   w.connect(wg); wg.connect(out); w.start(t); w.stop(t + 1);
 
-  // crepitii
-  for (var q = 0; q < 8; q++) {
-    var tk = t + .08 + Math.random() * (D - .2), cb = c.createBufferSource(), cg = c.createGain();
-    cb.buffer = noiseBuf(c, .008); cg.gain.setValueAtTime(.1 + Math.random() * .12, tk); cg.gain.exponentialRampToValueAtTime(.001, tk + .008);
+  // gracchiamento: fruscio distorto che si apre e si chiude a scatti, come un segnale che non aggancia
+  var curve = new Float32Array(256);
+  for (var ci = 0; ci < 256; ci++) { var xx = ci / 128 - 1; curve[ci] = Math.tanh(xx * 6) * .9; }
+  [[.14, .2], [1.12, .22]].forEach(function (seg) {
+    var t0 = t + seg[0], dur = seg[1];
+    var nb = c.createBufferSource(); nb.buffer = noiseBuf(c, dur + .02);
+    var bp = c.createBiquadFilter(); bp.type = "bandpass"; bp.frequency.value = 1400; bp.Q.value = 1.4;
+    var ws = c.createWaveShaper(); ws.curve = curve;
+    var gg = c.createGain(); gg.gain.setValueAtTime(0, t0);
+    for (var x = 0; x < dur; x += .025) gg.gain.setValueAtTime(Math.random() < .55 ? .05 + Math.random() * .05 : .004, t0 + x);
+    gg.gain.setValueAtTime(0, t0 + dur);
+    nb.connect(bp); bp.connect(ws); ws.connect(gg); gg.connect(out); nb.start(t0); nb.stop(t0 + dur + .02);
+  });
+
+  // interferenza: ronzio elettrico che pulsa veloce, a metà sintonia
+  (function (t0, dur) {
+    var b1 = c.createOscillator(), b2 = c.createOscillator(); b1.type = "sawtooth"; b2.type = "square";
+    b1.frequency.value = 98; b2.frequency.value = 196.5;
+    var bf = c.createBiquadFilter(); bf.type = "bandpass"; bf.frequency.value = 1100; bf.Q.value = 1.2;
+    var bg = c.createGain(); bg.gain.setValueAtTime(0, t0); bg.gain.linearRampToValueAtTime(.03, t0 + .04);
+    bg.gain.setValueAtTime(.03, t0 + dur - .05); bg.gain.linearRampToValueAtTime(0, t0 + dur);
+    var trem = c.createOscillator(), tg = c.createGain(); trem.type = "square"; trem.frequency.value = 23; tg.gain.value = .022;
+    trem.connect(tg); tg.connect(bg.gain);
+    b1.connect(bf); b2.connect(bf); bf.connect(bg); bg.connect(out);
+    [b1, b2, trem].forEach(function (o) { o.start(t0); o.stop(t0 + dur); });
+  })(t + .6, .22);
+
+  // crepitii, alcuni più lunghi
+  for (var q = 0; q < 16; q++) {
+    var tk = t + .06 + Math.random() * (D - .16), len = Math.random() < .3 ? .03 : .008, cb = c.createBufferSource(), cg = c.createGain();
+    cb.buffer = noiseBuf(c, len); cg.gain.setValueAtTime(.08 + Math.random() * .14, tk); cg.gain.exponentialRampToValueAtTime(.001, tk + len);
     cb.connect(cg); cg.connect(out); cb.start(tk);
   }
 }
