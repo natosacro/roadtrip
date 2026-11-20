@@ -2227,28 +2227,39 @@ function staticSound() {
   g.gain.linearRampToValueAtTime(0, t + D);
   n.connect(hp); hp.connect(lp); lp.connect(g); g.connect(out); n.start(t); n.stop(t + D);
 
-  // voce lontana di un'altra stazione: tono a dente di sega con formanti e sillabe
-  (function (t0, dur) {
+  // altre stazioni che passano per un attimo mentre si gira la manopola
+  function ghostVoice(t0, dur, base, f1v, f2v, gain) {   // qualcuno che parla, lontano
     var o = c.createOscillator(); o.type = "sawtooth";
-    o.frequency.setValueAtTime(150, t0);
-    for (var i = 0; i < 6; i++) o.frequency.linearRampToValueAtTime(120 + Math.random() * 90, t0 + dur * (i + 1) / 6);
-    var f1 = c.createBiquadFilter(); f1.type = "bandpass"; f1.frequency.value = 900; f1.Q.value = 3;
-    var f2 = c.createBiquadFilter(); f2.type = "bandpass"; f2.frequency.value = 2300; f2.Q.value = 5;
+    o.frequency.setValueAtTime(base, t0);
+    for (var i = 1; i <= 8; i++) o.frequency.linearRampToValueAtTime(base * (.8 + Math.random() * .55), t0 + dur * i / 8);
+    var f1 = c.createBiquadFilter(); f1.type = "bandpass"; f1.Q.value = 3;
+    var f2 = c.createBiquadFilter(); f2.type = "bandpass"; f2.Q.value = 5;
+    f1.frequency.setValueAtTime(f1v, t0); f2.frequency.setValueAtTime(f2v, t0);
+    for (var j = 1; j <= 5; j++) { f1.frequency.linearRampToValueAtTime(f1v * (.7 + Math.random() * .6), t0 + dur * j / 5); f2.frequency.linearRampToValueAtTime(f2v * (.8 + Math.random() * .4), t0 + dur * j / 5); }
+    var tel = c.createBiquadFilter(); tel.type = "highpass"; tel.frequency.value = 400;   // suono "da radio"
     var vg = c.createGain(); vg.gain.setValueAtTime(0, t0);
-    var syl = 0; for (var x = 0; x < dur; x += .09) { vg.gain.linearRampToValueAtTime(syl % 2 ? .012 : .07, t0 + x); syl++; }
+    for (var x = 0, k = 0; x < dur; x += .06 + Math.random() * .06, k++) vg.gain.linearRampToValueAtTime(k % 2 ? gain * .15 : gain * (.7 + Math.random() * .3), t0 + x);
     vg.gain.linearRampToValueAtTime(0, t0 + dur);
-    o.connect(f1); o.connect(f2); f1.connect(vg); f2.connect(vg); vg.connect(out); o.start(t0); o.stop(t0 + dur + .02);
-  })(t + .3, .32);
-
-  // musica lontana: un accordo che compare e sparisce
-  [261.6, 329.6, 392].forEach(function (fr, i) {
-    var o = c.createOscillator(), og = c.createGain(); o.type = i ? "triangle" : "square";
-    o.frequency.value = fr * (1 + (Math.random() - .5) * .01);
-    var bp = c.createBiquadFilter(); bp.type = "bandpass"; bp.frequency.value = 1000; bp.Q.value = .8;
-    og.gain.setValueAtTime(0, t + .85); og.gain.linearRampToValueAtTime(i ? .018 : .01, t + .93);
-    og.gain.linearRampToValueAtTime(i ? .014 : .008, t + 1.05); og.gain.linearRampToValueAtTime(0, t + 1.15);
-    o.connect(bp); bp.connect(og); og.connect(out); o.start(t + .85); o.stop(t + 1.2);
-  });
+    o.connect(f1); o.connect(f2); f1.connect(tel); f2.connect(tel); tel.connect(vg); vg.connect(out); o.start(t0); o.stop(t0 + dur + .02);
+  }
+  function ghostMusic(t0, dur, notes, bass, gain) {   // un pezzo di canzone: basso e note pizzicate
+    var mg = c.createGain(); mg.gain.setValueAtTime(0, t0); mg.gain.linearRampToValueAtTime(gain, t0 + .05);
+    mg.gain.setValueAtTime(gain, t0 + dur - .06); mg.gain.linearRampToValueAtTime(0, t0 + dur);
+    var bp = c.createBiquadFilter(); bp.type = "bandpass"; bp.frequency.value = 1100; bp.Q.value = .7;
+    bp.connect(mg); mg.connect(out);
+    var bo = c.createOscillator(), bg = c.createGain(); bo.type = "triangle"; bo.frequency.value = bass; bg.gain.value = .5;
+    bo.connect(bg); bg.connect(bp); bo.start(t0); bo.stop(t0 + dur);
+    notes.forEach(function (fr, i) {
+      var tn = t0 + i * dur / notes.length, o = c.createOscillator(), g = c.createGain();
+      o.type = "square"; o.frequency.value = fr;
+      g.gain.setValueAtTime(.5, tn); g.gain.exponentialRampToValueAtTime(.02, tn + dur / notes.length);
+      o.connect(g); g.connect(bp); o.start(tn); o.stop(tn + dur / notes.length + .01);
+    });
+  }
+  ghostVoice(t + .26, .3, 130, 800, 2200, .09);                 // un annunciatore
+  ghostMusic(t + .52, .26, [392, 494, 587, 494], 98, .05);      // un po' di country
+  ghostVoice(t + .82, .24, 225, 950, 2700, .075);               // una voce più acuta
+  ghostMusic(t + 1.06, .22, [523, 659, 784], 130.8, .045);      // un jingle
 
   // fischio di battimento tra le stazioni, appena udibile
   var w = c.createOscillator(), wg = c.createGain(); w.type = "sine";
