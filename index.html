@@ -2167,8 +2167,11 @@ var STATIONS = {
   4: { big: "HPR4", l1: "BLUEGRASS", l2: "GOSPEL", name: "HPR4 · Bluegrass Gospel", genre: "Heartland Public Radio · bluegrass",
        src: ["https://us7.maindigitalstream.com/4424/", "https://us7.maindigitalstream.com/4424/;", "https://us7.maindigitalstream.com/4424/stream"] },
   5: { big: "106.3", l1: "LA", l2: "MEXICANA", name: "La Mexicana 106.3", genre: "Regional mexicano",
-       src: ["https://streamdb9web.securenetsystems.net/v5/KDLWFM", "https://ice9.securenetsystems.net/KDLWFM"] }
+       src: ["https://streamdb9web.securenetsystems.net/v5/KDLWFM", "https://ice9.securenetsystems.net/KDLWFM"] },
+  // tasto 6: niente stream, apre Spotify (l'app se c'è, altrimenti il sito)
+  6: { big: "SPOTIFY", l1: "", l2: "", name: "Spotify", genre: "Apre l'app Spotify", app: "https://open.spotify.com/" }
 };
+function lcdSize(t) { return t.length > 5 ? 34 : t.length > 4 ? 40 : 46; }
 var radioOn = false, radioAudio = null, radioSt = 3, srcTry = 0, switchTm = null;
 
 /* Suoni dell'autoradio, generati al momento (niente file da scaricare) */
@@ -2262,7 +2265,7 @@ function radioSvg() {
     '<rect x="158" y="64" width="278" height="88" rx="5" fill="#1C1A15"/>' +
     '<rect class="lcd-glow" x="158" y="64" width="278" height="88" rx="5" fill="url(#lcd)"/>' +
     '<g class="lcd-txt" filter="url(#glow)" fill="#F5B53A">' +
-      '<text id="lcd-big" x="172" y="126" font-size="' + (st.big.length > 4 ? 40 : 46) + '" font-weight="800" letter-spacing="1">' + st.big + '</text>' +
+      '<text id="lcd-big" x="172" y="126" font-size="' + lcdSize(st.big) + '" font-weight="800" letter-spacing="1">' + st.big + '</text>' +
       '<text id="lcd-l1" x="300" y="102" font-size="15" font-weight="800" letter-spacing="2.5">' + st.l1 + '</text>' +
       '<text id="lcd-l2" x="300" y="126" font-size="15" font-weight="800" letter-spacing="2.5">' + st.l2 + '</text>' +
       '<text x="398" y="82" font-size="10" font-weight="800" fill="#7CF08A">ST</text><circle cx="420" cy="78" r="3.2" fill="#7CF08A"/>' +
@@ -2316,7 +2319,7 @@ function radioUi() {
     r.classList.toggle("on", radioOn); if (!radioOn) r.classList.remove("tuning");
     r.querySelectorAll(".preset").forEach(function (g) { g.classList.toggle("sel", g.getAttribute("data-st") === String(radioSt)); });
     var big = document.getElementById("lcd-big");
-    if (big) { big.textContent = st.big; big.setAttribute("font-size", st.big.length > 4 ? 40 : 46); }
+    if (big) { big.textContent = st.big; big.setAttribute("font-size", lcdSize(st.big)); }
     var l1 = document.getElementById("lcd-l1"), l2 = document.getElementById("lcd-l2");
     if (l1) l1.textContent = st.l1; if (l2) l2.textContent = st.l2;
   }
@@ -2331,6 +2334,14 @@ function radioUi() {
 
 function playStation() {
   var st = STATIONS[radioSt];
+  if (st.app) {
+    stopStation();
+    var rr = document.getElementById("radio"); if (rr) rr.classList.remove("tuning");
+    var w = null;
+    try { w = window.open(st.app, "_blank"); if (w) w.opener = null; } catch (e) {}
+    if (!w) location.href = st.app;
+    return;
+  }
   if (!radioAudio) {
     radioAudio = new Audio();
     radioAudio.preload = "none";
@@ -2356,6 +2367,7 @@ function stopStation() {
 }
 
 function setRadio(on) {
+  if (on && STATIONS[radioSt].app) radioSt = 3;   // all'accensione si riparte da HPR3, non da Spotify
   radioOn = on;
   radioUi();
   if (on) playStation(); else stopStation();
@@ -2369,6 +2381,7 @@ function selectStation(n) {
   radioSt = n;
   radioUi();
   // tra una stazione e l'altra: fruscio di sintonia, poi parte la nuova
+  if (STATIONS[n].app) { playStation(); return; }   // Spotify: si apre subito, senza fruscio
   stopStation();
   var r = document.getElementById("radio"); if (r) r.classList.add("tuning");
   staticSound();
