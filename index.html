@@ -2473,15 +2473,63 @@ function selectStation(n) {
   staticSound();
   switchTm = setTimeout(function () { if (radioOn) playStation(); }, 1000);
 }
-// comandi sulla schermata di blocco e nelle notifiche
+/* Copertina per schermata di blocco e autoradio (Bluetooth): il display della radio con il nome della stazione */
+var artCache = {};
+function stationArt(n) {
+  if (artCache[n]) return Promise.resolve(artCache[n]);
+  var st = STATIONS[n];
+  var ready = (document.fonts && document.fonts.load) ? Promise.all([document.fonts.load('800 80px "Overpass"'), document.fonts.load('700 20px "Overpass"')]).catch(function () {}) : Promise.resolve();
+  return ready.then(function () {
+    var S = 512, cv = document.createElement("canvas"); cv.width = cv.height = S;
+    var x = cv.getContext("2d"), F = '"Overpass", "Arial Narrow", Arial, sans-serif';
+    function rr(X, Y, W, H, R) { x.beginPath(); x.moveTo(X + R, Y); x.arcTo(X + W, Y, X + W, Y + H, R); x.arcTo(X + W, Y + H, X, Y + H, R); x.arcTo(X, Y + H, X, Y, R); x.arcTo(X, Y, X + W, Y, R); x.closePath(); }
+    // cornice cromata e frontalino
+    var gch = x.createLinearGradient(0, 0, 0, S); gch.addColorStop(0, "#E4E7EB"); gch.addColorStop(.5, "#A9AEB5"); gch.addColorStop(1, "#7E848C");
+    x.fillStyle = gch; x.fillRect(0, 0, S, S);
+    x.fillStyle = "#2B2D31"; rr(22, 22, S - 44, S - 44, 22); x.fill();
+    x.fillStyle = "#9EA3AA"; x.font = "700 18px " + F; x.textAlign = "center"; x.fillText("S T E R E O   ·   1 9 9 4", S / 2, 70);
+    // display ambra
+    x.fillStyle = "#141414"; rr(48, 92, S - 96, 250, 16); x.fill();
+    var gl = x.createLinearGradient(0, 104, 0, 330); gl.addColorStop(0, "#3B2A0C"); gl.addColorStop(1, "#1E1606");
+    x.fillStyle = gl; rr(62, 106, S - 124, 222, 10); x.fill();
+    x.shadowColor = "#F5B53A"; x.shadowBlur = 18; x.fillStyle = "#F5B53A";
+    var big = st.big, bs = big.length > 5 ? 82 : big.length > 4 ? 100 : 118;
+    x.font = "800 " + bs + "px " + F; x.fillText(big, S / 2, st.l1 ? 222 : 252);
+    if (st.l1) {
+      var line = (st.l1 + "  " + st.l2).split("").join(" "), fs = 30;   // si restringe finché sta nel display
+      do { x.font = "800 " + fs + "px " + F; fs--; } while (x.measureText(line).width > S - 160 && fs > 12);
+      x.fillText(line, S / 2, 292);
+    }
+    x.shadowBlur = 8; x.shadowColor = "#7CF08A"; x.fillStyle = "#7CF08A"; x.font = "800 18px " + F; x.textAlign = "right"; x.fillText("ST ●", S - 82, 136);
+    x.shadowBlur = 0; x.textAlign = "center";
+    // tasti di memoria con la stazione accesa
+    for (var i = 1; i <= 6; i++) {
+      var bx = 58 + (i - 1) * 68, on = i === n;
+      x.fillStyle = on ? "#C8402F" : "#4A4D53"; rr(bx, 372, 56, 50, 8); x.fill();
+      x.strokeStyle = on ? "#FF7A5C" : "#2A2C30"; x.lineWidth = 3; x.stroke();
+      x.fillStyle = "#E6E6E6"; x.font = "800 26px " + F; x.fillText(String(i), bx + 28, 406);
+    }
+    x.fillStyle = "#9EA3AA"; x.font = "700 15px " + F; x.fillText("F M   ·   M W   ·   R D S", S / 2, 462);
+    artCache[n] = cv.toDataURL("image/png");
+    return artCache[n];
+  });
+}
+
+// comandi sulla schermata di blocco e nelle notifiche (e titolo/copertina sull'autoradio via Bluetooth)
 function mediaSession() {
   if (!("mediaSession" in navigator)) return;
   try {
-    var st = STATIONS[radioSt];
-    navigator.mediaSession.metadata = new MediaMetadata({
-      title: st.name, artist: st.genre, album: "Road trip d'Avvento",
-      artwork: [{ src: "icona2-512.png", sizes: "512x512", type: "image/png" }]
-    });
+    var n = radioSt, st = STATIONS[n];
+    var meta = function (art) {
+      if (n !== radioSt) return;
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: st.big + (st.l1 ? " · " + st.l1.charAt(0) + st.l1.slice(1).toLowerCase() + " " + st.l2.charAt(0) + st.l2.slice(1).toLowerCase() : ""),
+        artist: "Road trip d'Avvento", album: st.name,
+        artwork: art ? [{ src: art, sizes: "512x512", type: "image/png" }] : [{ src: "icona2-512.png", sizes: "512x512", type: "image/png" }]
+      });
+    };
+    meta(artCache[n]);
+    if (!artCache[n]) stationArt(n).then(meta).catch(function () {});
     if (!mediaSession.done) {
       mediaSession.done = true;
       navigator.mediaSession.setActionHandler("play", function () { setRadio(true); });
