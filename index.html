@@ -815,7 +815,10 @@ svg.zoomed .m-minor { opacity: 1; }
 .sticker-note a { color: inherit; font-weight: 700; }
 .sticker-note .x { position: absolute; top: 6px; right: 8px; background: none; border: 0; font-size: 1.2rem; cursor: pointer; color: #6B5A4C; }
 
-/* ---------- Chiave di casa e stato del budget ---------- */
+/* ---------- Chiave dell'officina e stato del budget ---------- */
+.keybox { display: grid; grid-template-columns: 78px 1fr; gap: 10px; align-items: center; }
+.keybox-t { display: grid; gap: 8px; min-width: 0; }
+.shopkey { width: 78px; height: auto; display: block; filter: drop-shadow(0 2px 2px rgba(0,0,0,.3)); }
 .key-in { width: 100%; font: 600 .95rem var(--f-cassa); padding: 10px; border-radius: 6px; border: 2px solid #5B6168; background: #FFFDF4; color: #1B1B1B; }
 .key-st { font-size: .85rem; color: #8A1F14; }
 .b-sync { font-size: .84rem; color: var(--testo-2); }
@@ -1285,7 +1288,7 @@ var RUBRICA = [
 /* =====================================================================
    DATI PRIVATI (repo GitHub privato natosacro/roadtrip-privato)
    Nel sito pubblico ci sono solo segnaposto %%CHIAVE%% con una versione generica.
-   Con la "chiave di casa" (inserita una volta per telefono nell'officina) l'app scarica
+   Con la "chiave dell'officina" (inserita una volta per telefono nell'officina) l'app scarica
    i dati veri dal repo privato e li tiene anche offline.
    ===================================================================== */
 var PRIV_REPO = "natosacro/roadtrip-privato";
@@ -1989,10 +1992,10 @@ var bsync = { sha: null, dirty: {}, status: "", at: null, busy: false, again: fa
 try { bsync.dirty = JSON.parse(localStorage.getItem("rta-bdirty") || "{}"); } catch (e) {}
 function saveDirty() { try { localStorage.setItem("rta-bdirty", JSON.stringify(bsync.dirty)); } catch (e) {} }
 function syncText() {
-  if (!ghKey()) return "Solo su questo telefono. Per condividerlo inserisci la chiave di casa nell'officina.";
+  if (!ghKey()) return "Solo su questo telefono. Per condividerlo inserisci la chiave dell'officina nelle impostazioni.";
   if (bsync.status === "sending") return "Invio all'altro telefono…";
   if (bsync.status === "offline") return "Senza rete: le modifiche partono appena torna la connessione.";
-  if (bsync.status === "error") return "Non riesco a condividere il budget: controlla la chiave nell'officina.";
+  if (bsync.status === "error") return "Non riesco a condividere il budget: controlla la chiave dell'officina.";
   if (bsync.status === "ok" && bsync.at) return "Condiviso tra i vostri telefoni · aggiornato alle " + bsync.at.toTimeString().slice(0, 5) + ".";
   return "Condiviso tra i vostri telefoni.";
 }
@@ -2779,15 +2782,16 @@ function viewImpostazioni() {
         '<span class="g-righe" aria-hidden="true"><i></i><i></i><i></i></span>' +
         '<span class="g-sub">Family owned since 2020</span></header>' +
       '<div class="hazard" aria-hidden="true"></div>' +
+      drawer("CHIAVE DELL'OFFICINA", "#8A6A22",
+        '<div class="keybox"><svg class="shopkey" viewBox="0 0 96 132" aria-hidden="true"><rect x="30" y="2" width="36" height="12" rx="3" fill="#6E757D"/><circle cx="40" cy="8" r="2" fill="#C9CCD1"/><circle cx="56" cy="8" r="2" fill="#C9CCD1"/><path d="M48 14v8q0 6-6 6" fill="none" stroke="#3A3F45" stroke-width="3.5" stroke-linecap="round"/><circle cx="40" cy="36" r="9" fill="none" stroke="#9AA1A9" stroke-width="3"/><g transform="rotate(-8 40 60)"><circle cx="40" cy="58" r="13" fill="#C9A14A" stroke="#8A6A22" stroke-width="2.5"/><circle cx="40" cy="58" r="5.5" fill="#2B2D31"/><rect x="36.5" y="70" width="7" height="44" rx="2" fill="#C9A14A" stroke="#8A6A22" stroke-width="2"/><path d="M43 98h9v5h-5v4h6v6h-10z" fill="#C9A14A" stroke="#8A6A22" stroke-width="2" stroke-linejoin="round"/><path d="M39 74v36" stroke="#F1D98A" stroke-width="1.5" opacity=".7"/></g><path d="M48 40 70 62" stroke="#B8A47A" stroke-width="1.5"/><g transform="rotate(12 76 84)"><path d="M62 64h28v40H62z" fill="#EBDDB3" stroke="#B8A47A" stroke-width="1.5"/><circle cx="76" cy="70" r="2.6" fill="#AEB4BB" stroke="#7E858D"/><text x="76" y="86" text-anchor="middle" font-family="Courier Prime,monospace" font-weight="700" font-size="8.5" fill="#5A2E14">SHOP</text><text x="76" y="96" text-anchor="middle" font-family="Courier Prime,monospace" font-weight="700" font-size="8.5" fill="#5A2E14">KEY</text></g></svg><div class="keybox-t">' + (ghKey()
+          ? '<p><b>Chiave inserita.</b> Nomi, alloggi e budget arrivano dalla parte privata, e il budget è condiviso tra i vostri telefoni.</p><button type="button" class="btn" id="key-off">Togli la chiave da questo telefono</button>'
+          : '<p>Inserisci la chiave per vedere i dati privati e condividere il budget.</p>' +
+            '<input type="password" id="key-in" class="key-in" placeholder="github_pat_…" autocomplete="off" autocapitalize="off" spellcheck="false">' +
+            '<button type="button" class="btn" id="key-on">Inserisci la chiave</button><p id="key-st" class="key-st"></p>') + '</div></div>') +
       drawer("TEMA", "#1B1B1B", seg("theme", [["auto", "Auto"], ["light", "Giorno"], ["dark", "Notte"]])) +
       drawer("DISTANZE", "#B3261E", seg("units", [["km", "km"], ["mi", "miglia"], ["both", "entrambe"]])) +
       // la prova serve solo prima della partenza: dall'8 dicembre sparisce
       (tripStarted() ? '' : drawer("PROVA UN GIORNO", "#1F4E8C", seg("test", [["", "No"], ["1", "8"], ["2", "9"], ["3", "10"], ["4", "11"], ["5", "12"], ["6", "13"]]))) +
-      drawer("CHIAVE DI CASA", "#B3261E", ghKey()
-        ? '<p><b>Collegato.</b> Nomi, indirizzi degli alloggi e budget arrivano dalla parte privata e il budget è condiviso tra i vostri telefoni.</p><button type="button" class="btn" id="key-off">Scollega questo telefono</button>'
-        : '<p>Inserisci la chiave per vedere i dati privati e condividere il budget.</p>' +
-          '<input type="password" id="key-in" class="key-in" placeholder="github_pat_…" autocomplete="off" autocapitalize="off" spellcheck="false">' +
-          '<button type="button" class="btn" id="key-on">Collega</button><p id="key-st" class="key-st"></p>') +
       drawer("INSTALLA SUL TELEFONO", "#1B1B1B",
         '<p><b>Android (Chrome):</b> menu ⋮ → Installa app.</p><p><b>iPhone (Safari):</b> Condividi → Aggiungi alla schermata Home.</p>' +
         '<button type="button" class="btn" id="install" hidden>Installa adesso</button>') +
@@ -2809,7 +2813,7 @@ function initImpostazioni() {
     loadPrivate().then(function (ok) {
       if (!ok) throw 0;
       return pullBudget();
-    }).then(function () { toast("Collegato: dati privati e budget condiviso"); render(); })
+    }).then(function () { toast("Chiave inserita: dati privati e budget condiviso"); render(); })
       .catch(function () { try { localStorage.removeItem("rta-key"); } catch (e) {} st.textContent = "La chiave non funziona: controlla di averla copiata tutta."; });
   };
   if (koff) koff.onclick = function () {
