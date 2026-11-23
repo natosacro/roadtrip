@@ -1,0 +1,18 @@
+{
+  "id": "./?app=1",
+  "name": "Road trip d'Avvento",
+  "short_name": "Road trip",
+  "description": "Il nostro road trip d'Avvento, 8–13 dicembre 2026.",
+  "start_url": "./?app=1",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#EFE4D2",
+  "theme_color": "#0F6B4C",
+  "lang": "it",
+  "icons": [
+    { "src": "icona2-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icona2-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icona2-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
