@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Road trip d'Avvento</title>
 <meta name="claude:viewport-fit-sides" content="cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https://api.github.com; media-src 'self' https:; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#0F6B4C">
 <meta name="description" content="Il nostro road trip d'Avvento, 8–13 dicembre 2026: mappa, leg, mercatini e rubrica.">
 <link rel="manifest" href="manifest.json">
@@ -1249,6 +1251,8 @@ try { tcs = JSON.parse(localStorage.getItem("rta-tcs") || "null"); } catch (e) {
 if (tcs && tcs.bleifrei95) BUDGET_DEF.prezzo = tcs.bleifrei95;
 var budget = Object.assign({}, BUDGET_DEF, { manPrezzo: false });
 try { Object.assign(budget, JSON.parse(localStorage.getItem("rta-budget") || "{}")); } catch (e) {}
+Object.keys(BUDGET_DEF).forEach(function (k) { var n = Number(budget[k]); budget[k] = isFinite(n) ? n : BUDGET_DEF[k]; });
+budget.manPrezzo = budget.manPrezzo === true;
 if (!budget.manPrezzo) budget.prezzo = BUDGET_DEF.prezzo;
 function dataIt(iso) { var p = String(iso || "").split("-"); return p.length === 3 ? +p[2] + "." + +p[1] + "." + p[0] : ""; }
 function loadTcs() {
@@ -2008,7 +2012,10 @@ function applyRemoteBudget(v) {
   var changed = false;
   BKEYS.forEach(function (k) {
     if (bsync.dirty[k] || !(k in v)) return;
-    if (budget[k] !== v[k]) { budget[k] = v[k]; changed = true; }
+    // solo numeri (e un sì/no): niente testo dal repo finisce nella pagina
+    var nv = k === "manPrezzo" ? v[k] === true : Number(v[k]);
+    if (k !== "manPrezzo" && !isFinite(nv)) return;
+    if (budget[k] !== nv) { budget[k] = nv; changed = true; }
   });
   if (!budget.manPrezzo && budget.prezzo !== BUDGET_DEF.prezzo) { budget.prezzo = BUDGET_DEF.prezzo; changed = true; }   // prezzo automatico TCS
   if (changed) saveBudget();
