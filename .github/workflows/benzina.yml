@@ -1,5 +1,5 @@
 # Road trip d'Avvento: ogni 2 giorni legge il prezzo medio svizzero della benzina sul sito del TCS
-# e aggiorna benzina.json, che l'app usa per il budget.
+# e i prezzi Etzelpark sul percorso; aggiorna benzina.json ed etzel.json, che l'app usa.
 name: Prezzo benzina TCS
 
 on:
@@ -20,14 +20,18 @@ jobs:
       - name: Leggi il prezzo dal TCS
         run: python3 strumenti/benzina_tcs.py
 
+      - name: Leggi i prezzi Etzelpark sul percorso
+        continue-on-error: true
+        run: python3 strumenti/etzel_prezzi.py
+
       - name: Salva se è cambiato
         run: |
           git config user.name "roadtrip-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add benzina.json
+          git add benzina.json etzel.json
           if git diff --cached --quiet; then
             echo "Prezzo invariato."
           else
-            git commit -m "Prezzo benzina TCS del $(date -u +%Y-%m-%d)"
+            git commit -m "Prezzi benzina TCS ed Etzelpark del $(date -u +%Y-%m-%d)"
             git push
           fi

@@ -825,6 +825,19 @@ svg.zoomed .m-minor { opacity: 1; }
 .key-st { font-size: .85rem; color: #8A1F14; }
 .b-sync { font-size: .84rem; color: var(--testo-2); }
 
+/* ---------- Nota Etzelpark (pompa di benzina) ---------- */
+.pump-note { display: grid; grid-template-columns: 56px 1fr; gap: 12px; align-items: start; background: var(--card); border: 2px dashed var(--rosso); border-radius: 12px; padding: 12px; }
+.pump { width: 56px; height: auto; display: block; }
+.pump-t { display: grid; gap: 8px; min-width: 0; }
+.pump-t > b { font-family: var(--f-cartello); font-weight: 800; font-size: .95rem; color: var(--rosso); letter-spacing: .04em; }
+.pump-sub { font-size: .85rem; color: var(--testo-2); }
+.pump-st { display: grid; gap: 2px; border-top: 1px solid var(--bordo); padding-top: 8px; font-size: .88rem; }
+.pump-st b { font-size: .98rem; }
+.pump-st span { color: var(--testo-2); }
+.pump-btns { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+.pump-btns .go { margin-top: 0; }
+.nb-e a.site { font-size: .95rem; border-bottom-style: dotted; }
+
 /* ---------- Strade e cantoni ---------- */
 .roadgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(86px, 1fr)); gap: 10px; }
 .roadbtn {
@@ -1340,9 +1353,57 @@ function loadPrivate() {
   });
 }
 
-var RB_KT = [["LU", "#9FC4EA"], ["BE", "#F6C94A"], ["ZH", "#B8D3F2"], ["VS", "#F2A49A"]];   // ordine del viaggio
-var RB_CAT = ["Alloggi", "Consegna", "Parcheggio", "Museo", "Negozi", "Sauna", "Castello", "Chiesa"];
+/* Etzelpark Benzin: le stazioni lungo il percorso. Non sono tappe: compaiono come nota "pieno conveniente".
+   Prezzi E0 95 in etzel.json, aggiornati ogni 2 giorni da GitHub insieme a quello del TCS. */
+var ETZEL_SITO = "https://etzelparkbenzin.ch/standorte/";
+var ETZEL = [
+  { id: "bellinzona", kt: "TI", name: "Etzelpark Bellinzona", addr: "Via Franco Zorzi 40, Bellinzona", ll: "46.18224,9.01296", legs: [1, 6], dove: "Vicino all'A2: all'andata prima del Gottardo, al ritorno prima di Locarno." },
+  { id: "ostermundigen", kt: "BE", name: "Etzelpark Ostermundigen", addr: "Schermenweg 151, Ostermundigen", ll: "46.96003,7.47992", legs: [1, 2, 4], dove: "A pochi minuti dall'alloggio di Berna." },
+  { id: "dintikon", kt: "AG", name: "Etzelpark Dintikon", addr: "Parallelstrasse 1, Dintikon", ll: "47.37116,8.23079", legs: [2], dove: "Pochi minuti dall'uscita A1 Lenzburg, verso Zurigo." }
+];
+var etzelPrezzi = {};
+try { etzelPrezzi = JSON.parse(localStorage.getItem("rta-etzel") || "{}"); } catch (e) {}
+function loadEtzel() {
+  try {
+    fetch("etzel.json", { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : null; }).then(function (d) {
+      if (!d || !d.stazioni) return;
+      var changed = JSON.stringify(d.stazioni) !== JSON.stringify(etzelPrezzi);
+      etzelPrezzi = d.stazioni;
+      try { localStorage.setItem("rta-etzel", JSON.stringify(d.stazioni)); } catch (e) {}
+      if (changed && /^(leg-\d|rubrica)$/.test((location.hash || "").slice(1))) render();
+    }).catch(function () {});
+  } catch (e) {}
+}
+function etzelPrezzo(id) {
+  var p = etzelPrezzi[id];
+  if (!p || typeof p.e95 !== "number") return "";
+  return "E0 95 a CHF " + p.e95.toFixed(3) + " (" + dataIt(String(p.data || "")) + ")";
+}
+var PUMP_SVG = '<svg class="pump" viewBox="0 0 64 92" aria-hidden="true">' +
+  '<circle cx="23" cy="12" r="10" fill="#FFF6E0" stroke="#7A1E14" stroke-width="2"/><text x="23" y="15.5" text-anchor="middle" font-family="Overpass,Arial" font-weight="800" font-size="8" fill="#C0362C">GAS</text>' +
+  '<rect x="7" y="22" width="32" height="60" rx="5" fill="#C0362C" stroke="#7A1E14" stroke-width="2"/>' +
+  '<rect x="12" y="28" width="22" height="16" rx="2" fill="#FFF6E0" stroke="#7A1E14" stroke-width="1.5"/>' +
+  '<path d="M15 33h16M15 38h11" stroke="#2B2019" stroke-width="2"/>' +
+  '<rect x="12" y="50" width="22" height="5" rx="1.5" fill="#F2C230"/><rect x="12" y="59" width="22" height="3" rx="1" fill="#7A1E14" opacity=".5"/>' +
+  '<rect x="3" y="80" width="40" height="8" rx="2" fill="#3A2A20"/>' +
+  '<path d="M39 34h6q6 0 6 6v26q0 6 5 6h1" fill="none" stroke="#2B2019" stroke-width="3" stroke-linecap="round"/>' +
+  '<path d="M52 56h7l2 6h-4v12h-5z" fill="#4A4D53" stroke="#2B2019" stroke-width="1.5" stroke-linejoin="round"/></svg>';
+function etzelNote(n) {
+  var list = ETZEL.filter(function (e) { return e.legs.indexOf(n) !== -1; });
+  if (!list.length) return "";
+  return '<section class="pump-note">' + PUMP_SVG + '<div class="pump-t"><b>Pieno conveniente · Etzelpark</b>' +
+    '<span class="pump-sub">Non è una tappa: se serve benzina, è qui vicino.</span>' +
+    list.map(function (e) {
+      var pr = etzelPrezzo(e.id);
+      return '<div class="pump-st"><b>' + esc(e.name) + '</b><span>' + esc(e.addr) + ' · aperto 24/7' + (pr ? ' · ' + esc(pr) : '') + '</span><span>' + esc(e.dove) + '</span>' +
+        '<span class="pump-btns"><a class="go" ' + ext(mapsUrl(e.ll, "dir")) + '>Maps ↗</a><a class="go pin" ' + ext(ETZEL_SITO + e.id) + '>Sito ↗</a></span></div>';
+    }).join("") + '</div></section>';
+}
+
+var RB_KT = [["TI", "#F7B7A3"], ["LU", "#9FC4EA"], ["BE", "#F6C94A"], ["AG", "#B8E0C2"], ["ZH", "#B8D3F2"], ["VS", "#F2A49A"]];   // ordine del viaggio
+var RB_CAT = ["Alloggi", "Consegna", "Parcheggio", "Museo", "Negozi", "Sauna", "Castello", "Chiesa", "Benzina"];
 var rbSel = "";
+ETZEL.forEach(function (e) { RUBRICA.push([e.kt, "Benzina", e.name, e.addr, "aperto 24/7 · non è una tappa", e.ll, ETZEL_SITO + e.id, e.id]); });
 
 /* =====================================================================
    IMPOSTAZIONI (salvate solo su questo telefono)
@@ -1886,6 +1947,7 @@ function viewLeg(n) {
     '<p class="label">Cantoni</p>' + kts(LEG_CANTONS[l.n]) +
     '<a class="go pin tolink" href="#mappa-leg' + l.n + '">Vedi sulla mappa</a>' +
     '<p class="label">Il programma</p><div class="timeline">' + plan + '</div>' +
+    etzelNote(l.n) +
     (l.extra || []).map(extraBlock).join("") +
     '<nav class="pager" aria-label="Altre leg">' +
       (prev ? '<a href="#leg-' + prev.n + '">‹ Leg ' + prev.n + '<b>' + prev.day + ' ' + prev.date + '</b></a>' : '') +
@@ -2128,7 +2190,9 @@ function viewRubrica() {
 }
 
 function rbEntry(it) {
-  return '<div class="nb-e"><span class="n">' + esc(it[2]) + '</span><a ' + ext(mapsUrl(it[5], "dir")) + '>' + esc(it[3]) + '</a><span class="i">' + esc(it[4]) + '</span></div>';
+  var info = it[4] + (it[7] && etzelPrezzo(it[7]) ? " · " + etzelPrezzo(it[7]) : "");
+  return '<div class="nb-e"><span class="n">' + esc(it[2]) + '</span><a ' + ext(mapsUrl(it[5], "dir")) + '>' + esc(it[3]) + '</a>' +
+    (it[6] ? '<a class="site" ' + ext(it[6]) + '>sito</a>' : '') + '<span class="i">' + esc(info) + '</span></div>';
 }
 
 function initRubrica() {
@@ -2940,6 +3004,7 @@ if (ghKey()) loadPrivate().then(function (ok) { if (ok) render(); }).catch(funct
   });
 })();
 loadTcs();
+loadEtzel();
 
 if ("serviceWorker" in navigator && window.isSecureContext) {
   try { navigator.serviceWorker.register("sw.js").catch(function () {}); } catch (e) {}

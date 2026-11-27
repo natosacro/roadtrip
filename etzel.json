@@ -1,0 +1,18 @@
+{
+ "fonte": "etzelparkbenzin.ch",
+ "verificato": "2026-11-27T08:31:00Z",
+ "stazioni": {
+  "ostermundigen": {
+   "e95": 2.049,
+   "data": "2026-09-19"
+  },
+  "bellinzona": {
+   "e95": 1.979,
+   "data": "2026-10-16"
+  },
+  "dintikon": {
+   "e95": 2.089,
+   "data": "2026-10-16"
+  }
+ }
+}
