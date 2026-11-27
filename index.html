@@ -1067,7 +1067,7 @@ var LEGS = [
       ["Mattina", "Partenza da Berna", "Congelatore spento 24 h prima, sdraiato nel bagagliaio"],
       ["Mattina", "Consegna da Vegiboss AG", "Herdernstrasse 71, Zurigo · ≈ 1 h 25 · consegna del congelatore", "Vegiboss AG, Herdernstrasse 71, 8004 Zürich"],
       ["Mattina", "Da Vegiboss, se ci lasciano", "Piano B: P+Rail Tiefenbrunnen, Bellerivestrasse 261 · CHF 15 al giorno · app SBB Mobile", "Bellerivestrasse 261, 8008 Zürich"],
-      ["Pomeriggio", "Giornata a Zurigo", "Proposta: il NONAM (vedi sotto)"],
+      ["Pomeriggio", "Giornata a Zurigo", "Proposta: il NONAM"],
       ["Sera", "Rientro a Berna", "≈ 1 h 25 · uscita 12 Bern-Ostring", "%%BE_Q%%"]
     ], extra: ["nonam", "vegan-zh"] },
   { n: 3, day: "GIO", date: "10.12", iso: "2026-12-10",
@@ -1090,7 +1090,7 @@ var LEGS = [
     plan: [
       ["Mattina", "Partenza da Berna", "Verso Saxon VS, circa 1 h 30"],
       ["Mattina", "Landi Saxon", "Route du Léman 12, Saxon VS · lun–ven 8:30–18:30", "LANDI, Route du Léman 12, 1907 Saxon"],
-      ["Pranzo", "Sion VS", "Mangiare vegano: vedi la lista qui sotto"],
+      ["Pranzo", "Sion VS", "Mangiare vegano"],
       ["Pomeriggio", "Città, castello, second-hand", "Valère mar–dom 11–17 · Tourbillon chiuso", "Château de Valère, Sion"],
       ["Pomeriggio", "Check-in: %%VS_NOME%%", "%%VS_IND%% · 2 notti · CHF 180.–", "%%VS_Q%%"]
     ], extra: ["vegan-vs", "motel"] },
@@ -1102,7 +1102,7 @@ var LEGS = [
     night: ["Sion VS", "%%VS_NOME%%"],
     plan: [
       ["Mattina", "Bus per Evolène VS", "AutoPostale 381, ogni ora ai :45, ≈ 40 min", "Sion, gare"],
-      ["Giorno", "Giornata in racchette", "Vedi le escursioni nella Guida"],
+      ["Giorno", "Giornata in racchette", ""],
       ["Pomeriggio", "Ritorno a Sion VS", "Bus CHF 16.– a/r a persona"],
       ["Sera", "Serata a Sion VS", ""],
       ["Notte", "%%VS_NOME%%", "%%VS_IND%%", "%%VS_Q%%"]
@@ -1357,9 +1357,9 @@ function loadPrivate() {
    Prezzi E0 95 in etzel.json, aggiornati ogni 2 giorni da GitHub insieme a quello del TCS. */
 var ETZEL_SITO = "https://etzelparkbenzin.ch/standorte/";
 var ETZEL = [
-  { id: "bellinzona", kt: "TI", name: "Etzelpark Bellinzona", addr: "Via Franco Zorzi 40, Bellinzona", ll: "46.18224,9.01296", legs: [1, 6], dove: "Vicino all'A2: all'andata prima del Gottardo, al ritorno prima di Locarno." },
-  { id: "ostermundigen", kt: "BE", name: "Etzelpark Ostermundigen", addr: "Schermenweg 151, Ostermundigen", ll: "46.96003,7.47992", legs: [1, 2, 4], dove: "A pochi minuti dall'alloggio di Berna." },
-  { id: "dintikon", kt: "AG", name: "Etzelpark Dintikon", addr: "Parallelstrasse 1, Dintikon", ll: "47.37116,8.23079", legs: [2], dove: "Pochi minuti dall'uscita A1 Lenzburg, verso Zurigo." }
+  { id: "bellinzona", kt: "TI", name: "Etzelpark Bellinzona", addr: "Via Franco Zorzi 40, Bellinzona", ll: "46.18224,9.01296", legs: [1, 6] },
+  { id: "ostermundigen", kt: "BE", name: "Etzelpark Ostermundigen", addr: "Schermenweg 151, Ostermundigen", ll: "46.96003,7.47992", legs: [1, 2, 4] },
+  { id: "dintikon", kt: "AG", name: "Etzelpark Dintikon", addr: "Parallelstrasse 1, Dintikon", ll: "47.37116,8.23079", legs: [2] }
 ];
 var etzelPrezzi = {};
 try { etzelPrezzi = JSON.parse(localStorage.getItem("rta-etzel") || "{}"); } catch (e) {}
@@ -1391,11 +1391,10 @@ var PUMP_SVG = '<svg class="pump" viewBox="0 0 64 92" aria-hidden="true">' +
 function etzelNote(n) {
   var list = ETZEL.filter(function (e) { return e.legs.indexOf(n) !== -1; });
   if (!list.length) return "";
-  return '<section class="pump-note">' + PUMP_SVG + '<div class="pump-t"><b>Pieno conveniente · Etzelpark</b>' +
-    '<span class="pump-sub">Non è una tappa: se serve benzina, è qui vicino.</span>' +
+  return '<section class="pump-note">' + PUMP_SVG + '<div class="pump-t"><b>Etzelpark</b>' +
     list.map(function (e) {
       var pr = etzelPrezzo(e.id);
-      return '<div class="pump-st"><b>' + esc(e.name) + '</b><span>' + esc(e.addr) + ' · aperto 24/7' + (pr ? ' · ' + esc(pr) : '') + '</span><span>' + esc(e.dove) + '</span>' +
+      return '<div class="pump-st"><b>' + esc(e.name) + '</b><span>' + esc(e.addr) + ' · 24/7' + (pr ? ' · ' + esc(pr) : '') + '</span>' +
         '<span class="pump-btns"><a class="go" ' + ext(mapsUrl(e.ll, "dir")) + '>Maps ↗</a><a class="go pin" ' + ext(ETZEL_SITO + e.id) + '>Sito ↗</a></span></div>';
     }).join("") + '</div></section>';
 }
@@ -1403,7 +1402,7 @@ function etzelNote(n) {
 var RB_KT = [["TI", "#F7B7A3"], ["LU", "#9FC4EA"], ["BE", "#F6C94A"], ["AG", "#B8E0C2"], ["ZH", "#B8D3F2"], ["VS", "#F2A49A"]];   // ordine del viaggio
 var RB_CAT = ["Alloggi", "Consegna", "Parcheggio", "Museo", "Negozi", "Sauna", "Castello", "Chiesa", "Benzina"];
 var rbSel = "";
-ETZEL.forEach(function (e) { RUBRICA.push([e.kt, "Benzina", e.name, e.addr, "aperto 24/7 · non è una tappa", e.ll, ETZEL_SITO + e.id, e.id]); });
+ETZEL.forEach(function (e) { RUBRICA.push([e.kt, "Benzina", e.name, e.addr, "24/7", e.ll, ETZEL_SITO + e.id, e.id]); });
 
 /* =====================================================================
    IMPOSTAZIONI (salvate solo su questo telefono)
@@ -1746,7 +1745,7 @@ function viewHome() {
 function viewMappa(sel) {
   return sign("", "Mappa") +
     '<div class="mapbox">' + (sel && LEGS[sel - 1]
-        ? '<a class="map-sel" href="#leg-' + sel + '"><span class="num">' + sel + '</span><span><b>' + esc(LEGS[sel - 1].title) + '</b>' + LEGS[sel - 1].day + ' ' + LEGS[sel - 1].date + ' · apri la leg</span><span class="chev">›</span></a>'
+        ? '<a class="map-sel" href="#leg-' + sel + '"><span class="num">' + sel + '</span><span><b>' + esc(LEGS[sel - 1].title) + '</b>' + LEGS[sel - 1].day + ' ' + LEGS[sel - 1].date + '</span><span class="chev">›</span></a>'
         : '') + mapSvg() +
       '<div class="map-ctrl"><button type="button" id="zin" aria-label="Ingrandisci">+</button><button type="button" id="zout" aria-label="Riduci">−</button><button type="button" id="zreset" aria-label="Rimetti a posto la mappa">⟲</button></div></div>' +
     '<div class="chips">' + LEGS.map(function (l) {
@@ -1897,7 +1896,7 @@ function extraBlock(key) {
     '<dl><dt>DOVE</dt><dd>Seefeldstrasse 317</dd><dt>FERMATA</dt><dd>Tiefenbrunnen</dd><dt>MEZZI</dt><dd>tram 11 e 15 · S6 e S16</dd>' +
     '<dt>ORARI</dt><dd>mar–sab 13–17 · dom 10–17</dd><dt>PREZZI</dt><dd>CHF 17 a persona</dd></dl>' +
     '<a class="go" ' + ext(mapsUrl("NONAM, Seefeldstrasse 317, 8008 Zürich", "dir")) + '>Portami lì ↗</a></article>';
-  if (key === "vegan-zh" || key === "vegan-vs") return '<a class="linkcard" href="#guida-vegano"><span class="poi">' + ICON.posate + '</span><span><b>Mangiare vegano a ' + (key === "vegan-zh" ? "Zurigo" : "Sion") + '</b><span>4 posti, con indirizzi</span></span><span class="chev">›</span></a>';
+  if (key === "vegan-zh" || key === "vegan-vs") return '<a class="linkcard" href="#guida-vegano"><span class="poi">' + ICON.posate + '</span><span><b>Mangiare vegano a ' + (key === "vegan-zh" ? "Zurigo" : "Sion") + '</b><span>4 posti</span></span><span class="chev">›</span></a>';
   if (key === "racchette") return '<a class="linkcard" href="#guida-racchette"><span class="poi">' + ICON.racchetta + '</span><span><b>Escursioni in racchette</b><span>4 sentieri in Val d\'Hérens</span></span><span class="chev">›</span></a>';
   if (key === "motel") return '<div class="motel" aria-label="%%VS_NOME%%"><div class="motel-v" aria-hidden="true"><span>M</span><span>O</span><span>T</span><span>E</span><span>L</span></div>' +
     '<div class="motel-s"><div class="motel-board"><b>%%VS_NOME%%</b><ul><li>NATURA</li><li>CENTRO A 10 MIN</li><li>POSTEGGIO GRATIS</li><li>BUS A DUE PASSI</li></ul>' +
@@ -1960,7 +1959,7 @@ function viewLeg(n) {
    ===================================================================== */
 function viewGuida() {
   var tiles = [
-    ["#rubrica", ICON.rubrica, "Rubrica", "Tutti gli indirizzi del viaggio, per cantone"],
+    ["#rubrica", ICON.rubrica, "Rubrica", ""],
     ["#guida-mercatini", ICON.casetta, "Mercatini di Natale", "Berna, Zurigo e Sion · 9 mercatini"],
     ["#guida-vegano", ICON.posate, "Mangiare vegano", "Zurigo e Sion · 8 posti"],
     ["#guida-racchette", ICON.racchetta, "Racchette in Val d'Hérens", "4 sentieri da Evolène"],
@@ -1968,7 +1967,7 @@ function viewGuida() {
   ];
   return sign("", "Guida") +
     '<div class="tiles">' + tiles.map(function (t) {
-      return '<a class="linkcard" href="' + t[0] + '"><span class="poi">' + t[1] + '</span><span><b>' + t[2] + '</b><span>' + t[3] + '</span></span><span class="chev">›</span></a>';
+      return '<a class="linkcard" href="' + t[0] + '"><span class="poi">' + t[1] + '</span><span><b>' + t[2] + '</b>' + (t[3] ? '<span>' + t[3] + '</span>' : '') + '</span><span class="chev">›</span></a>';
     }).join("") +
     '</div>';
 }
@@ -2058,12 +2057,12 @@ var bsync = { sha: null, dirty: {}, status: "", at: null, busy: false, again: fa
 try { bsync.dirty = JSON.parse(localStorage.getItem("rta-bdirty") || "{}"); } catch (e) {}
 function saveDirty() { try { localStorage.setItem("rta-bdirty", JSON.stringify(bsync.dirty)); } catch (e) {} }
 function syncText() {
-  if (!ghKey()) return "Solo su questo telefono. Per condividerlo inserisci la chiave dell'officina nelle impostazioni.";
-  if (bsync.status === "sending") return "Invio all'altro telefono…";
-  if (bsync.status === "offline") return "Senza rete: le modifiche partono appena torna la connessione.";
-  if (bsync.status === "error") return "Non riesco a condividere il budget: controlla la chiave dell'officina.";
-  if (bsync.status === "ok" && bsync.at) return "Condiviso tra i vostri telefoni · aggiornato alle " + bsync.at.toTimeString().slice(0, 5) + ".";
-  return "Condiviso tra i vostri telefoni.";
+  if (!ghKey()) return "Solo su questo telefono";
+  if (bsync.status === "sending") return "Invio…";
+  if (bsync.status === "offline") return "In attesa di rete";
+  if (bsync.status === "error") return "Chiave non valida";
+  if (bsync.status === "ok" && bsync.at) return "Condiviso · " + bsync.at.toTimeString().slice(0, 5);
+  return "Condiviso";
 }
 function setSync(st) { bsync.status = st; if (st === "ok") bsync.at = new Date(); var el = document.getElementById("b-sync"); if (el) el.textContent = syncText(); }
 function markDirty(k) {
@@ -2127,9 +2126,9 @@ function updateBudgetTotals() {
   document.getElementById("b-tot").textContent = "≈ " + chf(t);
   document.getElementById("b-pp").textContent = chf(t / 2);
   document.getElementById("b-pg").textContent = chf(t / 12);
-  var nota = "Benzina: Škoda Kamiq, 6 l/100 km. ";
-  if (budget.manPrezzo) nota += "Prezzo inserito a mano." + (tcs ? ' <button type="button" class="r-reset" id="b-tcs">Usa il prezzo TCS (' + tcs.bleifrei95.toFixed(2) + ')</button>' : "");
-  else nota += tcs ? "Prezzo medio svizzero TCS (Bleifrei 95) del " + dataIt(tcs.data) + ", aggiornato ogni 2 giorni." : "Prezzo TCS del 18.11.2026.";
+  var nota = "";
+  if (budget.manPrezzo) nota += "Prezzo a mano." + (tcs ? ' <button type="button" class="r-reset" id="b-tcs">Usa il prezzo TCS (' + tcs.bleifrei95.toFixed(2) + ')</button>' : "");
+  else nota += "TCS, " + (tcs ? dataIt(tcs.data) : "18.11.2026");
   var el = document.getElementById("b-nota");
   el.innerHTML = nota;
   var bt = document.getElementById("b-tcs");
@@ -2661,7 +2660,7 @@ function playStation() {
       var s2 = STATIONS[radioSt];
       if (srcTry + 1 < s2.src.length) { srcTry++; radioAudio.src = s2.src[srcTry]; var q = radioAudio.play(); if (q && q.catch) q.catch(function () {}); return; }
       var x = document.getElementById("radio"); if (x) x.classList.remove("tuning");
-      toast(s2.name + " non risponde: prova un'altra stazione");
+      toast(s2.name + " non risponde");
     });
   }
   var r = document.getElementById("radio"); if (r) r.classList.add("tuning");
@@ -2812,7 +2811,7 @@ function installBannerHtml() {
   if (isInstalled()) return "";
   try { var d = +localStorage.getItem("rta-dopo") || 0; if (Date.now() - d < 3 * 86400000) return ""; } catch (e) {}
   return '<section class="instbar" id="instbar"><img src="icona2-192.png" alt="" onerror="this.remove()">' +
-    '<div class="instbar-t"><b>Installa l\'app sul telefono</b><span id="inst-aiuto">Si apre a schermo intero e funziona anche senza rete.</span></div>' +
+    '<div class="instbar-t"><b>Installa l\'app sul telefono</b><span id="inst-aiuto"></span></div>' +
     '<div class="instbar-b"><button type="button" class="btn" id="inst-si">Installa</button><button type="button" class="linkbtn2" id="inst-dopo">Dopo</button></div></section>';
 }
 function refreshInstallBanner() {
@@ -2855,9 +2854,8 @@ function viewImpostazioni() {
       '<div class="hazard" aria-hidden="true"></div>' +
       drawer("CHIAVE DELL'OFFICINA", "#8A6A22",
         '<div class="keybox"><svg class="shopkey" viewBox="0 0 96 132" aria-hidden="true"><rect x="30" y="2" width="36" height="12" rx="3" fill="#6E757D"/><circle cx="40" cy="8" r="2" fill="#C9CCD1"/><circle cx="56" cy="8" r="2" fill="#C9CCD1"/><path d="M48 14v8q0 6-6 6" fill="none" stroke="#3A3F45" stroke-width="3.5" stroke-linecap="round"/><circle cx="40" cy="36" r="9" fill="none" stroke="#9AA1A9" stroke-width="3"/><g transform="rotate(-8 40 60)"><circle cx="40" cy="58" r="13" fill="#C9A14A" stroke="#8A6A22" stroke-width="2.5"/><circle cx="40" cy="58" r="5.5" fill="#2B2D31"/><rect x="36.5" y="70" width="7" height="44" rx="2" fill="#C9A14A" stroke="#8A6A22" stroke-width="2"/><path d="M43 98h9v5h-5v4h6v6h-10z" fill="#C9A14A" stroke="#8A6A22" stroke-width="2" stroke-linejoin="round"/><path d="M39 74v36" stroke="#F1D98A" stroke-width="1.5" opacity=".7"/></g><path d="M48 40 70 62" stroke="#B8A47A" stroke-width="1.5"/><g transform="rotate(12 76 84)"><path d="M62 64h28v40H62z" fill="#EBDDB3" stroke="#B8A47A" stroke-width="1.5"/><circle cx="76" cy="70" r="2.6" fill="#AEB4BB" stroke="#7E858D"/><text x="76" y="86" text-anchor="middle" font-family="Courier Prime,monospace" font-weight="700" font-size="8.5" fill="#5A2E14">SHOP</text><text x="76" y="96" text-anchor="middle" font-family="Courier Prime,monospace" font-weight="700" font-size="8.5" fill="#5A2E14">KEY</text></g></svg><div class="keybox-t">' + (ghKey()
-          ? '<p><b>Chiave inserita.</b> Nomi, alloggi e budget arrivano dalla parte privata, e il budget è condiviso tra i vostri telefoni.</p><button type="button" class="btn" id="key-off">Togli la chiave da questo telefono</button>'
-          : '<p>Inserisci la chiave per vedere i dati privati e condividere il budget.</p>' +
-            '<input type="password" id="key-in" class="key-in" placeholder="github_pat_…" autocomplete="off" autocapitalize="off" spellcheck="false">' +
+          ? '<p><b>Chiave inserita.</b></p><button type="button" class="btn" id="key-off">Togli la chiave da questo telefono</button>'
+          : '<input type="password" id="key-in" class="key-in" placeholder="github_pat_…" autocomplete="off" autocapitalize="off" spellcheck="false">' +
             '<button type="button" class="btn" id="key-on">Inserisci la chiave</button><p id="key-st" class="key-st"></p>') + '</div></div>') +
       drawer("TEMA", "#1B1B1B", seg("theme", [["auto", "Auto"], ["light", "Giorno"], ["dark", "Notte"]])) +
       drawer("DISTANZE", "#B3261E", seg("units", [["km", "km"], ["mi", "miglia"], ["both", "entrambe"]])) +
@@ -2884,8 +2882,8 @@ function initImpostazioni() {
     loadPrivate().then(function (ok) {
       if (!ok) throw 0;
       return pullBudget();
-    }).then(function () { toast("Chiave inserita: dati privati e budget condiviso"); render(); })
-      .catch(function () { try { localStorage.removeItem("rta-key"); } catch (e) {} st.textContent = "La chiave non funziona: controlla di averla copiata tutta."; });
+    }).then(function () { toast("Chiave inserita"); render(); })
+      .catch(function () { try { localStorage.removeItem("rta-key"); } catch (e) {} st.textContent = "Chiave non valida"; });
   };
   if (koff) koff.onclick = function () {
     try { localStorage.removeItem("rta-key"); localStorage.removeItem("rta-priv"); } catch (e) {}
